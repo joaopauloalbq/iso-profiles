@@ -1,0 +1,75 @@
+@import "colors.rasi"
+
+inputbar {
+	border: 0 0 1px 0;
+	children: [prompt, entry, icon-prev-page, icon-next-page];
+}
+
+prompt {
+	font: "Noto Sans 13";
+	border: 0 1px 0 0;
+	padding: 0px 13px 0px;
+	vertical-align: 0.5;
+}
+
+entry {
+	padding: 12px;
+}
+
+textbox {
+	border: 0 0 1px 0;
+	padding: 12px 12px;
+}
+
+listview {
+	layout: vertical;
+	lines: 4;
+	columns: 6;
+	fixed-columns: true;
+	cycle: true;
+	dynamic: true;
+	padding: 9px;
+	margin: -1px 0px 0px 0px;
+	spacing: 10;	
+}
+
+element {
+	orientation:                    vertical;
+	border-radius:                  3px;
+	padding:                        10px 0px 14px 0px;
+}
+
+element-text {
+	expand:                         true;
+	horizontal-align:               0.5;
+	vertical-align:                 0.5;
+	padding:                        0px 5px;
+	margin:                         7px 0px -7px 0px;
+}
+
+element-icon {
+	horizontal-align: 0.5;
+	size: 48px;
+	border: 0px;
+}
+
+mode-switcher {
+	border: 1px 1px 0;
+	padding: 12px;
+}
+
+icon-next-page {
+	expand: false;
+	padding: 12px;
+	vertical-align: 0.5;
+	filename: "next";
+	action: "kb-page-next";
+}
+
+icon-prev-page {
+	expand: false;
+	padding: 12px;
+	vertical-align: 0.5;
+	filename: "previous";
+	action: "kb-page-prev";
+}

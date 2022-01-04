@@ -1,0 +1,39 @@
+@import "colors.rasi"
+
+* {
+	width: 670px;
+	height: 141px;
+}
+
+inputbar {
+	enabled: false;
+}
+
+listview {
+	columns: 5;
+	spacing: 10;
+	dynamic: true;
+	layout: vertical;
+	padding: 10px;
+	margin: 0px -1px;
+}
+
+element {
+	orientation:                    vertical;
+	padding:                        15px 0px;
+	border-radius:                  3px;
+}
+
+element-text {
+	expand:                         true;
+	horizontal-align:               0.5;
+	padding:                        0px 5px;
+	margin:                         7px 0px -7px 0px;
+	background-color: inherit;
+}
+
+element-icon {
+	size: 64px;
+	horizontal-align: 0.5;
+	background-color: inherit;
+}

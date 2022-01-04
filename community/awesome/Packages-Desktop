@@ -1,0 +1,215 @@
+## Network
+>extra avahi
+networkmanager
+>extra networkmanager-openconnect
+>extra networkmanager-openvpn
+>extra networkmanager-pptp
+>extra networkmanager-vpnc
+>extra nss-mdns # NSS support for mDNS (optdepend for avahi)
+>extra ntp
+>extra mobile-broadband-provider-info
+>extra modemmanager
+>extra openresolv
+>extra openssh
+>extra samba
+>extra usb_modeswitch
+
+## Libraries for Sound/Audio/Video
+# >extra alsa-firmware
+# >extra alsa-utils
+>extra ffmpeg
+>extra gst-libav
+>extra gst-plugins-bad
+>extra gst-plugins-base
+>extra gst-plugins-good
+>extra gst-plugins-ugly
+>extra libdvdcss
+# >extra >multilib manjaro-alsa
+manjaro-pipewire
+
+## Connect Packages
+>extra android-tools
+>extra android-udev
+>extra gvfs
+>extra gvfs-afc
+>extra gvfs-gphoto2
+>extra gvfs-mtp
+>extra gvfs-nfs
+>extra gvfs-smb
+>extra mtpfs
+udiskie
+>extra udisks2
+
+## AUR Support/Development
+# Missing base-devel packages
+base-devel
+autoconf
+automake
+binutils
+bison
+fakeroot
+flex
+gcc
+>multilib gcc-libs-multilib
+>multilib gcc-multilib
+libtool
+m4
+make
+patch
+pkg-config
+>multilib lib32-flex
+# Extra packages for AUR support
+git
+patchutils
+subversion
+
+## Fonts
+noto-fonts               # default font
+noto-fonts-emoji
+noto-fonts-compat
+nerd-fonts-noto-sans-mono
+>extra noto-fonts-cjk  # removed to reduce iso size (-184MB)
+gsfonts
+
+## Games
+# >x86_64 >extra steam-manjaro  # removed to reduce iso size (-74MB)
+# >extra lib32-libappindicator-gtk2
+
+## Package management
+pamac
+pamac-gtk
+# >extra appimagelauncher
+
+## Java
+>extra jre-openjdk
+
+## Printing
+>extra manjaro-printer
+>extra cups
+>extra cups-pdf
+>extra cups-pk-helper
+>extra ghostscript
+>extra gsfonts
+>extra gtk3-print-backends
+>extra splix
+>extra system-config-printer
+>extra hplip
+
+## Display manager
+lightdm
+lightdm-gtk-greeter
+>extra lightdm-gtk-greeter-settings
+accountsservice  # Enhanced user accounts handling
+
+## Applications
+awesome
+xfce4-terminal
+brave-browser
+mpv
+maim
+htop
+btop
+thunar
+thunar-archive-plugin
+viewnior
+galculator
+file-roller
+pavucontrol
+blueman
+ranger
+micro
+mintstick
+>extra libreoffice-fresh
+>extra manjaro-settings-manager
+
+tumbler
+ffmpegthumbnailer  # tumbler - for video thumbnails
+freetype2          # tumbler - for font thumbnails
+libgsf             # tumbler - for ODF thumbnails
+libopenraw         # tumbler - for RAW thumbnails
+poppler-glib       # tumbler - for PDF thumbnails
+
+p7zip  # 7Z and ARJ archive support
+unace  # ACE archive support
+unrar  # RAR archive support
+bzip2
+gzip
+zip
+unzip
+atool
+
+## Settings packages
+>extra manjaro-settings-samba
+
+## Xorg Input Drivers
+>extra xf86-input-elographics
+>extra xf86-input-evdev
+>extra xf86-input-libinput
+>extra xf86-input-void
+
+## Xorg Server and Graphics
+>extra >multilib lib32-libva-intel-driver
+>extra >multilib lib32-libva-mesa-driver
+>extra >multilib lib32-libva-vdpau-driver
+>extra libva-intel-driver
+>extra libva-mesa-driver
+>extra libva-vdpau-driver
+>extra mesa-demos
+>extra >multilib lib32-mesa-demos
+>extra numlockx
+xdg-user-dirs
+xorg-server
+>extra xorg-twm
+>extra xorg-xinit
+xorg-xprop
+xorg-xkill
+xorg-xbacklight
+
+
+## Misc
+manjaro-hotfixes
+awesome-freedesktop
+# exfatprogs
+>basic squashfs-tools
+>extra xiccd # enable color profile settings
+ufw  # firewall needs to be in every iso
+pamixer
+pa-applet
+network-manager-applet
+cbatticon
+rofi
+rofi-calc
+rofi-emoji
+lxsession-gtk3
+lxappearance-gtk3
+nitrogen
+arandr
+qt5ct
+qt5-styleplugins
+plocate
+clipmenu
+networkmanager-dmenu
+bat
+exa
+lain
+xdotool
+neofetch
+playerctl
+bmenu
+xsel
+xclip
+libcanberra
+>extra gnome-keyring
+
+## Gestures
+touchegg
+
+## Theme
+papirus-icon-theme
+
+## AUR packages
+vimix-gtk-themes
+picom-git
+i3lock-color
+dragon-drag-and-drop
+udiskie-dmenu-git

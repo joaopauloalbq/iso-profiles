@@ -1,0 +1,17 @@
+configuration {
+	display-ssh: "";
+	display-run: "";
+	display-drun: "";
+	display-calc: "";
+	display-emoji: "";
+	display-window: "";
+	display-windowcd: "";
+	display-filebrowser: "";
+	me-select-entry: "";
+	me-accept-entry: "MousePrimary";
+	drun-display-format: "{icon} {name}";
+	drun-match-fields: "name,generic,comment";
+	show-icons: true;
+}
+
+@theme "list"

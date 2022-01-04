@@ -1,0 +1,6 @@
+
+QMenuBar {
+  padding: 0px;
+  margin: 0px;
+  spacing: 1px;
+}

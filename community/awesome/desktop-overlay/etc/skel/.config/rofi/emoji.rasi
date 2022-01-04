@@ -1,0 +1,60 @@
+@import "colors.rasi"
+
+inputbar {
+	border: 0 0 1px 0;
+	children: [prompt,entry];
+}
+
+prompt {
+	font: "Noto Sans 18";
+	vertical-align: 0.5;
+	padding: 0px 9px 0px 9px;
+	border: 0 1px 0 0;
+}
+
+entry {
+	padding: 12px;
+}
+
+textbox {
+	padding: 12px;
+}
+
+listview {
+	layout: vertical;
+	scrollbar: false;
+	cycle: false;
+	//columns: 9; // big
+	columns: 10; // small	
+	padding: 9px;
+	margin: -1px 0px 0px 0px;
+	fixed-columns: true;
+}
+
+element {
+	border-radius: 3px;
+}
+
+element-icon {
+	enabled: false;	
+}
+
+element-text  {
+	text-color: @background-color;
+	font: "Noto Color Emoji 27";
+	horizontal-align: 0;
+	vertical-align: 0.5;
+	expand: false;
+	
+	// big
+	//padding: 16px;
+	//margin: 0px 0px -3px -2px;
+	
+	// small
+	padding: 10px 9px 9px 9px;
+	margin: 2px 0px -1px 1px;
+}
+
+element-text selected {
+	text-color: @background-color;
+}

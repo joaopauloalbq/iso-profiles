@@ -1,0 +1,31 @@
+[$Version]
+update_info=okular.upd:annotation-toolbar,okular.upd:builtin-annotations
+
+[Core General]
+ExternalEditor=Custom
+ExternalEditorCommand=micro
+ObeyDRM=false
+
+[Document]
+ChangeColors=true
+
+[General]
+DisplayDocumentTitle=false
+ShowOSD=false
+
+[Main View]
+SplitterSizes=309,1533
+
+[Nav Panel]
+CurrentPageOnly=true
+GroupByAuthor=false
+
+[PageView]
+BackgroundColor=0,0,0
+ShowScrollBars=false
+UseCustomBackgroundColor=true
+
+[Reviews]
+AnnotationContinuousMode=false
+BuiltinAnnotationTools=<tool name="Yellow Highlighter" id="1" type="highlight"><engine type="TextSelector" color="#ffebeb86"><annotation type="Highlight" color="#ffebeb86"/></engine><shortcut>1</shortcut></tool>,<tool id="2" type="underline"><engine type="TextSelector" color="#ff0000"><annotation type="Underline" color="#ffff0000"/></engine></tool>,<tool id="3" type="squiggly"><engine type="TextSelector" color="#ffff6767"><annotation type="Squiggly" color="#ffff6767"/></engine><shortcut>3</shortcut></tool>,<tool id="4" type="strikeout"><engine type="TextSelector" color="#ff0000"><annotation type="StrikeOut" color="#ffff0000"/></engine></tool>,<tool name="Insert Text" id="5" type="typewriter"><engine block="true" type="PickPoint"><annotation width="0" type="Typewriter" textColor="#000000" color="#00ffffff"/></engine><shortcut>4</shortcut></tool>,<tool id="6" type="note-inline"><engine hoverIcon="tool-note-inline" block="true" type="PickPoint" color="#ffeded87"><annotation font="Noto Sans\\,10\\,-1\\,5\\,50\\,0\\,0\\,0\\,0\\,0\\,ExtraCondensed" width="1" type="FreeText" color="#ffeded87"/></engine><shortcut>5</shortcut></tool>,<tool id="7" type="note-linked"><engine hoverIcon="tool-note" type="PickPoint" color="#fff0f089"><annotation type="Text" icon="Note" color="#fff0f089"/></engine><shortcut>6</shortcut></tool>,<tool id="8" type="ink"><engine type="SmoothLine" color="#00ff00"><annotation width="2" type="Ink" color="#ff00ff00"/></engine></tool>,<tool name="Arrow" id="9" type="straight-line"><engine points="2" type="PolyLine" color="#000000"><annotation endStyle="3" width="2" type="Line" color="#ff000000"/></engine></tool>,<tool id="10" type="straight-line"><engine points="2" type="PolyLine" color="#000000"><annotation width="2" type="Line" color="#ff000000"/></engine></tool>,<tool id="11" type="rectangle"><engine block="true" type="PickPoint" color="#ff0000"><annotation width="3" type="GeomSquare" color="#ffff0000"/></engine></tool>,<tool id="12" type="ellipse"><engine block="true" type="PickPoint" color="#00ffff"><annotation width="3" type="GeomCircle" color="#ff00ffff"/></engine></tool>,<tool id="13" type="polygon"><engine points="-1" type="PolyLine" color="#007eee"><annotation width="2" type="Line" color="#ff007eee"/></engine></tool>,<tool id="14" type="stamp"><engine size="64" block="true" type="PickPoint"><annotation type="Stamp"/></engine></tool>
+QuickAnnotationTools=<tool id="1" type="highlight" name="Yellow Highlighter"><engine type="TextSelector" color="#ffebeb86"><annotation type="Highlight" color="#ffebeb86"/></engine><shortcut>1</shortcut></tool>,<tool id="2" type="highlight" name="Green Highlighter"><engine type="TextSelector" color="#ff6affa6"><annotation type="Highlight" color="#ff6affa6"/></engine><shortcut>2</shortcut></tool>,<tool id="3" type="squiggly"><engine type="TextSelector" color="#ffff6767"><annotation type="Squiggly" color="#ffff6767"/></engine><shortcut>3</shortcut></tool>,<tool id="4" type="typewriter" name="Insert Text"><engine type="PickPoint" block="true"><annotation textColor="#000000" type="Typewriter" color="#00ffffff" width="0"/></engine><shortcut>4</shortcut></tool>,<tool id="5" type="note-inline"><engine type="PickPoint" color="#ffeded87" block="true" hoverIcon="tool-note-inline"><annotation font="Noto Sans\\,10\\,-1\\,5\\,50\\,0\\,0\\,0\\,0\\,0\\,ExtraCondensed" type="FreeText" color="#ffeded87" width="1"/></engine><shortcut>5</shortcut></tool>,<tool id="6" type="note-linked"><engine type="PickPoint" color="#fff0f089" hoverIcon="tool-note"><annotation icon="Note" type="Text" color="#fff0f089"/></engine><shortcut>6</shortcut></tool>

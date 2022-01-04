@@ -1,0 +1,57 @@
+@import "colors.rasi"
+
+* {
+	spacing: 0;
+}
+
+inputbar {
+	border: 0 0 1px 0;
+	children: [prompt,entry];
+}
+
+prompt {
+	font: "Noto Sans 13";
+	vertical-align: 0.5;
+	padding: 0px 13px;
+	border: 0 1px 0 0;
+}
+
+entry {
+	padding: 12px;
+}
+
+textbox {
+	border: 0 0 1px 0;
+	padding: 12px 12px;
+}
+
+listview {
+	cycle: false;
+	margin: 0 0 -1px 0;
+	scrollbar: false;
+	dynamic: true;
+}
+
+element {
+	border: 0 0 1px 0;
+	padding: 7px;
+}
+
+element-text {
+	expand: true;
+	vertical-align: 0.5;
+	padding: 0 12px 0px 12px;
+	spacing: 0;
+}
+
+element-icon {
+	size: 30px;
+	border: 0px;
+}
+
+button {
+	horizontal-align: 0.5;
+	border: 1px 1px 0 0;
+	padding: 11;
+}
+

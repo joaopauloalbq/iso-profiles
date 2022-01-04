@@ -1,0 +1,36 @@
+[Added Associations]
+
+[Default Applications]
+application/x-alz=heimer.desktop;
+audio/mp4=mpv.desktop;
+audio/mpeg=mpv.desktop;
+image/svg+xml=org.inkscape.Inkscape.desktop;
+image/svg+xml-compressed=inkscape.desktop;
+image/x-xcf=gimp.desktop;
+text/html=brave-browser.desktop
+video/mp4=mpv.desktop;
+video/x-matroska=mpv.desktop;
+video/x-ogm+ogg=mpv.desktop;
+video/x-theora+ogg=mpv.desktop;
+x-scheme-handler/http=brave-browser.desktop
+x-scheme-handler/https=brave-browser.desktop
+x-scheme-handler/webcal=brave-browser.desktop
+inode/directory=ranger.desktop
+image/png=viewnior.desktop
+application/pdf=org.kde.okular.desktop
+image/jpeg=viewnior.desktop
+image/jpg=viewnior.desktop
+image/gif=viewnior.desktop
+application/x-xdg-protocol-tg=telegramdesktop.desktop
+x-scheme-handler/tg=userapp-Telegram Desktop-7PY480.desktop
+x-terminal-emulator=xfce4-terminal.desktop
+x-scheme-handler/etcher=balena-etcher-electron.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+x-scheme-handler/msteams=teams-for-linux.desktop
+video/x-flv=mpv.desktop
+x-scheme-handler/discord-712465656758665259=discord.desktop
+text/plain=micro.desktop
+x-scheme-handler/mailto=brave-browser.desktop
+
+[Removed Associations]

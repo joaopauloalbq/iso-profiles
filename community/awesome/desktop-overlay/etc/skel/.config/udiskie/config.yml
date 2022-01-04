@@ -1,0 +1,19 @@
+icon_names: {
+    media: [drive-removable-media-usb-panel, device, indicator-sensors-disk],
+    browser: [document-open-folder],
+    terminal: [akonadiconsole],
+    mount: [tools-media-optical-format],
+    unmount: [tools-media-optical-erase],
+    unlock: [unlock],
+    lock: [lock],
+    eject: [media-eject],
+    detach: [process-stop],
+    quit: [application-exit],
+    forget_password: [edit-delete],
+    delete: [delete],
+    losetup: [udiskie-mount],
+    checked: [view-resource-calendar],
+    unchecked: [view-resource-calendar],
+    submenu: [udiskie-submenu]
+}
+
