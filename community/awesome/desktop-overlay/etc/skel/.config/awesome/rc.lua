@@ -133,8 +133,8 @@ mymainmenu = freedesktop.menu.build({
 })
 
 mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/suit/logo.png",
-                                     command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })  
-
+                                     command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
+                                     
 desktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
                                      { "Wallpaper", function () awful.spawn('nitrogen') end }
                                    }
@@ -183,14 +183,16 @@ local tasklist_buttons = gears.table.join(
 					 awful.button({ }, 2, function (c) 
 											  c:kill()                         
 										  end),
-                     awful.button({ }, 3, function()
-                                              awful.menu.client_list({ theme = { width = 300 } })
+                     awful.button({ }, 3, function(c)
+                                              -- awful.menu.client_list({ theme = { width = 300 } })
+                                              c:emit_signal("request::activate", "mouse_click", {raise = true})
+                                              awful.mouse.client.resize(c)
                                           end),
                      awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
+                                              awful.client.swap.byidx( 1)
                                           end),
                      awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
+                                              awful.client.swap.byidx(-1)
                                           end))
 
 -- local function set_wallpaper(s)
@@ -519,8 +521,10 @@ globalkeys = gears.table.join(
 	        end
 	        -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
 	        local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
-	        awful.client.movetotag(tag)
-	        awful.tag.viewprev()
+            client.focus:move_to_tag(tag)
+            -- awful.client.movetotag(tag) -- deprecated
+	        tag:view_only()
+	        -- awful.tag.viewprev() -- deprecated
 	    end,
 	        {description = "move client to previous tag and switch to it", group = "layout"}),
 	awful.key({ modkey, "Control" , "Shift" }, "Right",
@@ -532,8 +536,10 @@ globalkeys = gears.table.join(
 	        end
 	        -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
 	        local tag = client.focus.screen.tags[(t.name % 9) + 1]
-	        awful.client.movetotag(tag)
-	        awful.tag.viewnext()
+	        client.focus:move_to_tag(tag)
+	        -- awful.client.movetotag(tag) -- deprecated
+	        tag:view_only()
+	        -- awful.tag.viewnext() -- deprecated
 	    end,
 	        {description = "move client to next tag and switch to it", group = "layout"}),
 	
@@ -927,7 +933,7 @@ clientbuttons = gears.table.join(
     end),
     -- awful.button({ }, 2, function (c)
         -- c:emit_signal("request::activate", "mouse_click", {raise = true})
-        -- awful.mouse.client.move(c)
+        -- awful.mouse.client.resize(c)
     -- end),
     awful.button({ modkey }, 1, function (c)
         c:emit_signal("request::activate", "_NET_WM_STATE_FULLSCREEN_click", {raise = true})
@@ -1169,7 +1175,7 @@ awful.rules.rules = {
 run_single('','picom','')
 run_single('','nm-applet','')
 run_single('sleep 0.6 && ','pa-applet',' --disable-key-grabbing')
-run_single('sleep 0.7 && ','cbatticon',' -l 5 -c "systemctl hibernate"')
+run_single('sleep 0.7 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
 run_single('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_single('','udiskie',' -s -a')
 -- run_single('','blueman-tray','')
