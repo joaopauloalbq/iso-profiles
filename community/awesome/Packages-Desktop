@@ -128,6 +128,8 @@ freetype2          # tumbler - for font thumbnails
 libgsf             # tumbler - for ODF thumbnails
 libopenraw         # tumbler - for RAW thumbnails
 poppler-glib       # tumbler - for PDF thumbnails
+w3m 			   # ranger preview
+odt2txt			   # ranger preview
 
 p7zip  # 7Z and ARJ archive support
 unace  # ACE archive support
@@ -163,8 +165,8 @@ xorg-server
 >extra xorg-xinit
 xorg-xprop
 xorg-xkill
+xorg-xrdb
 xorg-xbacklight
-
 
 ## Misc
 manjaro-hotfixes
@@ -206,6 +208,8 @@ touchegg
 
 ## Theme
 papirus-icon-theme
+>extra gnome-themes-extra
+>extra gtk-engine-murrine
 
 ## AUR packages
 vimix-gtk-themes
