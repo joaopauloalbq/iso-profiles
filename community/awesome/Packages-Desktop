@@ -187,7 +187,6 @@ lxappearance-gtk3
 nitrogen
 arandr
 qt5ct
-qt5-styleplugins
 plocate
 clipmenu
 networkmanager-dmenu
@@ -201,7 +200,7 @@ bmenu
 xsel
 xclip
 libcanberra
->extra gnome-keyring
+gnome-keyring
 
 ## Gestures
 touchegg
