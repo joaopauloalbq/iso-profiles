@@ -166,7 +166,7 @@ xorg-server
 xorg-xprop
 xorg-xkill
 xorg-xrdb
-xorg-xbacklight
+light
 
 ## Misc
 manjaro-hotfixes
