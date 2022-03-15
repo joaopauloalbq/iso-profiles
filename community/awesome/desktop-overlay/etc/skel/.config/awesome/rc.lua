@@ -113,10 +113,11 @@ myawesomemenu = {
     { "quit", function() awesome.quit() end }
 }
 myexitmenu = {
-    { "log out", function() awesome.quit() end, menubar.utils.lookup_icon("system-log-out") },
-    { "suspend", "systemctl suspend", menubar.utils.lookup_icon("system-suspend") },
-    -- { "hibernate", "systemctl hibernate", menubar.utils.lookup_icon("system-hibernate") },
-    { "reboot", "systemctl reboot", menubar.utils.lookup_icon("system-reboot") },
+    { "shutdown", "systemctl poweroff" }, --, menubar.utils.lookup_icon("system-shutdown")
+    { "suspend", "systemctl suspend" }, --, menubar.utils.lookup_icon("system-suspend") 
+    { "hibernate", "systemctl hibernate" }, --, menubar.utils.lookup_icon("system-hibernate")
+    { "reboot", "systemctl reboot" }, --, menubar.utils.lookup_icon("system-reboot")
+    { "log out", function() awesome.quit() end }, --, menubar.utils.lookup_icon("system-log-out") 
 }
 
 mymainmenu = freedesktop.menu.build({
@@ -136,7 +137,8 @@ mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/suit/logo.p
                                      command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
                                      
 desktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
-                                     { "Wallpaper", function () awful.spawn('nitrogen') end }
+                                     { "Wallpaper", function () awful.spawn('nitrogen') end },
+                                     { "Exit", myexitmenu }
                                    }
                         })
 
@@ -251,8 +253,11 @@ local function notificationDisplayIcon(perc)
 end    
 
 local function notifyBacklight(mode)
-	awful.spawn.easy_async('xbacklight -' .. mode .. ' 10 -time 0', function(exit_code)
-        awful.spawn.easy_async('xbacklight -get', function(out)
+	-- awful.spawn.easy_async('xbacklight -' .. mode .. ' 10 -time 0', function(exit_code)
+	-- sudo usermod -a -G video <user>
+	awful.spawn.easy_async('light -' .. mode .. ' 10', function(exit_code)
+        -- awful.spawn.easy_async('xbacklight -get', function(out)
+        awful.spawn.easy_async('light -G', function(out)
         	if notification_display ~= nil then
         		notification_display = naughty.notify ({
         			replaces_id	= notification_display.id,
@@ -461,10 +466,10 @@ end)
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    -- awful.button({ }, 5, awful.tag.viewprev),
-    -- awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 1, function () desktopmenu:hide() end),
     awful.button({ }, 3, function () desktopmenu:toggle() end)
+    -- awful.button({ }, 5, awful.tag.viewprev),
+    -- awful.button({ }, 4, awful.tag.viewnext),
 ))
 -- }}}
 
@@ -703,8 +708,8 @@ globalkeys = gears.table.join(
         {description = "Lock Screen", group = "launcher"}),
         
     -- Bright Keys
-    awful.key({}, "XF86MonBrightnessUp", function() notifyBacklight("inc") end), 
-    awful.key({}, "XF86MonBrightnessDown", function() notifyBacklight("dec") end),
+    awful.key({}, "XF86MonBrightnessUp", function() notifyBacklight("A") end), 
+    awful.key({}, "XF86MonBrightnessDown", function() notifyBacklight("U") end),
               
 	-- Volume Keys
     awful.key({}, "XF86AudioRaiseVolume", function() notifySound("increase") end), 
@@ -967,10 +972,10 @@ client.connect_signal("manage", function (c)
 end)
 
 -- Focus urgent clients automatically
-client.connect_signal("property::urgent", function(c)
-    c.minimized = false
-    c:jump_to()
-end)
+-- client.connect_signal("property::urgent", function(c)
+    -- c.minimized = false
+    -- c:jump_to()
+-- end)
 
 client.connect_signal("property::fullscreen", function(c)
     if c.fullscreen then
@@ -1058,7 +1063,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.centered+awful.placement.no_offscreen,
+                     placement = awful.placement.centered,
                      size_hints_honor = false
                    }
     },
