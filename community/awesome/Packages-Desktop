@@ -73,7 +73,7 @@ gsfonts
 
 ## Games
 # >x86_64 >extra steam-manjaro  # removed to reduce iso size (-74MB)
-# >extra lib32-libappindicator-gtk2
+# >multilib >extra lib32-libappindicator-gtk2
 
 ## Package management
 pamac
