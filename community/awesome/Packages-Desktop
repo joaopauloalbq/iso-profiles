@@ -131,14 +131,14 @@ poppler-glib       # tumbler - for PDF thumbnails
 w3m 			   # ranger preview
 odt2txt			   # ranger preview
 
-p7zip  # 7Z and ARJ archive support
-unace  # ACE archive support
-unrar  # RAR archive support
-bzip2
-gzip
+## Archive support
+tar
 zip
 unzip
-atool
+p7zip
+bzip2
+unrar
+unace
 
 ## Settings packages
 >extra manjaro-settings-samba
@@ -216,3 +216,4 @@ picom-git
 i3lock-color
 dragon-drag-and-drop
 udiskie-dmenu-git
+# qt5-styleplugins
