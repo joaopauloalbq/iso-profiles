@@ -427,7 +427,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
     
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 23}) -- opacity = 0.90
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 }) -- opacity = 0.90
  	
  	-- os.setlocale(os.getenv("LANG"))
  	mytextclock = wibox.widget.textclock("  %a %d, %H:%M  ")
@@ -1048,6 +1048,7 @@ end)
 client.connect_signal("mouse::enter", function(c) c:emit_signal("request::activate", "mouse_enter", {raise = false}) end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("property::maximized", function(c) if c.maximized then c.border_width = 0 else c.border_width = beautiful.border_width end end)
 
 -- }}}
 
