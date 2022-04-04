@@ -1,0 +1,16 @@
+/* remove window title from Client-Side Decorations */
+.solid-csd headerbar .title { 
+    font-size: 0; 
+} 
+
+/* hide extra window decorations/double border */ 
+window decoration { 
+    border: none; 
+    margin: 0; 
+    padding: 0; 
+} 
+
+VteTerminal, vte-terminal { 
+/*			  ^   >   v   > 			*/
+	padding: 5px 2px 0px 4px;
+}
