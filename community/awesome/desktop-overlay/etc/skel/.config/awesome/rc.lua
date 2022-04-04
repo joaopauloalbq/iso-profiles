@@ -428,7 +428,6 @@ awful.screen.connect_for_each_screen(function(s)
     
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 }) -- opacity = 0.90
- 	
  	-- os.setlocale(os.getenv("LANG"))
  	mytextclock = wibox.widget.textclock("  %a %d, %H:%M  ")
  	-- mycal = lain.widget.cal({
@@ -699,7 +698,7 @@ globalkeys = gears.table.join(
 				 {description = "spotifyd", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e spt -T Spotify -I spotify") end,
 				 {description = "spotify", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave --enable-features=VaapiVideoDecoder") end,
+	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
 				 {description = "web browser", group = "launcher"}),
 	
               
@@ -1180,8 +1179,8 @@ awful.rules.rules = {
 
 run_single('','picom','')
 run_single('','nm-applet','')
-run_single('sleep 0.6 && ','pa-applet',' --disable-key-grabbing')
-run_single('sleep 0.7 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
+run_single('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
+run_single('sleep 0.9 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
 run_single('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_single('','udiskie',' -s -a')
 -- run_single('','blueman-tray','')
