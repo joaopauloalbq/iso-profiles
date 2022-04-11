@@ -6,7 +6,7 @@ networkmanager
 >extra networkmanager-pptp
 >extra networkmanager-vpnc
 >extra nss-mdns # NSS support for mDNS (optdepend for avahi)
->extra ntp
+ntp
 >extra mobile-broadband-provider-info
 >extra modemmanager
 >extra openresolv
@@ -103,6 +103,7 @@ accountsservice  # Enhanced user accounts handling
 
 ## Applications
 awesome
+picom
 xfce4-terminal
 brave-browser
 mpv
@@ -182,7 +183,7 @@ cbatticon
 rofi
 rofi-calc
 rofi-emoji
-lxsession-gtk3
+polkit-gnome
 lxappearance-gtk3
 nitrogen
 arandr
@@ -212,7 +213,6 @@ papirus-icon-theme
 
 ## AUR packages
 vimix-gtk-themes
-picom-git
 i3lock-color
 dragon-drag-and-drop
 udiskie-dmenu-git
