@@ -51,7 +51,7 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init("~/.config/awesome/themes/suit/theme.lua")
-revelation.init({tag_name = "Expo", charorder = "asdfqwergtbvcxz"})
+revelation.init({charorder = "asdfqwergtbvcxz"})
 -- local bling = require("bling")
 -- bling.module.flash_focus.enable()
 
@@ -95,10 +95,10 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
-    awful.layout.suit.floating,
     -- awful.layout.suit.magnifier,
     awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.spiral,
+    awful.layout.suit.floating,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
 }
@@ -694,10 +694,9 @@ globalkeys = gears.table.join(
 				 {description = "micro text editor", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
 				 {description = "vs code", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "a",     function () awful.spawn("spotifyd") end,
-				 {description = "spotifyd", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e spt -T Spotify -I spotify") end,
-				 {description = "spotify", group = "launcher"}),
+	-- awful.key({ modkey , "Shift" },  "a",     function () awful.spawn("spotifyd") end,
+				 -- {description = "spotifyd", group = "launcher"}),
+	-- awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e spt -T Spotify -I spotify") end,
 	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
 				 {description = "web browser", group = "launcher"}),
 	
@@ -744,7 +743,7 @@ globalkeys = gears.table.join(
             naughty.notify({ title = "Screenshot captured",
 				             text  = name,
         			     	 icon  = "preferences-desktop-wallpaper",
-        			     	 run   = function() awful.spawn.with_shell('xdg-open ' .. name)  end })
+        			     	 run   = function() awful.spawn.with_shell('xdg-open ' .. name) end })
         end) 
     end, {description = "Print desktop", group = "Screenshot"}),
     
@@ -971,10 +970,10 @@ client.connect_signal("manage", function (c)
 end)
 
 -- Focus urgent clients automatically
--- client.connect_signal("property::urgent", function(c)
-    -- c.minimized = false
-    -- c:jump_to()
--- end)
+client.connect_signal("property::urgent", function(c)
+    c.minimized = false
+    c:jump_to()
+end)
 
 client.connect_signal("property::fullscreen", function(c)
     if c.fullscreen then
@@ -1138,7 +1137,7 @@ awful.rules.rules = {
   	{ rule = { class = "Gcolor3" },
   	    properties = { floating = true, sticky = true} },
     { rule = { class= "MEGAsync" },
-	    properties = { floating = true, border_width = 0, placement = awful.placement.top_right } },
+	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
 	{ rule = { name= "Picture-in-picture" },
 		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.restore } },
 	{ rule = { class= "Nitrogen" },
@@ -1185,6 +1184,6 @@ run_single('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SE
 -- run_single('','udiskie',' -s -a')
 -- run_single('','blueman-tray','')
 -- run_single('','gnome-keyring-daemon',' --start')
-run_single('','lxpolkit','')
+run_single('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
 run_single('','clipmenud','')
 awful.spawn.with_shell('touchegg')
