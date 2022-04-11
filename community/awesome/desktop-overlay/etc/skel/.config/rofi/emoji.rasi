@@ -1,7 +1,8 @@
 @import "colors.rasi"
 
 inputbar {
-	border: 0 0 1px 0;
+	border: 0px 0px 1px 0px;
+
 	children: [prompt,entry];
 }
 
@@ -22,13 +23,13 @@ textbox {
 
 listview {
 	layout: vertical;
-	scrollbar: false;
-	cycle: false;
-	//columns: 9; // big
-	columns: 10; // small	
-	padding: 9px;
-	margin: -1px 0px 0px 0px;
 	fixed-columns: true;
+	fixed-height: true;
+	columns: 10;
+	lines: 7;
+	margin: -2px 0px 0px 0px;
+	padding: 9px;
+//	spacing: 9px;	
 }
 
 element {
@@ -46,13 +47,9 @@ element-text  {
 	vertical-align: 0.5;
 	expand: false;
 	
-	// big
-	//padding: 16px;
-	//margin: 0px 0px -3px -2px;
 	
-	// small
-	padding: 10px 9px 9px 9px;
-	margin: 2px 0px -1px 1px;
+	padding: 4px 0px;
+	margin: -1px 0px 1px 10px;
 }
 
 element-text selected {

@@ -23,28 +23,27 @@ textbox {
 
 listview {
 	layout: vertical;
-	lines: 4;
-	columns: 6;
 	fixed-columns: true;
-	cycle: true;
-	dynamic: true;
-	padding: 9px;
-	margin: -1px 0px 0px 0px;
-	spacing: 10;	
+	fixed-height: true;
+	columns: 6;
+	lines: 4;
+	margin: -2px 0px 0px 0px;
+    padding: 9px;
+	spacing: 9px;
 }
 
 element {
 	orientation:                    vertical;
 	border-radius:                  3px;
-	padding:                        10px 0px 14px 0px;
+	padding:                        12px 0px 15px 0px;
 }
 
 element-text {
 	expand:                         true;
 	horizontal-align:               0.5;
 	vertical-align:                 0.5;
-	padding:                        0px 5px;
-	margin:                         7px 0px -7px 0px;
+    padding:                        0px 6px;
+	margin:                         6px 0px -6px -3px;
 }
 
 element-icon {

@@ -9,7 +9,7 @@
 	
 	font: "Noto Sans 11";
 	width: 690px;
-	height: 480px;
+	height: 487px;
 }
 
 window {
