@@ -74,8 +74,6 @@ beautiful.snap_shape = gears.shape.rectangle
 modkey = "Mod4"
 altkey = "Mod1"
 
-lain.layout.termfair.nmaster = 3
-lain.layout.termfair.center.nmaster = 3
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
@@ -88,7 +86,7 @@ awful.layout.layouts = {
     -- lain.layout.termfair.center,
     -- lain.layout.cascade,
     -- lain.layout.cascade.tile,
-    lain.layout.centerwork,
+    -- lain.layout.centerwork,
     -- lain.layout.centerwork.horizontal,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
@@ -213,7 +211,7 @@ local function set_wallpaper(s)
     awful.spawn("nitrogen --restore", false)
 end
 
-local function run_single(exeBefore, exeCmd, exeArgs)
+local function run_once(exeBefore, exeCmd, exeArgs)
     awful.spawn.easy_async('pidof '..exeCmd, function(stdout, stderr, exitreason, exitcode)
         if exitcode ~= 0 then
             awful.spawn.with_shell(exeBefore..exeCmd..exeArgs)
@@ -240,12 +238,12 @@ local function setTitlebar(client, s)
     end
 end
 
-local function notificationDisplayIcon(perc)
-    if perc == 100 then
+local function notificationDisplayIcon(brightness)
+    if brightness == 100 then
         return "notification-display-brightness-full"
-    elseif perc >= 80 then
+    elseif brightness >= 80 then
         return "notification-display-brightness-high"
-    elseif perc >= 40 then
+    elseif brightness >= 40 then
         return "notification-display-brightness-medium"
     else
         return "notification-display-brightness-low"
@@ -253,16 +251,13 @@ local function notificationDisplayIcon(perc)
 end    
 
 local function notifyBacklight(mode)
-	-- awful.spawn.easy_async('xbacklight -' .. mode .. ' 10 -time 0', function(exit_code)
-	-- sudo usermod -a -G video <user>
-	awful.spawn.easy_async('light -' .. mode .. ' 10', function(exit_code)
-        -- awful.spawn.easy_async('xbacklight -get', function(out)
-        awful.spawn.easy_async('light -G', function(out)
+	awful.spawn.easy_async('light -' .. mode .. ' 10', function()
+        awful.spawn.easy_async('light -G', function(brightness)
         	if notification_display ~= nil then
         		notification_display = naughty.notify ({
         			replaces_id	= notification_display.id,
-        			text        = string.rep("■", math.ceil(out * 0.3)),
-        			icon        = notificationDisplayIcon(tonumber(out)),
+        			text        = string.rep("■", math.ceil(brightness * 0.3)),
+        			icon        = notificationDisplayIcon(tonumber(brightness)),
         			-- width	 = 346,
         			timeout  	= t_out,
         			preset   	= preset,
@@ -270,8 +265,8 @@ local function notifyBacklight(mode)
         		})
         	else
         		notification_display = naughty.notify ({
-        			text     = string.rep("■", math.ceil(out * 0.3)),
-        			icon     = notificationDisplayIcon(tonumber(out)),
+        			text     = string.rep("■", math.ceil(brightness * 0.3)),
+        			icon     = notificationDisplayIcon(tonumber(brightness)),
         			-- width	 = 346,
         			timeout  = t_out,
         			preset   = preset,
@@ -282,10 +277,10 @@ local function notifyBacklight(mode)
 	end)
 end
 
-local function notificationAudioIcon(perc)
-    if perc > 65 then
+local function notificationAudioIcon(vol)
+    if vol > 65 then
         return "notification-audio-volume-high"
-    elseif perc >= 35 then
+    elseif vol >= 35 then
         return "notification-audio-volume-medium"
     else
         return "notification-audio-volume-low"
@@ -293,21 +288,21 @@ local function notificationAudioIcon(perc)
 end
 
 local function notifySound(mode)
-	awful.spawn.easy_async('pamixer --' .. mode .. ' 5', function(exit_code)
-        awful.spawn.easy_async('pamixer --get-volume', function(out)
+	awful.spawn.easy_async('pamixer --' .. mode .. ' 5', function()
+        awful.spawn.easy_async('pamixer --get-volume', function(vol)
         	if notification_audio ~= nil then
         		notification_audio = naughty.notify ({
         			replaces_id	= notification_audio.id,
-        			text        = string.rep("■", math.ceil(out * 0.3)),
-        			icon        = notificationAudioIcon(tonumber(out)),
+        			text        = string.rep("■", math.ceil(vol * 0.3)),
+        			icon        = notificationAudioIcon(tonumber(vol)),
         			timeout  	= t_out,
         			preset   	= preset,
            			ignore_suspend = true
         		})
         	else
         		notification_audio = naughty.notify ({
-        			text        = string.rep("■", math.ceil(out * 0.3)),
-        			icon        = notificationAudioIcon(tonumber(out)),
+        			text        = string.rep("■", math.ceil(vol * 0.3)),
+        			icon        = notificationAudioIcon(tonumber(vol)),
         			timeout     = t_out,
         			preset      = preset,
         			ignore_suspend = true
@@ -318,54 +313,52 @@ local function notifySound(mode)
 end
 
 local function notifySoundMuted()
-	awful.spawn.with_line_callback('pamixer --toggle-mute', {
-		exit = function()
-			awful.spawn.with_line_callback('pamixer --get-volume', {
-                stdout = function(perc)
-					awful.spawn.with_line_callback('pamixer --get-mute', {
-                        stdout = function(isMuted)
-                            if notification_audio ~= nil then
-                                if isMuted == 'true' then
-                                    notification_audio = naughty.notify ({
-                                        replaces_id	= notification_audio.id,
-                                        fg          = "#676767",
-                                        text        = string.rep("■", math.ceil(perc * 0.3)),
-                                        icon        = "notification-audio-volume-muted",
-                                        timeout  	= t_out,
-                                        preset   	= preset
-                                    })
-                                else
-                                    notification_audio = naughty.notify ({
-                                        replaces_id	= notification_audio.id,
-                                        text        = string.rep("■", math.ceil(perc * 0.3)),
-                                        icon        = "notification-audio-volume-high",
-                                        timeout  	= t_out,
-                                        preset   	= preset
-                                    })    
-                                end
-                            else
-                                if isMuted == 'true' then
-                                    notification_audio = naughty.notify ({
-                                        fg          = "#676767",
-                                        icon        = "notification-audio-volume-muted",
-                                        timeout     = t_out,
-                                        preset      = preset
-                                    })
-                                else
-                                    notification_audio = naughty.notify ({
-                                        text        = string.rep("■", math.ceil(perc * 0.3)),
-                                        icon        = "notification-audio-volume-high",
-                                        timeout     = t_out,
-                                        preset      = preset
-                                    })
-                                end
-                            end
-                        end,
-                    })
-				end,
-			})
-		end,
-	})
+    awful.spawn.easy_async('pamixer --toggle-mute', function() 
+        awful.spawn.easy_async('pamixer --get-volume', function(vol) 
+            awful.spawn.easy_async('pamixer --get-mute', function(isMuted) 
+                if notification_audio ~= nil then
+                    if isMuted == "true\n" then
+                        notification_audio = naughty.notify ({
+                            replaces_id	= notification_audio.id,
+                            fg          = "#676767",
+                            text        = string.rep("■", math.ceil(vol * 0.3)),
+                            icon        = "notification-audio-volume-muted",
+                            timeout  	= t_out,
+                            preset   	= preset,
+                            ignore_suspend = true
+                         })
+                    else
+                        notification_audio = naughty.notify ({
+                            replaces_id = notification_audio.id,
+                            text        = string.rep("■", math.ceil(vol * 0.3)),
+                            icon        = notificationAudioIcon(tonumber(vol)),
+                            timeout  	= t_out,
+                            preset   	= preset,
+                            ignore_suspend = true
+                        })
+                    end
+                else
+                    if isMuted == "true\n" then
+                        notification_audio = naughty.notify ({
+                            fg          = "#676767",
+                            icon        = "notification-audio-volume-muted",
+                            timeout     = t_out,
+                            preset      = preset,
+                            ignore_suspend = true
+                        })
+                    else
+                        notification_audio = naughty.notify ({
+                            text        = string.rep("■", math.ceil(vol * 0.3)),
+                            icon        = notificationAudioIcon(tonumber(vol)),
+                            timeout     = t_out,
+                            preset      = preset,
+                            ignore_suspend = true
+                        })
+                    end
+                end
+            end)
+        end)
+    end)
 end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
@@ -664,7 +657,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "c",     function () awful.spawn("clipmenu -p ", false) end,
 			{description = "clipboard", group = "launcher"}),
 	              		              	              	              		              	             
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines 9 -i -keep-right -p )" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -o "$HOME/.cache/plocate.db"') end,
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines 9 -i -keep-right -p )" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines 9 -i -keep-right -p )"') end,
 	        {description = "File searcher", group = "launcher"}),
 	              		              
@@ -1148,6 +1141,8 @@ awful.rules.rules = {
 	    properties = { floating = true, ontop = true, sticky = true, focus = false, placement = awful.placement.bottom_right } },
 	{ rule = { class="Dragon-drag-and-drop" },
 		properties = { ontop = true, sticky = true } },
+	{ rule = { name="Torrential" },
+		properties = { floating = true } },	
 	{ rule = { class="Heimer" },
 		properties = { floating = false, fullscreen = false } },	
 	{ rule = { class= "mpv" },
@@ -1176,14 +1171,14 @@ awful.rules.rules = {
 }
 -- }}}
 
-run_single('','picom','')
-run_single('','nm-applet','')
-run_single('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
-run_single('sleep 0.9 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
-run_single('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
--- run_single('','udiskie',' -s -a')
--- run_single('','blueman-tray','')
--- run_single('','gnome-keyring-daemon',' --start')
-run_single('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
-run_single('','clipmenud','')
+run_once('','picom','')
+run_once('','nm-applet','')
+run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
+run_once('sleep 0.9 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
+run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+-- run_once('','udiskie',' -s -a')
+-- run_once('','blueman-tray','')
+-- run_once('','gnome-keyring-daemon',' --start')
+run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
+run_once('','clipmenud','')
 awful.spawn.with_shell('touchegg')
