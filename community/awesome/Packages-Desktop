@@ -179,7 +179,6 @@ ufw  # firewall needs to be in every iso
 pamixer
 pa-applet
 network-manager-applet
-cbatticon
 rofi
 rofi-calc
 rofi-emoji
@@ -217,4 +216,5 @@ vimix-gtk-themes
 i3lock-color
 dragon-drop
 udiskie-dmenu-git
+cbatticon-git
 # qt5-styleplugins

@@ -212,9 +212,9 @@ local function set_wallpaper(s)
 end
 
 local function run_once(exeBefore, exeCmd, exeArgs)
-    awful.spawn.easy_async('pidof '..exeCmd, function(stdout, stderr, exitreason, exitcode)
+    awful.spawn.easy_async('pidof ' .. exeCmd, function(stdout, stderr, exitreason, exitcode)
         if exitcode ~= 0 then
-            awful.spawn.with_shell(exeBefore..exeCmd..exeArgs)
+            awful.spawn.with_shell(exeBefore .. exeCmd .. exeArgs)
         end
     end)
 end
@@ -1174,7 +1174,7 @@ awful.rules.rules = {
 run_once('','picom','')
 run_once('','nm-applet','')
 run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
-run_once('sleep 0.9 && ','cbatticon',' -l 5 -c "systemctl hibernate" -n')
+-- run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
 run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
 -- run_once('','blueman-tray','')
