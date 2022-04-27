@@ -1139,7 +1139,7 @@ awful.rules.rules = {
 		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.bottom_right } },
     { rule = { class= "qvidcap" },
 	    properties = { floating = true, ontop = true, sticky = true, focus = false, placement = awful.placement.bottom_right } },
-	{ rule = { class="Dragon-drag-and-drop" },
+	{ rule = { class="Dragon-drop" },
 		properties = { ontop = true, sticky = true } },
 	{ rule = { name="Torrential" },
 		properties = { floating = true } },	
