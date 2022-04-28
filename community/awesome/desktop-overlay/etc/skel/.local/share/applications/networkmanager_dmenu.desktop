@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Settings;Network;
+Name=Network Manager Menu
+Icon=nm-device-wireless
+GenericName=Networkmanager Settings
+Exec=networkmanager_dmenu
+Type=Application
+
+
