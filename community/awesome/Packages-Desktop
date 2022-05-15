@@ -89,7 +89,6 @@ pamac-gtk
 >extra cups-pdf
 >extra cups-pk-helper
 >extra ghostscript
->extra gsfonts
 >extra gtk3-print-backends
 >extra splix
 >extra system-config-printer
@@ -133,6 +132,7 @@ w3m 			   # ranger preview
 odt2txt			   # ranger preview
 
 ## Archive support
+atool
 tar
 zip
 unzip
@@ -171,8 +171,7 @@ light
 
 ## Misc
 manjaro-hotfixes
-awesome-freedesktop
-# exfatprogs
+exfatprogs
 >basic squashfs-tools
 >extra xiccd # enable color profile settings
 ufw  # firewall needs to be in every iso
