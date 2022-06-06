@@ -645,7 +645,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "b",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
 			{description = "calculator", group = "launcher"}),
 	
-	awful.key({ modkey },            "e",     function () awful.spawn("rofi -modi emoji -show emoji -theme emoji", false) end,
+	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -theme emoji; xdotool key ctrl+v; clipctl enable", false) end,
 			{description = "emoji picker", group = "launcher"}),
 
 	awful.key({ modkey },            "g",     function () awful.spawn("rofi -modi filebrowser -show filebrowser", false) end,
@@ -654,10 +654,10 @@ globalkeys = gears.table.join(
 	awful.key({ altkey },            "slash",   function () awful.spawn.with_shell("python ~/.local/scripts/rofi-hud.py") end,
 			{description = "HUD", group = "launcher"}),
 		
-	awful.key({ modkey },            "c",     function () awful.spawn("clipmenu -p ", false) end,
+	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p && xdotool key ctrl+v", false) end,
 			{description = "clipboard", group = "launcher"}),
 	              		              	              	              		              	             
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines 9 -i -keep-right -p )" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p )" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines 9 -i -keep-right -p )"') end,
 	        {description = "File searcher", group = "launcher"}),
 	              		              
@@ -687,15 +687,16 @@ globalkeys = gears.table.join(
 				 {description = "micro text editor", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
 				 {description = "vs code", group = "launcher"}),
-	-- awful.key({ modkey , "Shift" },  "a",     function () awful.spawn("spotifyd") end,
-				 -- {description = "spotifyd", group = "launcher"}),
-	-- awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e spt -T Spotify -I spotify") end,
+	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e ncspot -I spotify", {tag = " 9 ", focus = false}) end,
+				 {description = "spotifyd", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
 				 {description = "web browser", group = "launcher"}),
+	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end, 
+	             {}),
 	
               
 	-- Lockscreen
-    awful.key({ modkey },            "l",     function () awful.spawn.with_shell("~/.local/scripts/lockscreen.sh") end,
+    awful.key({ modkey },            "l",     function () awful.spawn("lockscreen") end,
         {description = "Lock Screen", group = "launcher"}),
         
     -- Bright Keys
@@ -709,24 +710,24 @@ globalkeys = gears.table.join(
     
 	-- Media Keys	
     awful.key({}, "XF86AudioPlay", function()
-        awful.spawn("playerctl --player=spotify,%any play-pause", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause", false)
     end),    
     awful.key({modkey}, "/", function()
-        awful.spawn("playerctl --player=spotify,%any play-pause", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause", false)
     end),
     
     awful.key({}, "XF86AudioNext", function()
-        awful.spawn("playerctl --player=spotify,%any next", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any next", false)
     end),
     awful.key({modkey}, ".", function()
-        awful.spawn("playerctl --player=spotify,%any next", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any next", false)
     end),
     
     awful.key({}, "XF86AudioPrev", function()
-        awful.spawn("playerctl --player=spotify,%any previous", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any previous", false)
     end),
     awful.key({modkey}, ",", function()
-        awful.spawn("playerctl --player=spotify,%any previous", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any previous", false)
     end),
 	   
 	-- Screenshot
@@ -776,22 +777,22 @@ globalkeys = gears.table.join(
 )
 
 clientkeys = gears.table.join(
-    awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 40,   0, -80,   0) end,
+    awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 50,   0, -100,   0) end,
         {description = "decreases width", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "End",   function (c) c:relative_move(-40,   0,  80,   0) end,
+    awful.key({ modkey, "Shift" }, "End",   function (c) c:relative_move(-50,   0,  100,   0) end,
     	{description = "increases width", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Prior", function (c) c:relative_move(  0, -40,   0,  80) end,
+    awful.key({ modkey, "Shift" }, "Prior", function (c) c:relative_move(  0, -50,   0,  100) end,
     	{description = "increases height", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Next",  function (c) c:relative_move(  0,  40,   0, -80) end,
+    awful.key({ modkey, "Shift" }, "Next",  function (c) c:relative_move(  0,  50,   0, -100) end,
     	{description = "decreases height", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Up",    function (c) c:relative_move(  0, -40,   0,   0) end,
+    awful.key({ modkey, "Shift" }, "Up",    function (c) c:relative_move(  0, -60,   0,   0) end,
     	{description = "move up", group = "client"}),
-    awful.key({ modkey, "Shift" }, "Down",  function (c) c:relative_move(  0,  40,   0,   0) end,
+    awful.key({ modkey, "Shift" }, "Down",  function (c) c:relative_move(  0,  60,   0,   0) end,
 	    {description = "move down", group = "client"}),
     awful.key({ modkey, "Shift" }, "Left",  
         function (c) 
             if c.floating or c.first_tag.layout == awful.layout.suit.floating then
-                c:relative_move(-40,   0,   0,   0) 
+                c:relative_move(-60,   0,   0,   0) 
             else
                 awful.client.swap.byidx( -1)
             end
@@ -800,7 +801,7 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Shift" }, "Right", 
         function (c) 
             if c.floating or c.first_tag.layout == awful.layout.suit.floating then
-                c:relative_move( 40,   0,   0,   0) 
+                c:relative_move( 60,   0,   0,   0) 
             else
                 awful.client.swap.byidx(  1)
             end
@@ -1152,19 +1153,21 @@ awful.rules.rules = {
 	{ rule = { class= "Viewnior" },
 		callback = function() awful.layout.set(awful.layout.suit.max) end },
 	{ rule = { class="okular" },
-		properties = { switchtotag = true, tag = " 5 " },
-		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[5]) end },
+		properties = { switchtotag = true, tag = " 4 " },
+		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
     { rule = { instance="pt.overleaf", class="Brave-browser" },
-        properties = { floating = false, tag = " 6 " } },
+        properties = { floating = false, tag = " 5 " } },
+    { rule = { class="Inkscape" },
+            properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Blender" },
-            properties = { maximized = false, tag = " 6 " } },
+            properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Flowblade" },
-            properties = { maximized = false, tag = " 6 " } },
+            properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Skype" },
     	properties = { tag = " 7 " } },
-    { rule = { class="discord" },
+    { rule = { name="^Discord" },
     	properties = { focus = false, tag = " 7 " } },
-    { rule = { instance="web.whatsapp.com", class="Brave-browser" },
+    { rule = { instance="web.whatsapp.com"},
     	properties = { placement = awful.placement.restore, floating = true, tag = " 8 " } },
     { rule = { class="TelegramDesktop" },
     	properties = { placement = awful.placement.restore, floating = true, tag = " 8 " } }
