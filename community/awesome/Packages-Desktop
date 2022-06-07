@@ -199,6 +199,7 @@ playerctl
 bmenu
 xsel
 xclip
+xcolor
 libcanberra
 gnome-keyring
 

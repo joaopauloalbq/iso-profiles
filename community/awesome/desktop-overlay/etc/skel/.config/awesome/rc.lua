@@ -423,17 +423,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 }) -- opacity = 0.90
  	-- os.setlocale(os.getenv("LANG"))
  	mytextclock = wibox.widget.textclock("  %a %d, %H:%M  ")
- 	-- mycal = lain.widget.cal({
- 	    -- attach_to = { mytextclock },
- 	    -- notification_preset = {
- 	        -- font = "Noto Mono 15",
- 	        -- fg   = beautiful.notification_fg,
- 	        -- bg   = beautiful.notification_bg
- 	    -- },
- 	    -- followtag = true,
- 	    -- icons = ""
- 	-- })
- 	 	
+ 	 	 	
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -651,9 +641,6 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "g",     function () awful.spawn("rofi -modi filebrowser -show filebrowser", false) end,
 			{description = "file browser", group = "launcher"}),
 			
-	awful.key({ altkey },            "slash",   function () awful.spawn.with_shell("python ~/.local/scripts/rofi-hud.py") end,
-			{description = "HUD", group = "launcher"}),
-		
 	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p && xdotool key ctrl+v", false) end,
 			{description = "clipboard", group = "launcher"}),
 	              		              	              	              		              	             
@@ -766,6 +753,23 @@ globalkeys = gears.table.join(
     awful.key({ "Control" }, "Print", nil, function ()
         awful.spawn.with_shell("maim -s -k | xclip -selection c -t image/png && notify-send 'Screenshot captured' 'to clipboard' -i 'preferences-desktop-wallpaper'")
     end, {description = "Print area to clipboard", group = "Screenshot"}),
+    
+    awful.key({ modkey }, "z", nil, function ()
+        awful.spawn.easy_async("xcolor -s", function()
+            -- awful.spawn.with_line_callback("xclip -selection clipboard -o", {
+            awful.spawn.with_line_callback("xsel --clipboard -o", {
+                stdout = function(color)         
+                    naughty.notify({ 
+                        title = color,
+                        text  = "copied to clipboard",
+                        icon  = "mypaint",
+                        border_color = color,
+                        ignore_suspend = true
+                    })
+                end,
+            })
+        end)
+    end, {description = "Color picker", group = "launcher"}),
 
 	-- Kill app
     awful.key({ altkey, "Control" }, "Delete", nil, function ()
