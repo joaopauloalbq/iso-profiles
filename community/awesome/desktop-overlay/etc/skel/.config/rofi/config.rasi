@@ -1,12 +1,15 @@
 configuration {
 	display-ssh: "";
 	display-run: "";
+	display-keys: "";
 	display-drun: "";
 	display-calc: "";
 	display-emoji: "";
+	display-delclip: "";
 	display-window: "";
 	display-windowcd: "";
 	display-filebrowser: "";
+	hover-select: true;
 	me-select-entry: "";
 	me-accept-entry: "MousePrimary";
 	drun-display-format: "{icon} {name}";

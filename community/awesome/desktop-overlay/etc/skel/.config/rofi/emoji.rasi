@@ -1,8 +1,8 @@
-@import "colors.rasi"
+@import "base.rasi"
 
 inputbar {
 	border: 0px 0px 1px 0px;
-
+	margin: 0px 0px -2px 0px;
 	children: [prompt,entry];
 }
 
@@ -17,8 +17,13 @@ entry {
 	padding: 12px;
 }
 
+message{
+	border: 0 0 1px 0;
+}
+
 textbox {
 	padding: 12px;
+	horizontal-align: 0.5;
 }
 
 listview {
@@ -27,13 +32,11 @@ listview {
 	fixed-height: true;
 	columns: 10;
 	lines: 7;
-	margin: -2px 0px 0px 0px;
 	padding: 9px;
-//	spacing: 9px;	
 }
 
 element {
-	border-radius: 3px;
+	border-radius: @corner-radius;
 }
 
 element-icon {
@@ -46,12 +49,22 @@ element-text  {
 	horizontal-align: 0;
 	vertical-align: 0.5;
 	expand: false;
-	
-	
+	cursor: pointer;	
 	padding: 4px 0px;
 	margin: -1px 0px 1px 10px;
 }
 
 element-text selected {
 	text-color: @background-color;
+}
+
+mode-switcher {
+	border: 1px 0 0 0;
+}
+
+button {
+	horizontal-align: 0.5;
+	border: 0 1px 0 0;
+	padding: 10;
+	cursor: pointer;
 }

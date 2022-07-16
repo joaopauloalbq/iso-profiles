@@ -1,6 +1,6 @@
 {
     "backup": false,
-    "colorscheme": "geany",
+    "colorscheme": "atom-tc",
     "ignorecase": false,
     "keepautoindent": true,
     "mkparents": true,

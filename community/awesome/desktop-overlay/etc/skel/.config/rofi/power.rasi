@@ -1,8 +1,8 @@
-@import "colors.rasi"
+@import "base.rasi"
 
 * {
 	width: 670px;
-	height: 141px;
+	height: 139px;
 }
 
 inputbar {
@@ -10,30 +10,29 @@ inputbar {
 }
 
 listview {
-	columns: 5;
-	spacing: 10;
-	dynamic: true;
 	layout: vertical;
-	padding: 10px;
-	margin: 0px -1px;
+	dynamic: true;
+	columns: 5;
+	padding: 9px;
+	spacing: 9px;
 }
 
 element {
-	orientation:                    vertical;
-	padding:                        15px 0px;
-	border-radius:                  3px;
+	orientation: vertical;
+	border-radius: @corner-radius;
+	padding: 15px 0px;
 }
 
 element-text {
-	expand:                         true;
-	horizontal-align:               0.5;
-	padding:                        0px 5px;
-	margin:                         7px 0px -7px 0px;
-	background-color: inherit;
+	expand: true;
+	horizontal-align: 0.5;
+	padding: 0px 6px;
+	margin: 6px 0px -6px 0px;
+	cursor: pointer;
 }
 
 element-icon {
-	size: 64px;
 	horizontal-align: 0.5;
-	background-color: inherit;
+	size: 64px;
+	cursor: pointer;
 }

@@ -1,0 +1,43 @@
+* {
+	background-color: #2d323a;
+	brighter-background-color: #4c5158;
+	darker-background-color: #282C33;
+	border-color: #1e222a;
+	text-color: #DEDEDE;
+	brighter-text-color: #FAFAFA;
+	highlight-color: #dc98b1;
+	darker-highlight-color: #c88aa1;
+	
+	font: "Noto Sans Medium 11";
+	corner-radius: 8px;	
+	width: 690px;
+	height: 487px;
+}
+
+window {
+	margin: -2px;
+	border: 4px;
+	border-radius: 11px;
+	border-color: @highlight-color;
+}
+
+element selected, element-text selected {
+	background-color: @darker-highlight-color;
+	text-color: @brighter-text-color;
+}
+
+element-text, element-icon {
+	background-color: inherit;
+}
+
+textbox {
+	background-color: @brighter-background-color;
+}
+
+mode-switcher, button {
+	background-color: @darker-background-color;
+}
+
+button selected {
+	text-color: @highlight-color;
+}

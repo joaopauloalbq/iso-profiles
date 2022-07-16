@@ -1,0 +1,14 @@
+@import "list.rasi"
+
+* {
+	background-color: #392C2D;
+	border-color: #291D1E;
+}
+
+window {
+	border-color: #E75456;
+}
+
+element selected, element-text selected { 
+	background-color: #E75456;
+}

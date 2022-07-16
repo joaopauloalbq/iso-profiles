@@ -1,24 +1,29 @@
-@import "colors.rasi"
+@import "base.rasi"
 
 inputbar {
 	border: 0 0 1px 0;
+	margin: 0 0 -2px 0;
 	children: [prompt, entry, icon-prev-page, icon-next-page];
 }
 
 prompt {
 	font: "Noto Sans 13";
-	border: 0 1px 0 0;
-	padding: 0px 13px 0px;
 	vertical-align: 0.5;
+	padding: 0px 13px;
+	border: 0 1px 0 0;
 }
 
 entry {
 	padding: 12px;
 }
 
-textbox {
+message{
 	border: 0 0 1px 0;
-	padding: 12px 12px;
+}
+
+textbox {
+	padding: 12px;
+	horizontal-align: 0.5;
 }
 
 listview {
@@ -27,34 +32,40 @@ listview {
 	fixed-height: true;
 	columns: 6;
 	lines: 4;
-	margin: -2px 0px 0px 0px;
     padding: 9px;
 	spacing: 9px;
 }
 
 element {
-	orientation:                    vertical;
-	border-radius:                  3px;
-	padding:                        12px 0px 15px 0px;
+	orientation: vertical;
+	border-radius: @corner-radius;
+	padding: 12px 0px 15px 0px;
 }
 
 element-text {
-	expand:                         true;
-	horizontal-align:               0.5;
-	vertical-align:                 0.5;
-    padding:                        0px 6px;
-	margin:                         6px 0px -6px -3px;
+	expand: true;
+	horizontal-align: 0.5;
+	vertical-align: 0.5;
+    padding: 0px 6px;
+	margin: 6px 0px -6px -3px;
+	cursor: pointer;
 }
 
 element-icon {
 	horizontal-align: 0.5;
 	size: 48px;
-	border: 0px;
+	cursor: pointer;
 }
 
 mode-switcher {
-	border: 1px 1px 0;
-	padding: 12px;
+	border: 1px 0 0 0;
+}
+
+button {
+	horizontal-align: 0.5;
+	border: 0 1px 0 0;
+	padding: 10;
+	cursor: pointer;
 }
 
 icon-next-page {
@@ -63,6 +74,7 @@ icon-next-page {
 	vertical-align: 0.5;
 	filename: "next";
 	action: "kb-page-next";
+	cursor: pointer;
 }
 
 icon-prev-page {
@@ -71,4 +83,5 @@ icon-prev-page {
 	vertical-align: 0.5;
 	filename: "previous";
 	action: "kb-page-prev";
+	cursor: pointer;
 }

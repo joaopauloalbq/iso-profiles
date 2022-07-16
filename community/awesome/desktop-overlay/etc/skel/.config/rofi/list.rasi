@@ -1,4 +1,4 @@
-@import "colors.rasi"
+@import "base.rasi"
 
 * {
 	spacing: 0;
@@ -18,16 +18,20 @@ prompt {
 
 entry {
 	padding: 12px;
+	cursor: text;
+}
+
+message{
+	border: 0 0 1px 0;
 }
 
 textbox {
-	border: 0 0 1px 0;
-	padding: 12px 12px;
+	padding: 12px;
+	horizontal-align: 0.5;
 }
 
 listview {
 	cycle: false;
-	margin: 0 0 -1px 0;
 	scrollbar: false;
 	dynamic: true;
 	lines: 10;
@@ -35,24 +39,29 @@ listview {
 
 element {
 	border: 0 0 1px 0;
-	padding: 7px;
 }
 
 element-text {
+	padding: 12px 0;
 	expand: true;
 	vertical-align: 0.5;
-	padding: 0 12px 0px 12px;
-	spacing: 0;
+	cursor: pointer;
 }
 
 element-icon {
-	size: 30px;
-	border: 0px;
+	padding: 0 12px;	
+	size: 32px;
+	cursor: pointer;
+}
+
+mode-switcher {
+	border: 1px 0 0 0;
+	cursor: pointer;
 }
 
 button {
 	horizontal-align: 0.5;
-	border: 1px 1px 0 0;
-	padding: 11;
+	border: 0 1px 0 0;
+	padding: 10;
+	cursor: pointer;
 }
-

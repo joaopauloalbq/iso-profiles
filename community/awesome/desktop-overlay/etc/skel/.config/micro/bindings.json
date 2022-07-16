@@ -9,6 +9,8 @@
     "Alt-y": "lua:initlua.sort_imports",
     "Alt-z": "lua:initlua.toggleSoftwrap",
     "Alt-|": "lua:initlua.new_view",
+    "AltPageDown": "PreviousTab",
+    "AltPageUp": "NextTab",
     "AltShiftDown": "lua:initlua.searchNextWord",
     "AltShiftUp": "lua:initlua.searchPrevWord",
     "Ctrl-b": "lua:initlua.build",

@@ -1,0 +1,15 @@
+@import "list.rasi"
+
+* {
+	spacing: 0;
+}
+
+window {
+	height: 100%;
+	width: 400px;
+	location: east;
+	anchor: east;
+	margin: 0;
+	border: 0 0 0 2px;
+	border-radius: 0;
+}

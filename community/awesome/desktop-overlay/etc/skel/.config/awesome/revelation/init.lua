@@ -68,7 +68,7 @@ local clientData = {} -- table that holds the positions and sizes of floating cl
 
 local revelation = {
     -- Name of expose tag.
-    tag_name = "Revelation",
+    tag_name = "﯅",
 
     charorder = "jkluiopyhnmfdsatgvcewqzx1234567890",
 
@@ -182,7 +182,7 @@ function revelation.expose(args)
     for scr=1,capi.screen.count() do
         t[scr] = awful.tag.new({revelation.tag_name},
             scr, awful.layout.suit.fair.horizontal)[1]
-        zt[scr] = awful.tag.new({revelation.tag_name.."_zoom"},
+        zt[scr] = awful.tag.new({""},
             scr, awful.layout.suit.fair.horizontal)[1]
         
         if curr_tag_only then

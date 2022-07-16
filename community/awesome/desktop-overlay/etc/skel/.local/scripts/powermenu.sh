@@ -12,7 +12,8 @@ else
     elif [ "$1" = "Suspend" ]; then
     	awesome-client 'awful = require("awful") awful.spawn.with_shell("bash ~/.local/scripts/lockscreen.sh && systemctl suspend")'
     elif [ "$1" = "Hibernate" ]; then
-    	awesome-client 'awful = require("awful") awful.spawn.with_shell("bash ~/.local/scripts/lockscreen.sh && systemctl hibernate")'
+    	systemctl hibernate
+    	# awesome-client 'awful = require("awful") awful.spawn.with_shell("bash ~/.local/scripts/lockscreen.sh && systemctl hibernate")'
     elif [ "$1" = "Restart" ]; then
         systemctl reboot
     elif [ "$1" = "Logout" ]; then
