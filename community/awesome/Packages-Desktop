@@ -78,7 +78,7 @@ gsfonts
 ## Package management
 pamac
 pamac-gtk
->extra appimagelauncher
+appimagelauncher
 
 ## Java
 >extra jre-openjdk
@@ -192,6 +192,7 @@ clipmenu
 networkmanager-dmenu
 bat
 exa
+fd
 lain
 xdotool
 neofetch
@@ -213,8 +214,9 @@ papirus-folders
 >extra gtk-engine-murrine
 
 ## AUR packages
-vimix-gtk-themes
-i3lock-color
+# vimix-gtk-themes
+colloid-gtk-theme-git
+i3lock-color #light-locker
 dragon-drop
 udiskie-dmenu-git
 cbatticon-git
