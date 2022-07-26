@@ -32,7 +32,7 @@ local capi         = {
     screen         = screen
 }
 
-beautiful.init("~/.config/awesome/themes/suit/theme.lua")
+beautiful.init("~/.config/awesome/themes/nord-pink/theme.lua")
 
 -- disable for now. 
 -- It seems there is not way to pass err handling function into the delayed_call()

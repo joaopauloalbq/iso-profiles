@@ -3,14 +3,6 @@ source $HOME/.config/user-dirs.dirs
 
 export PS1="\[\e[1;34m\][\[\e[m\]\[\e[1;36m\]\u@\h\[\e[m\] \[\e[1;33m\]\w\[\e[m\]\[\e[1;34m\]]\[\e[m\]\[\e[1;32m\]\\$\[\e[m\] "
 
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
 # Another CTRL-R script to insert the selected command from history into the command line/region
 __fzf_history ()
 {
@@ -49,4 +41,4 @@ builtin bind -x '"\C-x1": __fzf_history';
 builtin bind '"\C-r": "\C-x1\e^\er"'
 
 # colorscript random
-# pokemon-colorscripts random
+# pokemon-colorscripts --no-title -r

@@ -19,7 +19,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Menu
-local freedesktop = require("freedesktop")
+-- local freedesktop = require("freedesktop")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 -- require("awful.hotkeys_popup.keys")
@@ -59,6 +59,7 @@ editor = "micro"
 editor_cmd = terminal .. " -x " .. editor
 
 naughty.config.defaults.border_width = beautiful.notification_border_width
+naughty.config.defaults.margin = beautiful.notification_margin
 naughty.config.padding = dpi(14)
 naughty.config.spacing = dpi(6)
 naughty.config.icon_dirs = {"/usr/share/icons/Papirus-Dark/48x48/status/", "/usr/share/icons/Papirus-Dark/48x48/categories/"}
@@ -74,6 +75,7 @@ altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
+    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
@@ -94,7 +96,6 @@ awful.layout.layouts = {
     -- awful.layout.suit.magnifier,
     awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.spiral,
-    awful.layout.suit.floating,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
 }
@@ -645,22 +646,22 @@ globalkeys = gears.table.join(
 			{description = "Translate selected text", group = "launcher"}),
 			
 	-- Apps
-	awful.key({ modkey , "Shift" },  "n",     function () awful.spawn(terminal .. " -e nmtui", {floating = true}) end,
-				 {description = "network manager", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "d", rallpaper,
-				 {description = "ranger file manager", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
-				 {description = "ranger file manager", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "h",     function () awful.spawn(terminal .. " -e htop -T htop") end,
-				 {description = "htop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "b",     function () awful.spawn(terminal .. " -e btop -T btop") end,
 				 {description = "btop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "c",     function () awful.spawn(terminal .. " -e micro") end,
 				 {description = "micro text editor", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
-				 {description = "vs code", group = "launcher"}),
+	awful.key({ modkey , "Shift" },  "d", rallpaper,
+				 {description = "wallpaper", group = "launcher"}),
+	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
+				 {description = "ranger file manager", group = "launcher"}),
+	awful.key({ modkey , "Shift" },  "h",     function () awful.spawn(terminal .. " -e htop -T htop") end,
+				 {description = "htop", group = "launcher"}),
+	awful.key({ modkey , "Shift" },  "n",     function () awful.spawn(terminal .. " -e nmtui", {floating = true}) end,
+				 {description = "network manager", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e ncspot -I spotify", {tag = " 9 ", focus = false }) end, 
 	             {description = "ncspot", group = "launcher"}),
+	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
+				 {description = "vs code", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
 				 {description = "web browser", group = "launcher"}),
 	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end),
@@ -1133,16 +1134,16 @@ awful.rules.rules = {
 		properties = { floating = true } },	
 	{ rule = { class="Heimer" },
 		properties = { floating = false, fullscreen = false } },	
-	{ rule = { class= "mpv" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
-	{ rule = { class= "feh" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
-	{ rule = { class= "Viewnior" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
-	{ rule = { class="okular" },
-		properties = { switchtotag = true, tag = " 4 " },
-		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
-    { rule = { instance="pt.overleaf", class="Brave-browser" },
+	-- { rule = { class= "mpv" },
+		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
+	-- { rule = { class= "feh" },
+		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
+	-- { rule = { class= "Viewnior" },
+		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
+	-- { rule = { class="okular" },
+		-- properties = { switchtotag = true, tag = " 4 " },
+		-- callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
+    { rule = { instance="typefast.io" },
         properties = { floating = false, tag = " 5 " } },
     { rule = { class="Inkscape" },
             properties = { maximized = false, tag = " 5 " } },
@@ -1152,9 +1153,9 @@ awful.rules.rules = {
             properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Skype" },
     	properties = { tag = " 7 " } },
-    { rule = { instance="discord", class="discord" },
+    { rule = { class="discord" },
     	properties = { switchtotag = false, urgent = false, focus = false, tag = " 7 " } },
-    { rule = { instance="web.whatsapp.com", class="Brave-browser" },
+    { rule = { instance="web.whatsapp.com" },
     	properties = { placement = awful.placement.right, floating = true, tag = " 8 " } },
     { rule = { class="TelegramDesktop" },
     	properties = { placement = awful.placement.restore, floating = true, urgent = false, tag = " 8 " } }
@@ -1164,10 +1165,10 @@ awful.rules.rules = {
 run_once('','picom','')
 run_once('','nm-applet','')
 run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
--- run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
-run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
+-- run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
--- run_once('','blueman-tray','')
+run_once('','blueman-tray','')
 -- run_once('','gnome-keyring-daemon',' --start')
 run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
 run_once('','clipmenud','')
