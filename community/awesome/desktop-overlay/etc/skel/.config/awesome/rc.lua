@@ -617,7 +617,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
 	        {description = "open applications", group = "launcher"}),
 	
-	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -theme emoji; xdotool key ctrl+v; clipctl enable", false) end,
+	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c ; clipctl enable", false) end,
 			{description = "emoji picker", group = "launcher"}),              
 			
 	awful.key({ modkey },            "g",     function () awful.spawn("rofi -modi filebrowser -show filebrowser", false) end,
@@ -1134,15 +1134,15 @@ awful.rules.rules = {
 		properties = { floating = true } },	
 	{ rule = { class="Heimer" },
 		properties = { floating = false, fullscreen = false } },	
-	-- { rule = { class= "mpv" },
-		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
-	-- { rule = { class= "feh" },
-		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
-	-- { rule = { class= "Viewnior" },
-		-- callback = function() awful.layout.set(awful.layout.suit.max) end },
-	-- { rule = { class="okular" },
-		-- properties = { switchtotag = true, tag = " 4 " },
-		-- callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
+	{ rule = { class= "mpv" },
+		callback = function() awful.layout.set(awful.layout.suit.max) end },
+	{ rule = { class= "feh" },
+		callback = function() awful.layout.set(awful.layout.suit.max) end },
+	{ rule = { class= "Viewnior" },
+		callback = function() awful.layout.set(awful.layout.suit.max) end },
+	{ rule = { class="okular" },
+		properties = { switchtotag = true, tag = " 4 " },
+		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
     { rule = { instance="typefast.io" },
         properties = { floating = false, tag = " 5 " } },
     { rule = { class="Inkscape" },
@@ -1153,6 +1153,9 @@ awful.rules.rules = {
             properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Skype" },
     	properties = { tag = " 7 " } },
+	{ rule = { class="VirtualBox Manager" },
+        properties = { switchtotag = true, tag = " 7 " },
+        callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[7]) end },
     { rule = { class="discord" },
     	properties = { switchtotag = false, urgent = false, focus = false, tag = " 7 " } },
     { rule = { instance="web.whatsapp.com" },
@@ -1165,10 +1168,10 @@ awful.rules.rules = {
 run_once('','picom','')
 run_once('','nm-applet','')
 run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
-run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
--- run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+-- run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
+run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
-run_once('','blueman-tray','')
+-- run_once('','blueman-tray','')
 -- run_once('','gnome-keyring-daemon',' --start')
 run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
 run_once('','clipmenud','')

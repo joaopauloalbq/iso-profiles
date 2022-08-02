@@ -3,7 +3,7 @@
 inputbar {
 	border: 0px 0px 1px 0px;
 	margin: 0px 0px -2px 0px;
-	children: [prompt,entry];
+	children: [prompt, entry, icon-prev-page, icon-next-page];
 }
 
 prompt {
@@ -28,7 +28,7 @@ textbox {
 
 listview {
 	layout: vertical;
-	fixed-columns: true;
+	//fixed-columns: false;
 	fixed-height: true;
 	columns: 10;
 	lines: 7;
@@ -44,18 +44,11 @@ element-icon {
 }
 
 element-text  {
-	text-color: @background-color;
 	font: "Noto Color Emoji 27";
-	horizontal-align: 0;
+	horizontal-align: 0.5;
 	vertical-align: 0.5;
-	expand: false;
 	cursor: pointer;	
 	padding: 4px 0px;
-	margin: -1px 0px 1px 10px;
-}
-
-element-text selected {
-	text-color: @background-color;
 }
 
 mode-switcher {
@@ -66,5 +59,23 @@ button {
 	horizontal-align: 0.5;
 	border: 0 1px 0 0;
 	padding: 10;
+	cursor: pointer;
+}
+
+icon-next-page {
+	expand: false;
+	padding: 12px;
+	vertical-align: 0.5;
+	filename: "next";
+	action: "kb-page-next";
+	cursor: pointer;
+}
+
+icon-prev-page {
+	expand: false;
+	padding: 12px;
+	vertical-align: 0.5;
+	filename: "previous";
+	action: "kb-page-prev";
 	cursor: pointer;
 }
