@@ -64,7 +64,7 @@ naughty.config.padding = dpi(14)
 naughty.config.spacing = dpi(6)
 naughty.config.icon_dirs = {"/usr/share/icons/Papirus-Dark/48x48/status/", "/usr/share/icons/Papirus-Dark/48x48/categories/"}
 naughty.config.icon_formats = {"svg"}
-beautiful.snap_shape = gears.shape.rectangle
+
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -363,6 +363,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytaglist = awful.widget.taglist {
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
+        -- style   = { shape = function(cr,w,h) gears.shape.rounded_rect(cr,w,h,6) end, },
         buttons = taglist_buttons
     }
 

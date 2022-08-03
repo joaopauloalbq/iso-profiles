@@ -1,8 +1,8 @@
 * {
 	background-color: #2d323a;
 	brighter-background-color: #4c5158;
-	darker-background-color: #282C33;
-	border-color: #1e222a;
+	darker-background-color: #2A2E36;
+	border-color: #232830;
 	text-color: #DEDEDE;
 	brighter-text-color: #FAFAFA;
 	highlight-color: #dc98b1;
@@ -22,7 +22,7 @@ window {
 }
 
 element selected, element-text selected {
-	background-color: @darker-highlight-color;
+	background-color: @brighter-background-color;
 	text-color: @brighter-text-color;
 }
 
@@ -31,7 +31,8 @@ element-text, element-icon {
 }
 
 textbox {
-	background-color: @brighter-background-color;
+	background-color: @darker-highlight-color;
+	text-color: @darker-background-color;
 }
 
 mode-switcher, button {

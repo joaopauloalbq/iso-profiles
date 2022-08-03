@@ -19,6 +19,7 @@ prompt {
 entry {
 	padding: 12px;
 	cursor: text;
+	//placeholder: "Search";
 }
 
 message{

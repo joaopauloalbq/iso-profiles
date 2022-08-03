@@ -12,6 +12,10 @@ configuration {
 	hover-select: true;
 	me-select-entry: "";
 	me-accept-entry: "MousePrimary";
+	kb-row-right: "Right";
+	kb-row-left: "Left";
+	kb-move-char-back: "Control+b";
+	kb-move-char-forward: "Control+f";
 	drun-display-format: "{icon} {name}";
 	drun-match-fields: "name,generic,comment";
 	show-icons: true;
