@@ -9,8 +9,9 @@ inputbar {
 prompt {
 	font: "Noto Sans 18";
 	vertical-align: 0.5;
-	padding: 0px 9px 0px 9px;
+	padding: 0px 20px;
 	border: 0 1px 0 0;
+	margin: 0 0 0 -4px;
 }
 
 entry {
@@ -28,8 +29,8 @@ textbox {
 
 listview {
 	layout: vertical;
-	//fixed-columns: false;
-	fixed-height: true;
+	fixed-columns: true;
+	// fixed-height: false;
 	columns: 10;
 	lines: 7;
 	padding: 9px;

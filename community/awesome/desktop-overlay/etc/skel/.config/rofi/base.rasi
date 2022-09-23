@@ -2,7 +2,7 @@
 	background-color: #2d323a;
 	brighter-background-color: #4c5158;
 	darker-background-color: #2A2E36;
-	border-color: #232830;
+	border-color: #21262E;
 	text-color: #DEDEDE;
 	brighter-text-color: #FAFAFA;
 	highlight-color: #dc98b1;
@@ -24,6 +24,16 @@ window {
 element selected, element-text selected {
 	background-color: @brighter-background-color;
 	text-color: @brighter-text-color;
+}
+
+//element selected.active, element-text selected.active {
+//	background-color: @highlight-color;
+//	text-color: @brighter-text-color;
+//}
+
+element active, element-text active {
+	background-color: @darker-highlight-color;
+	text-color: @background-color;
 }
 
 element-text, element-icon {
