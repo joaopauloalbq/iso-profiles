@@ -123,6 +123,11 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibar
+mytextclock = wibox.widget.textclock()
+mytextclock:buttons( gears.table.join(
+                        awful.button({ }, 1, function () awful.spawn("gsimplecal", false) end),
+                        awful.button({ }, 4, function () awful.spawn("gsimplecal next_month", false) end),
+                        awful.button({ }, 5, function () awful.spawn("gsimplecal prev_month", false) end)))
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
@@ -416,7 +421,7 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             -- awful.widget.keyboardlayout(),
-            wibox.widget.textclock("  %a %d, %H:%M  "),
+            mytextclock,
             s.mylayoutbox,
         },
     }
