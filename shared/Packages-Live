@@ -1,4 +1,4 @@
-calamares-git
+calamares
 grub-theme-live-manjaro
 gsmartcontrol
 #manjaro-architect
@@ -7,5 +7,4 @@ manjaro-live-systemd
 mkinitcpio-nfs-utils
 nbd
 clonezilla
-KERNEL-zfs
-zfs-utils
+virtualbox-guest-utils
