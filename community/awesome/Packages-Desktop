@@ -40,29 +40,6 @@ manjaro-pipewire
 udiskie
 >extra udisks2
 
-## AUR Support/Development
-# Missing base-devel packages
-base-devel
-autoconf
-automake
-binutils
-bison
-fakeroot
-flex
-gcc
->multilib gcc-libs-multilib
->multilib gcc-multilib
-libtool
-m4
-make
-patch
-pkg-config
->multilib lib32-flex
-# Extra packages for AUR support
-git
-patchutils
-subversion
-
 ## Fonts
 noto-fonts               # default font
 noto-fonts-emoji
@@ -99,28 +76,6 @@ lightdm
 lightdm-gtk-greeter
 >extra lightdm-gtk-greeter-settings
 accountsservice  # Enhanced user accounts handling
-
-## Applications
-awesome
-picom
-xfce4-terminal
-brave-browser
-mpv
-maim
-htop
-btop
-thunar
-thunar-archive-plugin
-viewnior
-galculator
-file-roller
-pavucontrol
-blueman
-ranger
-micro
-mintstick
->extra libreoffice-fresh
->extra manjaro-settings-manager
 
 tumbler
 ffmpegthumbnailer  # tumbler - for video thumbnails
@@ -169,6 +124,27 @@ xorg-xkill
 xorg-xrdb
 light
 
+## Applications
+awesome
+picom
+xfce4-terminal
+brave-browser
+mpv
+maim
+htop
+thunar
+thunar-archive-plugin
+viewnior
+galculator
+file-roller
+pavucontrol
+blueman
+ranger
+micro
+mintstick
+>extra libreoffice-fresh
+>extra manjaro-settings-manager
+
 ## Misc
 manjaro-hotfixes
 exfatprogs
@@ -213,6 +189,29 @@ papirus-icon-theme
 papirus-folders
 >extra gnome-themes-extra
 >extra gtk-engine-murrine
+
+## AUR Support/Development
+# Missing base-devel packages
+base-devel
+autoconf
+automake
+binutils
+bison
+fakeroot
+flex
+gcc
+>multilib gcc-libs-multilib
+>multilib gcc-multilib
+libtool
+m4
+make
+patch
+pkg-config
+>multilib lib32-flex
+# Extra packages for AUR support
+git
+patchutils
+subversion
 
 ## AUR packages
 # vimix-gtk-themes
