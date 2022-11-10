@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Steam (Runtime)
+Name=Steam
 Comment=Application for managing and playing games on Steam
 Comment[pt_BR]=Aplicativo para jogar e gerenciar jogos no Steam
 Comment[bg]=Приложение за ръководене и пускане на игри в Steam
@@ -30,7 +30,6 @@ Comment[vi]=Ứng dụng để quản lý và chơi trò chơi trên Steam
 Exec=/usr/bin/steam-runtime %U
 Icon=steam
 Terminal=false
-Hidden=true
 Type=Application
 Categories=Network;FileTransfer;Game;
 MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;

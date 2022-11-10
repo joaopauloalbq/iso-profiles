@@ -37,6 +37,8 @@ MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;
 Actions=Store;Community;Library;Servers;Screenshots;News;Settings;BigPicture;Friends;
 PrefersNonDefaultGPU=true
 X-KDE-RunOnDiscreteGpu=true
+Hidden=true
+
 
 [Desktop Action Store]
 Name=Store
