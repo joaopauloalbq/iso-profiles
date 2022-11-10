@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# WALLPAPER_FOLDER="$(xdg-user-dir PICTURES)/Wallpapers/"
+# IFS=$'\n' # change Internal Field Separator to newline char
+# WALLPAPERS=($(ls -1 $WALLPAPER_FOLDER))
+
+# echo -en "\x00prompt\x1f\n"
+# for w in "${WALLPAPERS[@]}" 
+# do
+#     echo -en "$w\0icon\x1f$WALLPAPER_FOLDER$w\x1finfo\x1fkeyboardKeymapSelectedMenu\n"
+# done
+
+# case $ROFI_RETV in
+#     1 )
+#         nitrogen --set-zoom-fill $WALLPAPER_FOLDER$1
+#     ;;
+# esac
+
+
+# #!/usr/bin/env bash
+
+WALLPAPER_FOLDER="$(xdg-user-dir PICTURES)/Wallpapers/"
+# WALLPAPER_FOLDER="/home/jp/.cache/thumbnails/large/"
+
+IFS=$'\n' # change Internal Field Separator to newline char
+WALLPAPERS=($(ls -1 $WALLPAPER_FOLDER))
+
+echo -en "\x00prompt\x1f\n"
+for w in "${WALLPAPERS[@]}" 
+do
+    THUMB="$(md5sum $WALLPAPER_FOLDER$w | awk '{print $1}').png"
+    if [ ! -e $HOME/.cache/thumbnails/large/$THUMB ]; then
+        convert -thumbnail 400 $WALLPAPER_FOLDER$w $HOME/.cache/thumbnails/large/$THUMB 
+    fi
+    
+    echo -en "$w\0icon\x1f$HOME/.cache/thumbnails/large/$THUMB\n"
+done
+
+case $ROFI_RETV in
+    1 )
+        nitrogen --set-zoom-fill $WALLPAPER_FOLDER$1
+    ;;
+esac

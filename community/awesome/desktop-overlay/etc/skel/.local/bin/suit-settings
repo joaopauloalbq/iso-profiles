@@ -1,0 +1,374 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+## Everyone is permitted to copy and distribute copies of this file under GPL2
+
+if [ -r /home/jp/$LANG ]; then
+	source /home/jp/$LANG
+else
+	source /home/jp/en_US.UTF-8
+fi
+
+run () {
+	coproc ( $1 > /dev/null  2>1 )
+}
+
+echo -en "\0message\x1f\n"
+case $ROFI_INFO in
+	"" )
+		echo -en "\x00prompt\x1f\n"
+		echo -en "\x00data\x1ftestededata\n"
+		echo -en "$DISPLAY_LABEL\0icon\x1fvideo-display\x1finfo\x1fdisplayMenu\n"
+		echo -en "$SOUND_LABEL\0icon\x1faudio-speakers\x1finfo\x1fsoundMenu\n"
+		echo -en "$NETWORK_LABEL\0icon\x1fnetwork-connect\x1finfo\x1fnetworkMenu\n"
+		echo -en "$BLUETOOTH_LABEL\0icon\x1fbluetooth\x1finfo\x1fbluetoothMenu\n"
+		echo -en "$POWER_LABEL\0icon\x1fac-adapter\x1finfo\x1fpowerMenu\n"
+		echo -en "$DEFAULTAPPLICATIONS_LABEL\0icon\x1ftag\x1finfo\x1fdefaultApplicationsMenu\n"
+		echo -en "$MOUSETOUCHPAD_LABEL\0icon\x1finput-mouse\x1finfo\x1fmouseTouchpadMenu\n"
+		echo -en "$KEYBOARD_LABEL\0icon\x1fkeyboard\x1finfo\x1fkeyboardKeymapMenu\n"
+		echo -en "$LANGUAGES_LABEL\0icon\x1flanguages\x1finfo\x1flocaleMenu\n"
+		echo -en "$TIMEDATE_LABEL\0icon\x1fhistory\x1finfo\x1ftimeDateMenu\n"
+		echo -en "$DRIVERS_LABEL\0icon\x1fdevice_pci\x1fdata\x1ftestededata\x1finfo\x1fdriverMenu\n"
+		echo -en "$USER_LABEL\0icon\x1favatar-default\x1finfo\x1fuserMenu\n"
+		echo -en "$ABOUT_LABEL\0icon\x1fdialog-information\x1finfo\x1faboutMenu\n"
+	;;
+	# ┌┐┌┌─┐┌┬┐┬ ┬┌─┐┬─┐┬┌─
+	# │││├┤  │ ││││ │├┬┘├┴┐
+	# ┘└┘└─┘ ┴ └┴┘└─┘┴└─┴ ┴
+	"networkMenu" )
+		echo -en "Browse SSH Servers\0icon\x1fnetwork-connect\x1finfo\x1fnetworkSelectedMenu\n"
+		echo -en "Browse VNC Servers\0icon\x1fnetwork-connect\x1finfo\x1fnetworkSelectedMenu\n"
+		echo -en "$CONNECTIONEDITOR_LABEL\0icon\x1flan-segment\x1finfo\x1fnetworkSelectedMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
+	;;
+	"networkSelectedMenu" )
+		if [ "$1" = "Browse SSH Servers" ]; then
+			run "bssh"
+		elif [ "$1" = "Browse VNC Servers" ]; then
+			run "bvnc"
+		elif [ "$1" = "$CONNECTIONEDITOR_LABEL" ]; then
+			run "nm-connection-editor"
+		fi
+	;;
+	
+	# ┌┐ ┬  ┬ ┬┌─┐┌┬┐┌─┐┌─┐┌┬┐┬ ┬
+	# ├┴┐│  │ │├┤  │ │ ││ │ │ ├─┤
+	# └─┘┴─┘└─┘└─┘ ┴ └─┘└─┘ ┴ ┴ ┴
+	
+	"bluetoothMenu" )
+		echo -en "SENDFILE_LABEL\0icon\x1fnetwork-connect\x1finfo\x1fsendFileSelectedMenu\n"
+		echo -en "PREFERENCES_LABEL\0icon\x1fnetwork-connect\x1finfo\x1fbluetoothPreferencesSelectedMenu\n"
+		echo -en "DEVICES_LABEL\0icon\x1fnetwork-connect\x1finfo\x1fservicesSelectedMenu\n"
+		echo -en "SERVICES_LABEL\0icon\x1fnetwork-connect\x1finfo\x1fservicesSelectedMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
+	;;
+	
+	"sendFileSelectedMenu" )
+		run "blueman-sendto"
+	;;
+	
+	"bluetoothPreferencesSelectedMenu" )
+		run "blueman-adapters"
+	;;
+	
+	"servicesSelectedMenu" )
+		run "blueman-services"
+	;;
+	# ┌─┐┌─┐┬ ┬┌┐┌┌┬┐
+	# └─┐│ ││ ││││ ││
+	# └─┘└─┘└─┘┘└┘─┴┘
+	"soundMenu" )
+		 run pavucontrol
+	;;
+	# ┌┬┐┬┌─┐┌─┐┬  ┌─┐┬ ┬
+	#  │││└─┐├─┘│  ├─┤└┬┘
+	# ─┴┘┴└─┘┴  ┴─┘┴ ┴ ┴
+	"displayMenu" )
+		if [ "$1" = "Layout editor" ]; then
+			run arandr3			exit 0
+		fi
+
+		echo -en "Screens\0icon\x1fvideo-display\x1finfo\x1fscreensMenu\n"
+		echo -en "Backlight\0icon\x1fcontrast\x1finfo\x1fbacklightMenu\n"
+		echo -en "Layout editor\0icon\x1fedit\x1finfo\x1fdisplayMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
+	;;
+	"screensMenu" )
+		echo -en "\0message\x1fSelect a screen\n"
+		
+		SCREENS=($(echo -e $(xrandr | awk '$2=="connected" { print $1 }')))
+		for s in "${SCREENS[@]}" 
+		do
+			echo -en "$s\0icon\x1fvideo-display\x1finfo\x1fscreensResolutionMenu\n"
+		done
+
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1fdisplayMenu\n"
+	;;
+	"screensResolutionMenu" )
+		echo -en "\0message\x1fSelect a resolution to $1\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fscreensMenu\n"
+		
+		OUTPUT=($(echo -e $(xrandr | awk '{ print $1 }')))
+		for (( i=0; i<${#OUTPUT[@]}; i++))
+		do
+			if [[ $1 == ${OUTPUT[$i]} ]]; then
+				for (( i=$i+1; i<${#OUTPUT[@]}; i++))
+				do
+					if [[ ${OUTPUT[$i]} == *"x"* ]]; then
+						echo -en "${OUTPUT[$i]}\0icon\x1fvideo-display\x1finfo\x1fscreensResolutionSelectedMenu\n"
+					else
+						break
+					fi
+				done
+			fi
+		done
+	;;
+	"screensResolutionSelectedMenu" )
+		echo "xrandr -s $1" > .xprofile
+		xrandr -s $1
+	;;
+	"backlightMenu" )
+		echo -en "\0keep-selection\x1ftrue\n"
+		if [ "$1" = "Increase" ]; then
+			light -A 10
+		elif [ "$1" = "Decrease" ]; then
+			light -U 10
+		fi
+
+		echo -en "\0message\x1fBacklight $(light -G)\n"
+		echo -en "Increase\0icon\x1fadd\x1finfo\x1fbacklightMenu\n"
+		echo -en "Decrease\0icon\x1fremove\x1finfo\x1fbacklightMenu\n"
+
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1fdisplayMenu\n"
+	;;
+	# ┬┌─┌─┐┬ ┬┌┐ ┌─┐┌─┐┬─┐┌┬┐
+	# ├┴┐├┤ └┬┘├┴┐│ │├─┤├┬┘ ││
+	# ┴ ┴└─┘ ┴ └─┘└─┘┴ ┴┴└──┴┘	
+	"keyboardStatusMenu" )
+		localectl status | sed 's/^ *//g'
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1fkeyboardMenu\n"
+	;;
+	"keyboardKeymapMenu" )
+		echo -en "\0message\x1fSelect Keyboard Mapping\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1f\n"
+		
+		KEYMAPS=($(echo -e $(localectl list-keymaps --no-pager)))
+		for v in "${KEYMAPS[@]}" 
+		do
+			echo -en "$v\0icon\x1fkeyboard\x1finfo\x1fkeyboardKeymapSelectedMenu\n"
+		done
+	;;
+	"keyboardKeymapSelectedMenu" )
+		coproc ( localectl set-keymap $1 && notify-send -i 'stock_dialog-info' 'Keyboard mapping' 'Session restart is required' || notify-send -i 'dialog-error' 'Keyboard mapping' 'Unable to change your keyboard mapping' > /dev/null  2>1 )	
+	;;
+	# ┬  ┌─┐┌┐┌┌─┐┬ ┬┌─┐┌─┐┌─┐
+	# │  ├─┤││││ ┬│ │├─┤│ ┬├┤
+	# ┴─┘┴ ┴┘└┘└─┘└─┘┴ ┴└─┘└─┘
+	"localeMenu" )
+		echo -en "\0message\x1fSelect Your Locale\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1f\n"
+		LOCALES=($(echo -e $(localectl list-locales --no-pager)))
+		for l in "${LOCALES[@]}" 
+		do
+			echo -en "$l\0icon\x1flanguages\x1finfo\x1flocaleSelectedMenu\n"
+		done			
+	;;
+	"localeSelectedMenu" )
+		coproc ( localectl set-locale $1 \
+		&& notify-send -i 'stock_dialog-info' 'System Locale' 'Session restart is required' \
+		|| notify-send -i 'dialog-error' 'System Locale' 'Unable to change your locale' \
+		> /dev/null  2>1 )		
+	;;
+	# ┌┬┐┬┌┬┐┌─┐   ┬   ┌┬┐┌─┐┌┬┐┌─┐
+	#  │ ││││├┤   ┌┼─   ││├─┤ │ ├─┤
+	#  ┴ ┴┴ ┴└─┘  └┘   ─┴┘┴ ┴ ┴ ┴ ┴
+	"timeDateMenu" )
+		echo -en "Show Status\0icon\x1fhelp-about\x1finfo\x1ftimeDateStatusMenu\n"
+		echo -en "Set Time Manually\0icon\x1fhistory\x1finfo\x1fsetTimeManuallyMenu\n"
+		echo -en "Set Time Automatically\0icon\x1fknemo-monitor-idle\x1finfo\x1ftimeSyncMenu\n"
+		echo -en "Set Time zone\0icon\x1fnetwork\x1finfo\x1ftimezoneMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
+	;;
+	
+	"timeDateStatusMenu" )
+		timedatectl status | sed 's/^ *//g'
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1ftimeDateMenu\n"
+	;;
+	
+	"setTimeManuallyMenu" | 				\
+	"setTimeManuallyYearSelectedMenu" | 	\
+	"setTimeManuallyMonthSelectedMenu" | 	\
+	"setTimeManuallyDaySelectedMenu" | 		\
+	"setTimeManuallyHourSelectedMenu" | 	\
+	"setTimeManuallyMinuteSelectedMenu" | 	\
+	"setTimeManuallySecondSelectedMenu" )
+		
+		if [[ $ROFI_INFO == "setTimeManuallyYearSelectedMenu" ]]; then
+			echo $1 > /tmp/suit-year
+		elif [[ $ROFI_INFO == "setTimeManuallyMonthSelectedMenu" ]]; then
+			echo $1 > /tmp/suit-month
+		elif [[ $ROFI_INFO == "setTimeManuallyDaySelectedMenu" ]]; then
+			echo $1 > /tmp/suit-day
+		elif [[ $ROFI_INFO == "setTimeManuallyHourSelectedMenu" ]]; then
+			echo $1 > /tmp/suit-hour
+		elif [[ $ROFI_INFO == "setTimeManuallyMinuteSelectedMenu" ]]; then
+			echo $1 > /tmp/suit-minute
+		elif [[ $ROFI_INFO == "setTimeManuallySecondSelectedMenu" ]]; then
+			echo $1 > /tmp/suit-second
+		fi
+		
+		if [ -r /tmp/suit-year ]; then
+			read -r YEAR < /tmp/suit-year
+		fi
+		if [ -r /tmp/suit-month ]; then
+			read -r MONTH < /tmp/suit-month
+		fi
+		if [ -r /tmp/suit-day ]; then
+			read -r DAY < /tmp/suit-day
+		fi
+		if [ -r /tmp/suit-hour ]; then
+			read -r HOUR < /tmp/suit-hour
+		fi
+		if [ -r /tmp/suit-minute ]; then
+			read -r MINUTE < /tmp/suit-minute
+		fi
+		if [ -r /tmp/suit-minute ]; then
+			read -r SECOND < /tmp/suit-second
+		fi
+		
+		echo -en "$YEAR_LABEL\t\t$YEAR\0info\x1fsetTimeManuallyYearMenu\n"
+		echo -en "$MONTH_LABEL\t\t$MONTH\0info\x1fsetTimeManuallyMonthMenu\n"
+		echo -en "$DAY_LABEL\t\t$DAY\0info\x1fsetTimeManuallyDayMenu\n"
+		echo -en "$HOUR_LABEL\t\t$HOUR \0info\x1fsetTimeManuallyHourMenu\n"
+		echo -en "$MINUTE_LABEL\t\t$MINUTE\0info\x1fsetTimeManuallyMinuteMenu\n"
+		echo -en "$SECOND_LABEL\t$SECOND\0info\x1fsetTimeManuallySecondMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$APPLY_LABEL\0icon\x1fobject-select\x1finfo\x1fsetTimeManuallySelectedMenu\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1ftimeDateMenu\n"
+		
+	;;
+	"setTimeManuallySelectedMenu" )
+		read -r YEAR < /tmp/suit-year
+		read -r MONTH < /tmp/suit-month
+		read -r DAY < /tmp/suit-day
+		read -r HOUR < /tmp/suit-hour
+		read -r MINUTE < /tmp/suit-minute
+		read -r SECOND < /tmp/suit-second
+		
+		coproc ( (timedatectl set-ntp false && timedatectl set-time "$YEAR-$MONTH-$DAY $HOUR:$MINUTE:$SECOND") \
+			&& notify-send -i 'stock_dialog-info' 'The Time Has Been Adjusted' \
+			|| notify-send -i 'dialog-error' 'Unable To Set The Time' \
+			> /dev/null  2>1 )
+	;;
+	
+	"setTimeManuallyYearMenu" )
+		echo -en "\0message\x1fSelect the YEAR\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {1900..2100}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallyYearSelectedMenu\n"
+		done
+	;;
+	"setTimeManuallyMonthMenu" )
+		echo -en "\0message\x1fSelect the MONTH\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {1..12}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallyMonthSelectedMenu\n"
+		done
+	;;
+	"setTimeManuallyDayMenu" )
+		echo -en "\0message\x1fSelect the DAY\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {1..31}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallyDaySelectedMenu\n"
+		done
+	;;
+	"setTimeManuallyHourMenu" )
+		echo -en "\0message\x1fSelect the HOUR\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {0..23}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallyHourSelectedMenu\n"
+		done
+	;;
+	"setTimeManuallyMinuteMenu" )
+		echo -en "\0message\x1fSelect the MINUTE\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {0..59}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallyMinuteSelectedMenu\n"
+		done
+	;;
+	"setTimeManuallySecondMenu" )
+		echo -en "\0message\x1fSelect the SECOND\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1fsetTimeManuallyMenu\n"
+		for i in {0..59}
+		do
+			echo -en "$i\0info\x1fsetTimeManuallySecondSelectedMenu\n"
+		done
+	;;
+	
+	"timeSyncMenu" )
+		echo -en "\0message\x1fNetwork Time Synchronization\n"
+		echo -en "Enable\0icon\x1fobject-select\x1finfo\x1ftimeSyncSelectedMenu\n"
+		echo -en "Disable\0icon\x1fcancel\x1finfo\x1ftimeSyncSelectedMenu\n"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1ftimeDateMenu\n"
+	;;
+	"timeSyncSelectedMenu" )
+		if [ "$1" = "Enable" ]; then
+			coproc ( timedatectl set-ntp true \
+				&& notify-send -i 'stock_dialog-info' 'Network Time Synchronization' 'Enabled' \
+				|| notify-send -i 'dialog-error' 'Unable to activate sync' \
+				> /dev/null  2>1 )
+			
+		elif [ "$1" = "Disable" ]; then
+			coproc ( timedatectl set-ntp false \
+				&& notify-send -i 'stock_dialog-info' 'Network Time Synchronization' 'Disabled' \
+				|| notify-send -i 'dialog-error' 'Unable to deactivate sync' \
+				> /dev/null  2>1 )
+		fi
+	;;
+	
+	"timezoneMenu" )
+		echo -en "\0message\x1fSelect your Time Zone\n"
+		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1ftimeDateMenu\n"
+		TIMEZONES=($(echo -e $(timedatectl list-timezones --no-pager)))
+		for z in "${TIMEZONES[@]}" 
+		do
+			echo -en "$z\0icon\x1fnetwork\x1finfo\x1ftimezoneSelectedMenu\n"
+		done
+	;;
+	"timezoneSelectedMenu" )
+		coproc ( timedatectl set-timezone $1 \
+			&& notify-send -i 'stock_dialog-info' 'Time zone' 'Your time zone has been changed' \
+			|| notify-send -i 'dialog-error' 'Time zone' 'Unable to change your time zone' \
+			> /dev/null  2>1 )
+	;;
+	
+	"aboutMenu" )
+		echo "$(neofetch --stdout --separator ' ')"
+		echo -en " \0nonselectable\x1ftrue\n"
+		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
+	;;
+
+	*)
+		echo -en "\x00prompt\x1f\n"
+		echo -en "\0message\x1f$ROFI_INFO\n"
+		echo -en "ROFI_INFO - $ROFI_INFO\n"
+		echo -en "ROFI_DATA - $ROFI_DATA\n"
+		echo -en "ROFI_RETV - $ROFI_RETV\n"
+		echo -en "1 = $1\n"
+		echo -en "@ = $@\n"
+	;;
+esac

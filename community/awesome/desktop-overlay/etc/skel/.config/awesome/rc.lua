@@ -17,6 +17,7 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local rmenu = require("menu")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Menu
 -- local freedesktop = require("freedesktop")
@@ -102,6 +103,7 @@ awful.layout.layouts = {
 -- }}}
 
 -- {{{ Menu
+-- To add the menu to a widget:
 myexitmenu = {
     { "Shutdown", "systemctl poweroff" }, --, menubar.utils.lookup_icon("system-shutdown")
     { "Suspend", "systemctl suspend" }, --, menubar.utils.lookup_icon("system-suspend") 
@@ -110,13 +112,16 @@ myexitmenu = {
     { "Logout", function() awesome.quit() end }, --, menubar.utils.lookup_icon("system-log-out") 
 }
 
+mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
+
+suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi "settings:suit-settings" -show settings -theme settings' })
+
 mydesktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
-                                       { "Wallpaper", function () awful.spawn('nitrogen') end },
+                                       { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi "wallpaper:/home/jp/.local/bin/suit-wallpaper" -show wallpaper -theme wallpaper') end},
+                                       { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn.with_shell('rofi -modi "settings:suit-settings" -show settings -theme settings') end},
                                        { "Exit", myexitmenu }
-                                     }})
-                        
-mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/suit/logo.png",
-                                     command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
+                                    }})
+
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -128,6 +133,7 @@ mytextclock:buttons( gears.table.join(
                         awful.button({ }, 1, function () awful.spawn("gsimplecal", false) end),
                         awful.button({ }, 4, function () awful.spawn("gsimplecal next_month", false) end),
                         awful.button({ }, 5, function () awful.spawn("gsimplecal prev_month", false) end)))
+                        
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
@@ -298,7 +304,7 @@ end
 local function audioMute()
     awful.spawn.easy_async('pamixer --toggle-mute', function() 
         awful.spawn.easy_async('pamixer --get-volume', function(vol) 
-            awful.spawn.easy_async('pamixer --get-mute', function(isMuted) 
+            awful.spawn.easy_async('pamixer --get-mute', function(isMuted)
                 if notification_audio ~= nil then
                     if isMuted == "true\n" then
                         notification_audio = naughty.notify ({
@@ -324,6 +330,7 @@ local function audioMute()
                     if isMuted == "true\n" then
                         notification_audio = naughty.notify ({
                             fg          = "#676767",
+                            text        = string.rep("■", math.ceil(vol * 0.3)),
                             icon        = "notification-audio-volume-muted",
                             timeout     = t_out,
                             preset      = preset,
@@ -395,7 +402,7 @@ awful.screen.connect_for_each_screen(function(s)
                     layout = wibox.layout.fixed.horizontal,
                 },
                 left  = 1,
-                right = 1,
+                right = 3,
                 widget = wibox.container.margin
             },
             id     = 'background_role',
@@ -404,8 +411,8 @@ awful.screen.connect_for_each_screen(function(s)
     }
     
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 }) -- opacity = 0.90
- 	-- os.setlocale(os.getenv("LANG"))
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 24 }) -- opacity = 0.90
+ 	os.setlocale(os.getenv("LAN"))
      	 	 	
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -416,11 +423,15 @@ awful.screen.connect_for_each_screen(function(s)
             s.mytaglist,
             s.mypromptbox,
         },
-        s.mytasklist, -- Middle widget
+            s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            spacing = beautiful.systray_icon_spacing,
+            
             wibox.widget.systray(),
             -- awful.widget.keyboardlayout(),
+            suitSettingsLauncher,
+            -- wibox.widget.textclock(" %a %d, %H:%M "),
             mytextclock,
             s.mylayoutbox,
         },
@@ -568,7 +579,6 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, altkey    }, "Return", function () awful.spawn(terminal .. " --drop-down") end,
@@ -607,20 +617,29 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Launchers
-	awful.key({ modkey },            "a",     function () awful.spawn("rofi -modi 'window,windowcd' -show window", false) end,
+	awful.key({ modkey },            "o",     function () awful.spawn('rofi -modi "settings:suit-settings" -show settings -theme settings', false) end,
 		    {description = "show windows (all desktops)", group = "launcher"}),
+		    
+	awful.key({ modkey },            "a",     function () awful.spawn("rofi -modi 'window,windowcd' -show window", false) end,
+			{description = "show windows (all desktops)", group = "launcher"}),
 	
-	awful.key({ modkey },            "b",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
+	awful.key({ modkey },            "b",     function () awful.spawn("rofi-bluetooth", false) end,
+				{description = "bluetooth", group = "launcher"}),
+	
+	awful.key({ modkey },            "c",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
 			{description = "calculator", group = "launcher"}),
 			
-	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p && xdotool key shift+Insert", false) end,
+	awful.key({ modkey },            "v",     function () awful.spawn.with_shell("clipmenu -p  && xdotool key shift+Insert", false) end,
 			{description = "clipboard", group = "launcher"}),
 			
     -- awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("clipmenu -theme clipdel -p  && clipdel -d $(xsel -o)", false) end,
-    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi 'delclip:~/.local/scripts/delclip' -show delclip -theme clipdel -p ", false) end,
+    awful.key({ modkey, "Control" }, "v",     function () awful.spawn.with_shell("rofi -modi 'delclip:suit-delclip' -show delclip -theme clipdel -p ", false) end,
     		{description = "Delete clipboard entries", group = "launcher"}),
 			
 	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
+	        {description = "open applications", group = "launcher"}),
+	        
+    awful.key({ modkey, altkey },            "d",     function() rmenu.open() end,
 	        {description = "open applications", group = "launcher"}),
 	
 	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c ; clipctl enable", false) end,
@@ -635,14 +654,17 @@ globalkeys = gears.table.join(
 	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu", false) end,
             {description = "network launcher", group = "launcher"}),
     
-    awful.key({ modkey },  "p",     function () awful.spawn.with_shell("~/.local/scripts/monitor.sh", false) end,
-            		 	{description = "Display Mode", group = "launcher"}),        
+    awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),        
+            		 	
+    awful.key({ modkey },  "p",     function () awful.spawn.with_shell("suit-monitor", false) end,
+            {description = "Display Mode", group = "launcher"}),        
 			
-	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi 'power:~/.local/scripts/powermenu.sh' -show power -theme power", false) end,
+	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi 'powermenu:suit-powermenu' -show powermenu -theme power", false) end,
 		 	{description = "Power menu", group = "launcher"}),
 	              		              	              	              		              	             
-	-- awful.key({ modkey },            "s"     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -lines-keep-') end,
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p )" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
+	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
+	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent | rofi -dmenu -i -fixed-num-lines 10 -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
@@ -656,7 +678,7 @@ globalkeys = gears.table.join(
 				 {description = "btop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "c",     function () awful.spawn(terminal .. " -e micro") end,
 				 {description = "micro text editor", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "d", rallpaper,
+	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi "wallpaper:/home/jp/.local/bin/suit-wallpaper" -show wallpaper -theme wallpaper') end,
 				 {description = "wallpaper", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
 				 {description = "ranger file manager", group = "launcher"}),
@@ -671,7 +693,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
 				 {description = "web browser", group = "launcher"}),
 	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end),
-              
+
 	-- Lockscreen
     awful.key({ modkey },            "l",     function () awful.spawn("lockscreen") end,
         {description = "Lock Screen", group = "launcher"}),
@@ -765,12 +787,14 @@ globalkeys = gears.table.join(
     awful.key({ altkey, "Control" }, "Delete", nil, function ()
             awful.spawn("xkill") 
     end, {description = "Kill app", group = "client"}),
-		  
+
 	awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() 
 	end, {description = "run prompt", group = "launcher"})
 )
 
 clientkeys = gears.table.join(
+    awful.key({ altkey }, "/",  function () awful.spawn("/home/jp/hud.py") end,
+        {description = "decreases width", group = "floating window"}),
     awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 50,   0, -100,   0) end,
         {description = "decreases width", group = "floating window"}),
     awful.key({ modkey, "Shift" }, "End",   function (c) c:relative_move(-50,   0,  100,   0) end,
@@ -1020,8 +1044,8 @@ client.connect_signal("request::titlebars", function(c)
 	        },
 	        layout = wibox.layout.align.horizontal
 	    },
-    	widget = wibox.container.margin,
-    	left = 8
+    	left = 8,
+    	widget = wibox.container.margin
 	}
 end)
 
@@ -1072,6 +1096,7 @@ awful.rules.rules = {
             "file-roller",
 		},
 		class = {
+            "Rofi",
             "Blueman-manager",
             "Gpick",
             "Kruler",
@@ -1120,10 +1145,14 @@ awful.rules.rules = {
     },
 
     -- Rules
+    -- { rule = { class= "Rofi" },
+	    -- properties = { floating = true, skip_taskbar = true, type = "dock" } },
     { rule = { class = "Xsnow" },
       	    properties = { fullscreen = true, requests_no_titlebar = true, skip_taskbar = true, below = true } },
   	{ rule = { class = "Gcolor3" },
   	    properties = { floating = true, sticky = true} },
+    { rule = { class= "Gsimplecal" },
+	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
     { rule = { class= "MEGAsync" },
 	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
 	{ rule = { name= "Picture-in-picture" },
@@ -1178,7 +1207,7 @@ run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
 run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
 -- run_once('','blueman-tray','')
--- run_once('','gnome-keyring-daemon',' --start')
 run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
+run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
 awful.spawn.with_shell('touchegg')
