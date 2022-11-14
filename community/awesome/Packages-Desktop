@@ -85,6 +85,7 @@ libopenraw         # tumbler - for RAW thumbnails
 poppler-glib       # tumbler - for PDF thumbnails
 w3m 			   # ranger preview
 odt2txt			   # ranger preview
+webp-pixbuf-loader
 
 ## Archive support
 atool
