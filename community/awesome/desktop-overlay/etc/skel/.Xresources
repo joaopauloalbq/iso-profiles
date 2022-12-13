@@ -1,2 +1,8 @@
-Xft.dpi: 96
-Xft*antalias: true
+Xft.dpi:       96
+Xft.antialias: true
+Xft.hinting:   true
+Xft.autohint:  false
+Xft.hintstyle: hintslight
+Xft.lcdfilter: lcddefault
+Xft.rgba:      rgb
+Xcursor.theme: Tie-cursors
