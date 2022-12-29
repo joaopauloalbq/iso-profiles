@@ -43,13 +43,12 @@ udiskie
 ## Fonts
 noto-fonts               # default font
 noto-fonts-emoji
-noto-fonts-compat
 nerd-fonts-noto-sans-mono
->extra noto-fonts-cjk  # removed to reduce iso size (-184MB)
+>extra noto-fonts-cjk  # removed to reduce iso size (-197,7 MB)
 gsfonts
 
 ## Games
-# >x86_64 >extra steam-manjaro  # removed to reduce iso size (-74MB)
+# >x86_64 >extra steam  # removed to reduce iso size (-74MB)
 # >multilib >extra lib32-libappindicator-gtk2
 
 ## Package management
@@ -140,6 +139,7 @@ galculator
 file-roller
 pavucontrol
 blueman
+bluez-utils # (contains bluetoothctl)
 ranger
 micro
 mintstick
@@ -166,7 +166,6 @@ qt5ct
 qt6ct
 plocate
 clipmenu
-networkmanager-dmenu
 bat
 exa
 fd
