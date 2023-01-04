@@ -169,6 +169,7 @@ clipmenu
 bat
 exa
 fd
+ripgrep
 lain
 xdotool
 neofetch
