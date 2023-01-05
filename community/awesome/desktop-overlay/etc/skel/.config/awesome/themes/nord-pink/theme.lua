@@ -1,5 +1,5 @@
 ---------------------------
--- Default awesome theme --
+------- Suit  theme -------
 ---------------------------
 
 local theme_assets = require("beautiful.theme_assets")
@@ -16,8 +16,8 @@ theme.font          = "Noto Sans Medium 11"
 
 theme.bg_normal     = "#2d323a"
 theme.bg_focus      = "#4c5158"
-theme.bg_urgent     = "#F06C6C"
 theme.bg_minimize   = "#1e222a"
+theme.bg_urgent     = "#F06C6C"
 theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#DEDEDE"
@@ -29,7 +29,7 @@ theme.useless_gap   = 3
 -- theme.gap_single_client = false
 theme.border_width  = 2
 theme.corner_radius = 11
-theme.border_normal = "#474b53"
+theme.border_normal = "#565C63"
 theme.border_focus  = "#dc98b1"
 theme.border_marked = "#64A7A7"
 
@@ -44,7 +44,7 @@ theme.notification_fg = theme.fg_focus
 theme.notification_border_width = theme.border_width
 theme.notification_border_color = theme.border_focus
 theme.notification_icon_size = dpi(48)
-theme.notification_width = dpi(346) -- 346 FOR OSD NOTIFICATIONS
+theme.notification_width = dpi(352)
 theme.notification_margin = dpi(6)
 
 -- There are other variable sets
@@ -61,13 +61,13 @@ theme.notification_margin = dpi(6)
 --theme.taglist_bg_focus = "#ff0000"
 
 theme.titlebar_bg_normal = "#1e222a" 
-theme.titlebar_bg_focus = "#1e222a"
+theme.titlebar_bg_focus = theme.titlebar_bg_normal
 
 theme.hotkeys_label_fg = theme.fg_normal
 theme.hotkeys_modifiers_fg = theme.fg_focus
 theme.hotkeys_border_color = theme.border_focus
 theme.hotkeys_description_font = theme.font
-theme.hotkeys_font = theme.font
+theme.hotkeys_font = "Noto Sans Black"
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
@@ -88,8 +88,8 @@ theme.menu_bg_focus  = "#424955"
 theme.menu_border_color  = "#3d424a"
 theme.menu_border_width  = dpi(1)
 
-theme.snap_border_width = dpi(4)
-theme.snap_shape = function(cr,w,h) gears.shape.rounded_rect(cr,w,h,12) end
+theme.snap_border_width = dpi(2)
+--theme.snap_shape = function(cr,w,h) gears.shape.rounded_rect(cr,w,h,12) end
 -- theme.snap_bg = "#00000000"
 
 -- You can add as many variables as
@@ -100,6 +100,7 @@ theme.snap_shape = function(cr,w,h) gears.shape.rounded_rect(cr,w,h,12) end
 -- Define the image to load
 theme.titlebar_close_button_normal = "~/.config/awesome/themes/nord-pink/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = "~/.config/awesome/themes/nord-pink/titlebar/close_focus.png"
+theme.titlebar_close_button_focus_hover  = "~/.config/awesome/themes/nord-pink/titlebar/close_focus_hover.png"
 
 theme.titlebar_minimize_button_normal = "~/.config/awesome/themes/nord-pink/titlebar/minimize_normal.png"
 theme.titlebar_minimize_button_focus  = "~/.config/awesome/themes/nord-pink/titlebar/minimize_focus.png"
@@ -155,7 +156,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 -- local mytextclock = wibox.widget.textclock("  %a %d, %H:%M  ")
 
 -- System tray
-theme.systray_icon_spacing = 6
+theme.systray_icon_spacing = 5
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
@@ -164,14 +165,14 @@ theme.icon_theme = "Papirus-Dark"
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
 
 -- Rofi
-file = io.open(".config/rofi/base.rasi", "r")
-content = file:read("*a")
+local file = io.open(".config/rofi/base.rasi", "r")
+local content = file:read("*a")
 file:close()
 
 content = content:gsub("background%-color: (%g+);", ("background-color: " .. theme.bg_normal .. ";"), 1)
 content = content:gsub("brighter%-background%-color: (%g+);", ("brighter-background-color: " .. theme.bg_focus .. ";"), 1)
 content = content:gsub("darker%-background%-color: (%g+);", ("darker-background-color: " .. "#2A2E36" .. ";"), 1)
-content = content:gsub("border%-color: (%g+);", ("border-color: " .. "#232830" .. ";"), 1)
+content = content:gsub("border%-color: (%g+);", ("border-color: " .. "#21262E" .. ";"), 1)
 content = content:gsub("text%-color: (%g+);", ("text-color: " .. theme.fg_normal .. ";"), 1)
 content = content:gsub("brighter%-text%-color: (%g+);", ("brighter-text-color: " .. theme.fg_focus .. ";"), 1)
 content = content:gsub("highlight%-color: (%g+);", ("highlight-color: " .. theme.border_focus .. ";"), 1)
