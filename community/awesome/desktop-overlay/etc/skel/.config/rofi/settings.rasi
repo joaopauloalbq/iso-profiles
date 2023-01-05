@@ -1,3 +1,6 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
 @import "list.rasi"
 
 * {
@@ -12,4 +15,9 @@ window {
 	margin: 0;
 	border: 0 0 0 2px;
 	border-radius: 0;
+}
+
+element-icon {
+	size: 17px;
+	margin: 0 4;
 }

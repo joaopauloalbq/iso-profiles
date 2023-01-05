@@ -1,0 +1,60 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
+@import "list.rasi"
+
+* {
+	spacing: 0;
+
+}
+
+window {
+	height: 75%;
+	width: 100%;
+	location: north;
+	anchor: north;
+	margin: 0;
+	//border: 0 0 2px 0;
+	border: 0;
+	border-radius: 0;
+}
+
+prompt {
+	padding: 0px 15px;
+	margin: 0;
+}
+
+entry {
+	padding: 7px;
+	//placeholder: "Search";
+}
+
+listview {
+	layout: vertical;
+	fixed-columns: false;
+	fixed-height: true;
+	columns: 1;
+    padding: 5px;
+	spacing: 5px;
+}
+
+element {
+	//orientation: vertical;
+	border-radius: @corner-radius;
+	//padding: 12px 0px 15px 0px;
+	padding: 5px 0px;
+}
+
+element-text {
+	expand: true;
+	horizontal-align: 0;
+	vertical-align: 0.5;
+    padding: 0px 6px;
+	//margin: 6px 0px -6px -3px;
+	cursor: pointer;
+}
+
+element-icon {
+	size: 16px;
+	margin: 0 4;
+}

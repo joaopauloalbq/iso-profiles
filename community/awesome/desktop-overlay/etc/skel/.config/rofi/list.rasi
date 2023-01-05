@@ -1,3 +1,6 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
 @import "base.rasi"
 
 * {
@@ -40,31 +43,23 @@ listview {
 	lines: 9;
 }
 
-//element {
-//	border: 0 0 1px 0;
-//}
-
 element-text {
 	padding: 12px;
 	expand: true;
 	vertical-align: 0.5;
-	cursor: pointer;
 }
 
 element-icon {
 	padding: 0 0 0 12px;	
 	size: 32px;
-	cursor: pointer;
 }
 
 mode-switcher {
 	border: 1px 0 0 0;
-	cursor: pointer;
 }
 
 button {
 	horizontal-align: 0.5;
 	border: 0 1px 0 0;
 	padding: 12px;
-	cursor: pointer;
 }

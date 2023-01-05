@@ -1,3 +1,6 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
 configuration {
 	display-ssh: "";
 	display-run: "";

@@ -1,3 +1,6 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
 * {
 	background-color: #2d323a;
 	brighter-background-color: #4c5158;
@@ -10,8 +13,8 @@
 	
 	font: "Noto Sans Medium 11";
 	corner-radius: 8px;	
-	width: 690px;
 	height: 487px;
+	width: 690px;
 }
 
 window {
@@ -21,23 +24,31 @@ window {
 	border-color: @highlight-color;
 }
 
+entry {
+	cursor: text;
+}
+
 element selected, element-text selected {
 	background-color: @brighter-background-color;
 	text-color: @brighter-text-color;
 }
 
-//element selected.active, element-text selected.active {
-//	background-color: @highlight-color;
-//	text-color: @brighter-text-color;
-//}
+/*
+element selected.active, element-text selected.active {
+	background-color: @highlight-color;
+	text-color: @brighter-text-color;
+}
+*/
 
 element active, element-text active {
-	background-color: @darker-highlight-color;
-	text-color: @background-color;
+	//background-color: @darker-highlight-color;
+	//text-color: @background-color;
+	text-color: @highlight-color;
 }
 
 element-text, element-icon {
 	background-color: inherit;
+	cursor: pointer;
 }
 
 textbox {
@@ -47,8 +58,17 @@ textbox {
 
 mode-switcher, button {
 	background-color: @darker-background-color;
+	cursor: pointer;
 }
 
 button selected {
 	text-color: @highlight-color;
+}
+
+icon-next-page {
+	cursor: pointer;	
+}
+
+icon-prev-page {
+	cursor: pointer;	
 }

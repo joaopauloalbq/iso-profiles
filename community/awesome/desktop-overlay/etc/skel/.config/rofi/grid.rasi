@@ -1,3 +1,6 @@
+// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Everyone is permitted to copy and distribute copies of this file under GPL2
+
 @import "base.rasi"
 
 inputbar {
@@ -24,7 +27,6 @@ message{
 
 textbox {
 	padding: 12px;
-	horizontal-align: 0.5;
 }
 
 listview {
@@ -48,14 +50,12 @@ element-text {
 	horizontal-align: 0.5;
 	vertical-align: 0.5;
     padding: 0px 6px;
-	margin: 6px 0px -6px -3px;
-	cursor: pointer;
+	margin: 5px 0px -5px -4px;
 }
 
 element-icon {
 	horizontal-align: 0.5;
 	size: 48px;
-	cursor: pointer;
 }
 
 mode-switcher {
@@ -66,7 +66,6 @@ button {
 	horizontal-align: 0.5;
 	border: 0 1px 0 0;
 	padding: 10;
-	cursor: pointer;
 }
 
 icon-next-page {
@@ -75,7 +74,6 @@ icon-next-page {
 	vertical-align: 0.5;
 	filename: "next";
 	action: "kb-page-next";
-	cursor: pointer;
 }
 
 icon-prev-page {
@@ -84,5 +82,4 @@ icon-prev-page {
 	vertical-align: 0.5;
 	filename: "previous";
 	action: "kb-page-prev";
-	cursor: pointer;
 }
