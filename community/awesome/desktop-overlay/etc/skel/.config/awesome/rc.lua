@@ -18,7 +18,6 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-local rmenu = require("menu")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Menu
 -- local freedesktop = require("freedesktop")
