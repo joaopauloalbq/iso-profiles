@@ -10,6 +10,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- More widgets, layouts and utilities 
 local lain = require("lain")
+local markup = lain.util.markup
 -- Overview
 local revelation = require("revelation")
 -- Theme handling library
@@ -76,7 +77,6 @@ altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
@@ -95,6 +95,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
     -- awful.layout.suit.magnifier,
+    awful.layout.suit.floating,
     awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.tile.left,
@@ -412,7 +413,7 @@ awful.screen.connect_for_each_screen(function(s)
     
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 24 }) -- opacity = 0.90
- 	os.setlocale(os.getenv("LAN"))
+ 	-- os.setlocale(os.getenv("LANG"))
      	 	 	
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -654,7 +655,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu", false) end,
             {description = "network launcher", group = "launcher"}),
     
-    awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),        
+    awful.key({ modkey, altkey },  "p",     function () menubar.show() collectgarbage("collect") end ),        
             		 	
     awful.key({ modkey },  "p",     function () awful.spawn.with_shell("suit-monitor", false) end,
             {description = "Display Mode", group = "launcher"}),        
@@ -664,7 +665,7 @@ globalkeys = gears.table.join(
 	              		              	              	              		              	             
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent | rofi -dmenu -i -fixed-num-lines 10 -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
@@ -678,7 +679,7 @@ globalkeys = gears.table.join(
 				 {description = "btop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "c",     function () awful.spawn(terminal .. " -e micro") end,
 				 {description = "micro text editor", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi "wallpaper:/home/jp/.local/bin/suit-wallpaper" -show wallpaper -theme wallpaper') end,
+	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi "wallpaper:suit-wallpaper" -show wallpaper -theme wallpaper') end,
 				 {description = "wallpaper", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
 				 {description = "ranger file manager", group = "launcher"}),
@@ -835,8 +836,8 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-	awful.key({ modkey, 'Control' }, 't',	   function(c) awful.titlebar.toggle(c) 	  	end,
-	          {description = 'toggle title bar', group = 'client'}),
+	awful.key({ modkey, "Control" }, "t",	   function(c) awful.titlebar.toggle(c) 	  	end,
+	          {description = "toggle title bar", group = "client"}),
     awful.key({ modkey, 		  }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey,           }, "space",  awful.client.floating.toggle                     ,
@@ -1018,7 +1019,7 @@ client.connect_signal("request::titlebars", function(c)
         end)
     )
 
-    awful.titlebar(c, {size=26}) : setup {
+    awful.titlebar(c, {size=dpi(26)}) : setup {
 	    {
 	        { -- Left
 	            -- awful.titlebar.widget.iconwidget(c),
@@ -1152,7 +1153,7 @@ awful.rules.rules = {
   	{ rule = { class = "Gcolor3" },
   	    properties = { floating = true, sticky = true} },
     { rule = { class= "Gsimplecal" },
-	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
+	    properties = { floating = true, border_width = 0, skip_taskbar = true, requests_no_titlebar = true, placement = awful.placement.top_right } },
     { rule = { class= "MEGAsync" },
 	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
 	{ rule = { name= "Picture-in-picture" },
@@ -1194,7 +1195,7 @@ awful.rules.rules = {
     { rule = { class="discord" },
     	properties = { switchtotag = false, urgent = false, focus = false, tag = " 7 " } },
     { rule = { instance="web.whatsapp.com" },
-    	properties = { placement = awful.placement.right, floating = true, tag = " 8 " } },
+    	properties = { width = 845, height = 860, floating = true, placement = awful.placement.right, tag = " 8 " } },
     { rule = { class="TelegramDesktop" },
     	properties = { placement = awful.placement.restore, floating = true, urgent = false, tag = " 8 " } }
 }
