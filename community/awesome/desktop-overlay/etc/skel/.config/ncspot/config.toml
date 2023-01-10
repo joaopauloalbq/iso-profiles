@@ -1,0 +1,100 @@
+notify = true
+use_nerdfont = true
+
+[keybindings]
+# Views
+"1" = "focus library"
+"2" = "focus queue"
+"3" = "focus search"
+"f" = "focus search"
+
+# Navigation
+"Enter" = "play"
+"Backspace" = "back"
+"q" = "back"
+"Home" = "move top"
+"End" = "move bottom"
+"Up" = "move up 1"
+"Down" = "move down 1"
+"Left" = "move left 1"
+"Right" = "move right 1"
+"PageUp" = "move up 5"
+"PageDown" = "move down 5"
+
+# Fast forward / rewind
+"[" = "seek -2s"
+"]" = "seek +2s"
+"{" = "seek -10s"
+"}" = "seek +10s"
+
+# Volume
+"=" = "volup 5"
+"-" = "voldown 5"
+
+# Track manipulation
+" " = "playpause"
+"c" = "playpause"
+"z" = "previous"
+"x" = "next"
+"r" = "repeat"
+"s" = "shuffle"
+"S" = "save"
+"D" = "delete"
+
+# Open context menu
+"w" = "open selected"
+"W" = "open current"
+"a" = "goto artist"
+"A" = "goto album"
+"p" = "similar current"
+"Ctrl+p" = "similar selected"
+
+# Queue
+# Add to queue
+"e" = "queue"
+"Ctrl+s" = "save queue"
+# Move selected song up/down in the queue
+"," = "shift up 1"
+"." = "shift down 1"
+"<" = "shift up 5"
+">" = "shift down 5"
+"Ctrl+l" = "clear"
+# Open the context menu for a Spotify link in the clipboard
+"Ctrl+v" = "insert"
+
+# Sorting
+"t" = "sort added d"
+"T" = "sort title a"
+
+# Sharing
+"Y" = "share selected"
+"y" = "share current"
+
+# Other
+"Q" = "quit"
+"?" = "help"
+"U" = "update"
+
+[notification_format]
+title = "%title"
+body = "%album - %artists"
+
+[theme] 
+# Spotify
+background = "black"
+primary = "white"
+secondary = "light white"
+title = "green"
+playing = "green"
+playing_selected = "light green"
+playing_bg = "black"
+highlight = "light white"
+highlight_bg = "light black"
+error = "light white"
+error_bg = "red"
+statusbar = "black"
+statusbar_progress = "green"
+statusbar_bg = "green"
+cmdline = "light white"
+cmdline_bg = "black"
+search_match = "light red"
