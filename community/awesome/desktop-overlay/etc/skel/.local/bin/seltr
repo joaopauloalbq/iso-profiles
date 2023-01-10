@@ -1,0 +1,36 @@
+#!/usr/bin/python
+
+import argparse
+import urllib.request
+import subprocess
+
+
+def argparser():
+    parser = argparse.ArgumentParser(description='Instant Translator')
+    
+    parser.add_argument('from_lang', metavar='fl', type=str, default='auto',
+                        help='language the text will be tranlated from')
+    parser.add_argument('to_lang', metavar='tl', type=str, default='pt-BR',
+                            help='language the text will be translated to')
+    return parser.parse_args()
+
+
+def translate(text, from_language="auto", to_language="pt-BR"):
+    agents = {'User-Agent': "Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"}
+    link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s" % (to_language, from_language, text.replace('-\n', '').replace('\n', '+').replace(' ', '+'))
+    request = urllib.request.Request(url=link, headers=agents)
+    page = urllib.request.urlopen(request).read().decode('utf-8')
+    return page.split('class="result-container">')[1].split('</div>')[0]
+
+
+def get_selection():
+    return subprocess.run(['xsel', '-o'], capture_output=True, text=True).stdout
+
+
+def send_notification(text):
+    subprocess.run(['notify-send', '-t', '15000', '-i', 'applications-education-language', text])
+
+
+args = argparser()
+
+send_notification(translate(get_selection(), args.from_lang, args.to_lang))
