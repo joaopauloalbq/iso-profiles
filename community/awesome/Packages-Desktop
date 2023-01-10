@@ -148,6 +148,8 @@ mintstick
 
 ## Misc
 manjaro-hotfixes
+>extra xdg-desktop-portal
+>extra xdg-desktop-portal-gtk
 exfatprogs
 >basic squashfs-tools
 >extra xiccd # enable color profile settings
