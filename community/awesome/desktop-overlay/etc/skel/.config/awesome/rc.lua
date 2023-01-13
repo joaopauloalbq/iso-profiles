@@ -639,9 +639,6 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
 	        {description = "open applications", group = "launcher"}),
 	        
-    awful.key({ modkey, altkey },            "d",     function() rmenu.open() end,
-	        {description = "open applications", group = "launcher"}),
-	
 	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c ; clipctl enable", false) end,
 			{description = "emoji picker", group = "launcher"}),              
 			
@@ -695,7 +692,7 @@ globalkeys = gears.table.join(
 	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end),
 
 	-- Lockscreen
-    awful.key({ modkey },            "l",     function () awful.spawn("lockscreen") end,
+    awful.key({ modkey },            "l",     function () awful.spawn("suit-lockscreen") end,
         {description = "Lock Screen", group = "launcher"}),
         
     -- Bright Keys
