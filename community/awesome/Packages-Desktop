@@ -43,8 +43,8 @@ udiskie
 ## Fonts
 noto-fonts               # default font
 noto-fonts-emoji
-nerd-fonts-noto-sans-mono
 >extra noto-fonts-cjk  # removed to reduce iso size (-197,7 MB)
+ttf-noto-nerd
 gsfonts
 
 ## Games
