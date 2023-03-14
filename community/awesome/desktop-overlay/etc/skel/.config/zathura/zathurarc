@@ -1,0 +1,18 @@
+set adjust-open "width"
+set window-title-basename true
+set window-title-page true
+# set window-title-home-tilde true
+set guioptions h
+set window-icon "gnome-pdf"
+set recolor true
+set recolor-darkcolor "#f8f8f2"
+set recolor-lightcolor "#242932"
+set default-bg "#242932"
+set font "Noto Mono 11"
+set index-bg "#323946"
+set index-fg "#dfdfdf"
+set index-active-fg "#fafafa"
+set index-active-bg "#424955"
+map 0 zoom 100
+map - zoom out
+map = zoom in
