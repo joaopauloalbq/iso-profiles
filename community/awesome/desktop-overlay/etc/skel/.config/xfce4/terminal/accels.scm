@@ -27,7 +27,7 @@
 ; (gtk_accel_path "<Actions>/terminal-window/last-active-tab" "")
 ; (gtk_accel_path "<Actions>/terminal-window/show-borders" "")
 ; (gtk_accel_path "<Actions>/terminal-window/view-menu" "")
-; (gtk_accel_path "<Actions>/terminal-window/detach-tab" "<Primary><Shift>d")
+(gtk_accel_path "<Actions>/terminal-window/detach-tab" "<Primary><Shift>d")
 ; (gtk_accel_path "<Actions>/terminal-window/scroll-on-output" "")
 ; (gtk_accel_path "<Actions>/terminal-window/show-toolbar" "")
 ; (gtk_accel_path "<Actions>/terminal-window/next-tab" "<Primary>Page_Down")
