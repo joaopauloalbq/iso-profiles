@@ -94,8 +94,8 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
     -- awful.layout.suit.magnifier,
-    awful.layout.suit.floating,
     awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.floating,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -112,12 +112,12 @@ myexitmenu = {
     { "Logout", function() awesome.quit() end }, --, menubar.utils.lookup_icon("system-log-out") 
 }
 
-mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
+mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
 
 suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi "settings:suit-settings" -show settings -theme settings' })
 
 mydesktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
-                                       { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi "wallpaper:/home/jp/.local/bin/suit-wallpaper" -show wallpaper -theme wallpaper') end},
+                                       { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi "wallpaper:suit-wallpaper" -show wallpaper -theme wallpaper') end},
                                        { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn.with_shell('rofi -modi "settings:suit-settings" -show settings -theme settings') end},
                                        { "Exit", myexitmenu }
                                     }})
@@ -128,7 +128,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibar
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock(" %a %d, %H:%M ")
 mytextclock:buttons( gears.table.join(
                         awful.button({ }, 1, function () awful.spawn("gsimplecal", false) end),
                         awful.button({ }, 4, function () awful.spawn("gsimplecal next_month", false) end),
@@ -626,19 +626,19 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "b",     function () awful.spawn("rofi-bluetooth", false) end,
 				{description = "bluetooth", group = "launcher"}),
 	
-	awful.key({ modkey },            "c",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
+	awful.key({ modkey },            "k",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
 			{description = "calculator", group = "launcher"}),
 			
-	awful.key({ modkey },            "v",     function () awful.spawn.with_shell("clipmenu -p  && xdotool key shift+Insert", false) end,
+	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p  && xdotool key shift+Insert", false) end,
 			{description = "clipboard", group = "launcher"}),
 			
     -- awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("clipmenu -theme clipdel -p  && clipdel -d $(xsel -o)", false) end,
-    awful.key({ modkey, "Control" }, "v",     function () awful.spawn.with_shell("rofi -modi 'delclip:suit-delclip' -show delclip -theme clipdel -p ", false) end,
+    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi 'delclip:suit-delclip' -show delclip -theme clipdel -p ", false) end,
     		{description = "Delete clipboard entries", group = "launcher"}),
 			
 	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
 	        {description = "open applications", group = "launcher"}),
-	        
+	
 	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c ; clipctl enable", false) end,
 			{description = "emoji picker", group = "launcher"}),              
 			
@@ -651,7 +651,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu", false) end,
             {description = "network launcher", group = "launcher"}),
     
-    awful.key({ modkey, altkey },  "p",     function () menubar.show() collectgarbage("collect") end ),        
+    awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),
             		 	
     awful.key({ modkey },  "p",     function () awful.spawn.with_shell("suit-monitor", false) end,
             {description = "Display Mode", group = "launcher"}),        
@@ -661,7 +661,7 @@ globalkeys = gears.table.join(
 	              		              	              	              		              	             
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
@@ -947,6 +947,12 @@ clientbuttons = gears.table.join(
         -- c:emit_signal("request::activate", "mouse_click", {raise = true})
         -- awful.mouse.client.resize(c)
     -- end),
+    awful.button({ }, 3, function (c)
+        local m = mouse.coords()
+        if (m.x <= c.x + 8 or m.y <= c.y + 8 or m.x >= c.x + c.width - 8 or m.y >= c.y + c.height - 8) then
+            awful.mouse.client.resize(c)
+        end
+    end),
     awful.button({ modkey }, 1, function (c)
         c:emit_signal("request::activate", "_NET_WM_STATE_FULLSCREEN_click", {raise = true})
         awful.mouse.client.move(c)
@@ -954,6 +960,7 @@ clientbuttons = gears.table.join(
     awful.button({ modkey }, 3, function (c)
         c:emit_signal("request::activate", "mouse_click", {raise = true})
         awful.mouse.client.resize(c)
+        
     end)
 )
 
@@ -1008,11 +1015,11 @@ client.connect_signal("request::titlebars", function(c)
         awful.button({ }, 1, function()
             c:emit_signal("request::activate", "titlebar", {raise = true})
             awful.mouse.client.move(c)
-        end),
-        awful.button({ }, 3, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.resize(c)
         end)
+        -- awful.button({ }, 3, function()
+            -- c:emit_signal("request::activate", "titlebar", {raise = true})
+            -- awful.mouse.client.resize(c)
+        -- end)
     )
 
     awful.titlebar(c, {size=dpi(26)}) : setup {
@@ -1146,6 +1153,8 @@ awful.rules.rules = {
 	    -- properties = { floating = true, skip_taskbar = true, type = "dock" } },
     { rule = { class = "Xsnow" },
       	    properties = { fullscreen = true, requests_no_titlebar = true, skip_taskbar = true, below = true } },
+  	{ rule = { class = "conky" },
+  	    properties = { floating = true, requests_no_titlebar = true, border_width = 0 } },
   	{ rule = { class = "Gcolor3" },
   	    properties = { floating = true, sticky = true} },
     { rule = { class= "Gsimplecal" },
@@ -1183,6 +1192,8 @@ awful.rules.rules = {
             properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Flowblade" },
             properties = { maximized = false, tag = " 5 " } },
+    { rule = { class="heroic" },
+            properties = { tag = " 6 " } },
     { rule = { class="Skype" },
     	properties = { tag = " 7 " } },
 	{ rule = { class="VirtualBox Manager" },
