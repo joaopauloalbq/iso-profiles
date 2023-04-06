@@ -53,7 +53,7 @@ gsfonts
 
 ## Package management
 pamac
-pamac-gtk
+>extra pamac-gtk
 appimagelauncher
 
 ## Java
@@ -181,7 +181,7 @@ xsel
 xclip
 xcolor
 libcanberra
-gnome-keyring
+>extra gnome-keyring
 gsimplecal
 
 ## Gestures
