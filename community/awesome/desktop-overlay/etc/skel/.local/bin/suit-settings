@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-## Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+## Copyright (C) 2022-2023 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
 ## Everyone is permitted to copy and distribute copies of this file under GPL2
 
-if [ -r /home/jp/$LANG ]; then
-	source /home/jp/$LANG
+if [ -r $HOME/.local/share/suit-settings/locale/$LANG ]; then
+	source $HOME/.local/share/suit-settings/locale/$LANG
 else
-	source /home/jp/en_US.UTF-8
+	source $HOME/.local/share/suit-settings/locale/en_US.UTF-8
 fi
 
 run () {
-	coproc ( $1 > /dev/null  2>1 )
+	coproc ( $1 > /dev/null  2>&1 )
 }
 
 echo -en "\0message\x1f\n"
@@ -129,14 +129,14 @@ case $ROFI_INFO in
 	;;
 	"screensResolutionSelectedMenu" )
 		echo "xrandr -s $1" > .xprofile
-		xrandr -s $1
+		run "xrandr -s $1"
 	;;
 	"backlightMenu" )
 		echo -en "\0keep-selection\x1ftrue\n"
 		if [ "$1" = "Increase" ]; then
-			light -A 10
+			run "light -A 10"
 		elif [ "$1" = "Decrease" ]; then
-			light -U 10
+			run "light -U 10"
 		fi
 
 		echo -en "\0message\x1fBacklight $(light -G)\n"
@@ -159,9 +159,9 @@ case $ROFI_INFO in
 		echo -en "$CANCEL_LABEL\0icon\x1fedit-clear\x1finfo\x1f\n"
 		
 		KEYMAPS=($(echo -e $(localectl list-keymaps --no-pager)))
-		for v in "${KEYMAPS[@]}" 
+		for km in "${KEYMAPS[@]}" 
 		do
-			echo -en "$v\0icon\x1fkeyboard\x1finfo\x1fkeyboardKeymapSelectedMenu\n"
+			echo -en "$km\0icon\x1fkeyboard\x1finfo\x1fkeyboardKeymapSelectedMenu\n"
 		done
 	;;
 	"keyboardKeymapSelectedMenu" )
@@ -246,10 +246,10 @@ case $ROFI_INFO in
 		
 		echo -en "$YEAR_LABEL\t\t$YEAR\0info\x1fsetTimeManuallyYearMenu\n"
 		echo -en "$MONTH_LABEL\t\t$MONTH\0info\x1fsetTimeManuallyMonthMenu\n"
-		echo -en "$DAY_LABEL\t\t$DAY\0info\x1fsetTimeManuallyDayMenu\n"
+		echo -en "$DAY_LABEL\t\t\t$DAY\0info\x1fsetTimeManuallyDayMenu\n"
 		echo -en "$HOUR_LABEL\t\t$HOUR \0info\x1fsetTimeManuallyHourMenu\n"
 		echo -en "$MINUTE_LABEL\t\t$MINUTE\0info\x1fsetTimeManuallyMinuteMenu\n"
-		echo -en "$SECOND_LABEL\t$SECOND\0info\x1fsetTimeManuallySecondMenu\n"
+		echo -en "$SECOND_LABEL\t\t$SECOND\0info\x1fsetTimeManuallySecondMenu\n"
 		echo -en " \0nonselectable\x1ftrue\n"
 		echo -en "$APPLY_LABEL\0icon\x1fobject-select\x1finfo\x1fsetTimeManuallySelectedMenu\n"
 		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1ftimeDateMenu\n"
@@ -319,7 +319,10 @@ case $ROFI_INFO in
 	;;
 	
 	"timeSyncMenu" )
-		echo -en "\0message\x1fNetwork Time Synchronization\n"
+		declare -A myStatus=([active]=Enabled [inactive]=Disabled)
+
+		echo -en "\0message\x1fNetwork Time Synchronization: ${myStatus[$(timedatectl -a | awk 'NR==6 { print $3 }')]}\n"
+		# echo -en "\0message\x1f$(timedatectl -a | awk 'NR==6 { print $1 " " $2 " " $3 }')\n"
 		echo -en "Enable\0icon\x1fobject-select\x1finfo\x1ftimeSyncSelectedMenu\n"
 		echo -en "Disable\0icon\x1fcancel\x1finfo\x1ftimeSyncSelectedMenu\n"
 		echo -en " \0nonselectable\x1ftrue\n"
