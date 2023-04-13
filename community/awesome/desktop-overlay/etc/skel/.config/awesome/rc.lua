@@ -661,7 +661,7 @@ globalkeys = gears.table.join(
 	              		              	              	              		              	             
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . --no-ignore-parent -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
