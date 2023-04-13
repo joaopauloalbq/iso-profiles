@@ -765,16 +765,17 @@ globalkeys = gears.table.join(
     
     awful.key({ modkey }, "z", nil, function ()
         awful.spawn.easy_async("xcolor -s", function()
-            -- awful.spawn.with_line_callback("xclip -selection clipboard -o", {
-            awful.spawn.with_line_callback("xsel --clipboard -o", {
-                stdout = function(color)         
-                    naughty.notify({ 
-                        title = color,
-                        text  = "copied to clipboard",
-                        icon  = "mypaint",
-                        border_color = color,
-                        ignore_suspend = true
-                    })
+            awful.spawn.with_line_callback("xclip -selection clipboard -o", {
+                stdout = function(color)
+                    awful.spawn.easy_async_with_shell('convert $HOME/.local/share/color.png -fill "'.. color .. '" -colorize 100 $HOME/.local/share/color.png', function() 
+                        naughty.notify({
+                            title = color,
+                            text  = "copied to clipboard",
+                            icon  = ".local/share/color.png",
+                            border_color = color,
+                            ignore_suspend = true
+                        })                
+                    end)
                 end,
             })
         end)
