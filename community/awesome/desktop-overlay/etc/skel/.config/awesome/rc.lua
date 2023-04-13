@@ -1177,11 +1177,17 @@ awful.rules.rules = {
 	{ rule = { class="Heimer" },
 		properties = { floating = false, fullscreen = false } },	
 	{ rule = { class= "mpv" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
-	{ rule = { class= "feh" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
+		callback = function() 
+		    if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then
+		        awful.layout.set(awful.layout.suit.max)
+            end
+        end },
 	{ rule = { class= "Viewnior" },
-		callback = function() awful.layout.set(awful.layout.suit.max) end },
+		callback = function() 
+            if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then
+                awful.layout.set(awful.layout.suit.max)
+            end
+        end },
 	{ rule = { class="okular" },
 		properties = { switchtotag = true, tag = " 4 " },
 		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
