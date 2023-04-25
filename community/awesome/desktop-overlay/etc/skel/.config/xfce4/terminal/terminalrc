@@ -38,13 +38,13 @@ TextBlinkMode=TERMINAL_TEXT_BLINK_MODE_FOCUSED
 ShortcutsNoHelpkey=TRUE
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
-CustomCommand=bash
+CustomCommand=fish
 DropdownStatusIcon=FALSE
 MiscRightClickAction=TERMINAL_RIGHT_CLICK_ACTION_CONTEXT_MENU
 OverlayScrolling=TRUE
-ColorUseTheme=TRUE
 DropdownHeight=80
 DropdownToggleFocus=FALSE
 DropdownPositionVertical=1
 BackgroundDarkness=0,800000
+RunCustomCommand=TRUE
 
