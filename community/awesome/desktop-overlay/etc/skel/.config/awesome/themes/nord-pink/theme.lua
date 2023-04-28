@@ -111,6 +111,16 @@ theme.titlebar_close_button_focus_hover  = "~/.config/awesome/themes/nord-pink/t
 
 theme.titlebar_minimize_button_normal = "~/.config/awesome/themes/nord-pink/titlebar/minimize_normal.png"
 theme.titlebar_minimize_button_focus  = "~/.config/awesome/themes/nord-pink/titlebar/minimize_focus.png"
+theme.titlebar_minimize_button_focus_hover  = "~/.config/awesome/themes/nord-pink/titlebar/minimize_focus_hover.png"
+
+theme.titlebar_maximized_button_normal_inactive = "~/.config/awesome/themes/nord-pink/titlebar/maximized_normal_inactive.png"
+theme.titlebar_maximized_button_focus_inactive  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_focus_inactive.png"
+theme.titlebar_maximized_button_normal_active = "~/.config/awesome/themes/nord-pink/titlebar/maximized_normal_active.png"
+theme.titlebar_maximized_button_focus_active  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_focus_active.png"
+theme.titlebar_maximized_button_normal_active_hover  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_button_normal_active_hover.png"
+theme.titlebar_maximized_button_focus_active_hover  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_button_focus_active_hover.png"
+theme.titlebar_maximized_button_normal_inactive_hover  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_button_normal_inactive_hover.png"
+theme.titlebar_maximized_button_focus_inactive_hover  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_button_focus_inactive_hover.png"
 
 theme.titlebar_ontop_button_normal_inactive = "~/.config/awesome/themes/nord-pink/titlebar/ontop_normal_inactive.png"
 theme.titlebar_ontop_button_focus_inactive  = "~/.config/awesome/themes/nord-pink/titlebar/ontop_focus_inactive.png"
@@ -126,11 +136,6 @@ theme.titlebar_floating_button_normal_inactive = "~/.config/awesome/themes/nord-
 theme.titlebar_floating_button_focus_inactive  = "~/.config/awesome/themes/nord-pink/titlebar/sepa.png"
 theme.titlebar_floating_button_normal_active = "~/.config/awesome/themes/nord-pink/titlebar/sepa.png"
 theme.titlebar_floating_button_focus_active  = "~/.config/awesome/themes/nord-pink/titlebar/sepa.png"
-
-theme.titlebar_maximized_button_normal_inactive = "~/.config/awesome/themes/nord-pink/titlebar/maximized_normal_inactive.png"
-theme.titlebar_maximized_button_focus_inactive  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_active = "~/.config/awesome/themes/nord-pink/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_active  = "~/.config/awesome/themes/nord-pink/titlebar/maximized_focus_active.png"
 
 theme.wallpaper = "~/.wallpaper"
 
