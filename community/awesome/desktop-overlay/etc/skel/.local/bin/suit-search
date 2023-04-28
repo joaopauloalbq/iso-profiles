@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+echo -en "\x00prompt\x1f\n"
+echo -en "\x00use-hot-keys\x1ftrue\n"
+
+case $ROFI_RETV in
+    0 )
+        fd -c never
+        # plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]"
+    ;;
+    1 )
+        # Open File/Folder
+        coproc ( xdg-open "$1" > /dev/null  2>&1 )
+    ;;
+    10)
+        # Open Folder
+        coproc ( xdg-open "${1%/*}" > /dev/null  2>&1 )
+    ;;
+esac

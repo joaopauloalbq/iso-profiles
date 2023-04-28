@@ -76,6 +76,7 @@ altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
+    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
@@ -95,7 +96,6 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.se,
     -- awful.layout.suit.magnifier,
     awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.floating,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -661,7 +661,8 @@ globalkeys = gears.table.join(
 	              		              	              	              		              	             
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
+	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell("rofi -modi 'search:suit-search' -show search -kb-accept-alt '' -kb-custom-1 'Shift+Return'") end,
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
@@ -791,7 +792,7 @@ globalkeys = gears.table.join(
 )
 
 clientkeys = gears.table.join(
-    awful.key({ altkey }, "/",  function () awful.spawn("/home/jp/hud.py") end,
+    awful.key({ altkey }, "/",  function () awful.spawn("suit-hud",false) end,
         {description = "decreases width", group = "floating window"}),
     awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 50,   0, -100,   0) end,
         {description = "decreases width", group = "floating window"}),

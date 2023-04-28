@@ -44,11 +44,11 @@ case $ROFI_INFO in
 	;;
 	"networkSelectedMenu" )
 		if [ "$1" = "Browse SSH Servers" ]; then
-			run "bssh"
+			run 'bssh'
 		elif [ "$1" = "Browse VNC Servers" ]; then
-			run "bvnc"
+			run 'bvnc'
 		elif [ "$1" = "$CONNECTIONEDITOR_LABEL" ]; then
-			run "nm-connection-editor"
+			run 'nm-connection-editor'
 		fi
 	;;
 	
@@ -80,19 +80,21 @@ case $ROFI_INFO in
 	# └─┐│ ││ ││││ ││
 	# └─┘└─┘└─┘┘└┘─┴┘
 	"soundMenu" )
-		 run pavucontrol
+		 run "pavucontrol"
 	;;
 	# ┌┬┐┬┌─┐┌─┐┬  ┌─┐┬ ┬
 	#  │││└─┐├─┘│  ├─┤└┬┘
 	# ─┴┘┴└─┘┴  ┴─┘┴ ┴ ┴
 	"displayMenu" )
 		if [ "$1" = "Layout editor" ]; then
-			run arandr3			exit 0
+			run "arandr"
+			exit 0
 		fi
-
+		
 		echo -en "Screens\0icon\x1fvideo-display\x1finfo\x1fscreensMenu\n"
 		echo -en "Backlight\0icon\x1fcontrast\x1finfo\x1fbacklightMenu\n"
 		echo -en "Layout editor\0icon\x1fedit\x1finfo\x1fdisplayMenu\n"
+		echo -en "Wallpaper\0icon\x1fview-preview\x1finfo\x1fwallpaperMenu\n"
 		echo -en " \0nonselectable\x1ftrue\n"
 		echo -en "$BACK_LABEL\0icon\x1fgo-previous\x1finfo\x1f\n"
 	;;
@@ -126,6 +128,9 @@ case $ROFI_INFO in
 				done
 			fi
 		done
+	;;
+	"wallpaperMenu" )
+		run 'rofi -modi "wallpaper:suit-wallpaper" -show wallpaper -theme wallpaper'
 	;;
 	"screensResolutionSelectedMenu" )
 		echo "xrandr -s $1" > .xprofile
