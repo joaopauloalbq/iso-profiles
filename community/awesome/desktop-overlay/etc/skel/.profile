@@ -1,3 +1,4 @@
+export PS1="\[\e[1;34m\][\[\e[m\]\[\e[1;36m\]\u@\h\[\e[m\] \[\e[1;33m\]\w\[\e[m\]\[\e[1;34m\]]\[\e[m\]\[\e[1;32m\]\\$\[\e[m\] "
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export QT_SCALE_FACTOR=1
 export GTK_USE_PORTAL=1
