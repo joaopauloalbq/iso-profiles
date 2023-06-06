@@ -61,14 +61,14 @@ theme.titlebar_bg_focus = theme.titlebar_bg_normal
 theme.titlebar_fg_focus = "#ffffff"
 theme.titlebar_fg_normal = "#b5b7bb"
 
-theme.tasklist_sticky = '󰗐 ' -- 
-theme.tasklist_ontop = ' ' 
-theme.tasklist_above = ' '
-theme.tasklist_below = ' '
-theme.tasklist_floating = '󰅣 ' -- 󱀋 
-theme.tasklist_maximized = '󰨤 ' --  󰹵
-theme.tasklist_maximized_vertical = '󰡏 ' -- 󰹹
-theme.tasklist_maximized_horizontal = '󰡎 '
+theme.tasklist_sticky = '󰗐  ' -- 
+theme.tasklist_ontop = '  ' 
+theme.tasklist_above = '  '
+theme.tasklist_below = '  '
+theme.tasklist_floating = '󰅣  ' -- 󱀋 
+theme.tasklist_maximized = '󰨤  ' --  󰹵
+theme.tasklist_maximized_vertical = '󰡏  ' -- 󰹹
+theme.tasklist_maximized_horizontal = '󰡎  '
 
 theme.hotkeys_label_fg = theme.fg_normal
 theme.hotkeys_modifiers_fg = theme.fg_focus

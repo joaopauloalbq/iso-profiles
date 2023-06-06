@@ -76,7 +76,6 @@ altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
@@ -96,6 +95,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.se,
     -- awful.layout.suit.magnifier,
     awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.floating,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -794,22 +794,22 @@ globalkeys = gears.table.join(
 clientkeys = gears.table.join(
     awful.key({ altkey }, "/",  function () awful.spawn("suit-hud",false) end,
         {description = "decreases width", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 50,   0, -100,   0) end,
+    awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 75,   0, -150,   0) end,
         {description = "decreases width", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "End",   function (c) c:relative_move(-50,   0,  100,   0) end,
+    awful.key({ modkey, "Shift" }, "End",   function (c) c:relative_move(-75,   0,  150,   0) end,
     	{description = "increases width", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Prior", function (c) c:relative_move(  0, -50,   0,  100) end,
+    awful.key({ modkey, "Shift" }, "Prior", function (c) c:relative_move(  0, -75,   0,  150) end,
     	{description = "increases height", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Next",  function (c) c:relative_move(  0,  50,   0, -100) end,
+    awful.key({ modkey, "Shift" }, "Next",  function (c) c:relative_move(  0,  75,   0, -150) end,
     	{description = "decreases height", group = "floating window"}),
-    awful.key({ modkey, "Shift" }, "Up",    function (c) c:relative_move(  0, -60,   0,   0) end,
+    awful.key({ modkey, "Shift" }, "Up",    function (c) c:relative_move(  0, -75,   0,   0) end,
     	{description = "move up", group = "client"}),
-    awful.key({ modkey, "Shift" }, "Down",  function (c) c:relative_move(  0,  60,   0,   0) end,
+    awful.key({ modkey, "Shift" }, "Down",  function (c) c:relative_move(  0,  75,   0,   0) end,
 	    {description = "move down", group = "client"}),
     awful.key({ modkey, "Shift" }, "Left",  
         function (c) 
             if c.floating or c.first_tag.layout == awful.layout.suit.floating then
-                c:relative_move(-60,   0,   0,   0) 
+                c:relative_move(-75,   0,   0,   0) 
             else
                 awful.client.swap.byidx( -1)
             end
@@ -818,7 +818,7 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Shift" }, "Right", 
         function (c) 
             if c.floating or c.first_tag.layout == awful.layout.suit.floating then
-                c:relative_move( 60,   0,   0,   0) 
+                c:relative_move( 75,   0,   0,   0) 
             else
                 awful.client.swap.byidx(  1)
             end
@@ -979,12 +979,12 @@ client.connect_signal("manage", function (c)
     -- i.e. put it at the end of others instead of setting it master.
     if not awesome.startup then awful.client.setslave(c) end
 
-    if awesome.startup
-      and not c.size_hints.user_position
-      and not c.size_hints.program_position then
-        -- Prevent clients from being unreachable after screen count changes.
-        awful.placement.no_offscreen(c)
-    end
+    -- if awesome.startup
+      -- and not c.size_hints.user_position
+      -- and not c.size_hints.program_position then
+        -- -- Prevent clients from being unreachable after screen count changes.
+        -- awful.placement.no_offscreen(c)
+    -- end
 end)
 
 -- Focus urgent clients automatically
@@ -1010,13 +1010,30 @@ tag.connect_signal("property::layout", function(t)
     end
 end)
 
+-- Double click titlebar timer, how long it takes for a 2 clicks to be considered a double click
+function double_click_event_handler(double_click_event)
+    if double_click_timer then
+        double_click_timer:stop()
+        double_click_timer = nil
+        return true
+    end
+
+    double_click_timer = gears.timer.start_new(0.20, function() double_click_timer = nil return false end)
+end
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
     local buttons = gears.table.join(
         awful.button({ }, 1, function()
             c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.move(c)
+            -- WILL EXECUTE THIS ON DOUBLE CLICK
+            if double_click_event_handler() then
+                c.maximized = not c.maximized
+                c:raise()
+            else
+                awful.mouse.client.move(c)
+            end
         end)
         -- awful.button({ }, 3, function()
             -- c:emit_signal("request::activate", "titlebar", {raise = true})
@@ -1056,9 +1073,10 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- Hook called when a client spawns
--- client.connect_signal("manage", function(c)
+client.connect_signal("manage", function(c)
     -- setTitlebar(c, c.first_tag.layout == awful.layout.suit.floating) -- or c.floating
--- end)
+    if c.maximized then c.border_width = 0 else c.border_width = beautiful.border_width end
+end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c) c:emit_signal("request::activate", "mouse_enter", {raise = false}) end)
@@ -1073,14 +1091,15 @@ client.connect_signal("property::maximized", function(c) if c.maximized then c.b
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
+      properties = { border_color = beautiful.border_normal,
+                     -- border_width = beautiful.border_width,
+                     maximized = false,
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.centered,
+                     placement = awful.placement.centered+awful.placement.no_offscreen,
                      size_hints_honor = false
                    }
     },
@@ -1155,6 +1174,8 @@ awful.rules.rules = {
 	    -- properties = { floating = true, skip_taskbar = true, type = "dock" } },
     { rule = { class = "Xsnow" },
       	    properties = { fullscreen = true, requests_no_titlebar = true, skip_taskbar = true, below = true } },
+  	{ rule = { class = "wps" },
+  	    properties = { titlebars_enabled = false } },
   	{ rule = { class = "conky" },
   	    properties = { floating = true, requests_no_titlebar = true, border_width = 0 } },
   	{ rule = { class = "Gcolor3" },
@@ -1189,9 +1210,9 @@ awful.rules.rules = {
                 awful.layout.set(awful.layout.suit.max)
             end
         end },
-	{ rule = { class="okular" },
-		properties = { switchtotag = true, tag = " 4 " },
-		callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
+	-- { rule = { class="okular" },
+		-- properties = { switchtotag = true, tag = " 4 " },
+		-- callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
     { rule = { instance="typefast.io" },
         properties = { floating = false, tag = " 5 " } },
     { rule = { class="Inkscape" },
@@ -1218,12 +1239,12 @@ awful.rules.rules = {
 
 run_once('','picom','')
 run_once('','nm-applet','')
-run_once('sleep 0.8 && ','pa-applet',' --disable-key-grabbing')
--- run_once("sleep 0.9 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
-run_once('sleep 1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+run_once('sleep 0.9 && ','pa-applet',' --disable-key-grabbing')
+run_once("sleep 1.0 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
+run_once('sleep 1.1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
 -- run_once('','blueman-tray','')
-run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
+run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1',' & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)')
 run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
 awful.spawn.with_shell('touchegg')

@@ -4,8 +4,10 @@
 @import "list.rasi"
 
 * {
+	background-color: #323946;
+	brighter-background-color: #424955;
+	border-color: #4a515c;
 	spacing: 0;
-
 }
 
 window {

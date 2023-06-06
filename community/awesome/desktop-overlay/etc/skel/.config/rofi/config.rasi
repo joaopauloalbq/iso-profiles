@@ -7,7 +7,7 @@ configuration {
 	display-keys: "";
 	display-drun: "";
 	display-calc: "";
-	display-emoji: "";
+	display-emoji: "󰞅";
 	display-delclip: "";
 	display-window: "";
 	display-windowcd: "";

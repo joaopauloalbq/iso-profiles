@@ -10,14 +10,15 @@ inputbar {
 }
 
 prompt {
-	font: "Noto Sans 18";
+	font: "Noto Sans 14";
 	vertical-align: 0.5;
-	padding: 0px 17px;
-	border: 0 1px 0 0;
+	padding: 0 19px;
+	margin: 0 0 0 -3px;
 }
 
 entry {
 	padding: 12px;
+	border: 0 0 0 1px;
 }
 
 message{

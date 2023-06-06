@@ -4,20 +4,21 @@
 @import "base.rasi"
 
 inputbar {
-	border: 0px 0px 1px 0px;
-	margin: 0px 0px -2px 0px;
+	border: 0 0 1px 0;
+	margin: 0 0 -2px 0;
 	children: [prompt, entry, icon-prev-page, icon-next-page];
 }
 
 prompt {
-	font: "Noto Sans 22";
+	font: "Noto Sans 18";
 	vertical-align: 0.5;
-	padding: 0px 15px;
-	border: 0 1px 0 0;
+	padding: 0 18px;
+	margin: 0 0 0 -3px;
 }
 
 entry {
 	padding: 12px;
+	border: 0 0 0 1px;
 }
 
 message{
