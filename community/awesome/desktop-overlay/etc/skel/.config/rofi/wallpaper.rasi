@@ -17,18 +17,19 @@ window {
 inputbar {
 	border: 0 0 1px 0;
 	margin: 0 0 -2px 0;
-	children: [prompt, entry, icon-add];
+	children: [prompt, entry];
 	//children: [prompt, entry, icon-prev-page, icon-next-page, icon-add];
 }
 
 prompt {
-	font: "Noto Sans 18";
+	font: "Noto Sans 14";
 	vertical-align: 0.5;
-	padding: 0px 15px;
-	border: 0 1px 0 0;
+	padding: 0 20px;
+	margin: 0 0 0 -6px;
 }
 
 entry {
+	border: 0 0 0 1px;
 	padding: 12px;
 }
 
