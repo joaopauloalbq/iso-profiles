@@ -101,7 +101,6 @@ unace
 
 ## Xorg Input Drivers
 >extra xf86-input-elographics
->extra xf86-input-evdev
 >extra xf86-input-libinput
 >extra xf86-input-void
 
@@ -128,7 +127,7 @@ light
 awesome
 picom
 xfce4-terminal
-brave-browser
+firefox
 mpv
 maim
 htop
