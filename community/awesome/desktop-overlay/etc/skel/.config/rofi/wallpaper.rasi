@@ -9,16 +9,15 @@ window {
 	location: east;
 	anchor: east;
 	margin: 0;
-	border: 0 0 0 2px;
 	border-radius: 0;
+	border: 0 0 0 2px;
 }
 
 
 inputbar {
 	border: 0 0 1px 0;
 	margin: 0 0 -2px 0;
-	children: [prompt, entry];
-	//children: [prompt, entry, icon-prev-page, icon-next-page, icon-add];
+	children: [icon-prompt, entry];
 }
 
 prompt {
@@ -106,9 +105,13 @@ icon-prev-page {
 	action: "kb-page-prev";
 }
 
-icon-add {
-	padding: 12px;
+icon-prompt {
+	size: 25;
+	padding: 0 9px;
+	margin: 0 0 0 2px;
 	expand: false;
-	filename: "add";
-	action: "kb-custom-1";
+	filename: "view-preview";
+	action: "kb-cancel";
 }
+
+

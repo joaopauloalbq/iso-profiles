@@ -57,6 +57,6 @@ element-text {
 }
 
 element-icon {
-	size: 16px;
+	size: 17px;
 	margin: 0 4;
 }

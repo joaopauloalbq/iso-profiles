@@ -13,8 +13,8 @@
 	
 	font: "Noto Sans Medium 11";
 	corner-radius: 8px;	
-	height: 487px;
-	width: 690px;
+	height: 500px;
+	width: 700px;
 }
 
 window {

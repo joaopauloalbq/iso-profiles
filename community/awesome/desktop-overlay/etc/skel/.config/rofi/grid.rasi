@@ -42,7 +42,7 @@ listview {
 element {
 	orientation: vertical;
 	border-radius: @corner-radius;
-	padding: 12px 0px 15px 0px;
+	padding: 14px 0px 15px 0px;
 }
 
 element-text {
@@ -55,7 +55,7 @@ element-text {
 
 element-icon {
 	horizontal-align: 0.5;
-	size: 48px;
+	size: 49px;
 }
 
 mode-switcher {
@@ -69,6 +69,7 @@ button {
 }
 
 icon-next-page {
+	size: 17;
 	expand: false;
 	padding: 12px;
 	vertical-align: 0.5;
@@ -77,9 +78,19 @@ icon-next-page {
 }
 
 icon-prev-page {
+	size: 17;
 	expand: false;
 	padding: 12px;
 	vertical-align: 0.5;
 	filename: "previous";
 	action: "kb-page-prev";
+}
+
+icon-prompt {
+	size: 25;
+	padding: 0 9px;
+	margin: 0 0 0 2px;
+	expand: false;
+	filename: "view-preview";
+	action: "kb-cancel";
 }

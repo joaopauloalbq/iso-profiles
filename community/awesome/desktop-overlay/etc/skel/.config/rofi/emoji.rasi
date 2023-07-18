@@ -1,4 +1,4 @@
-// Copyright (C) 2022-2022 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
+// Copyright (C) 2022-2023 João Paulo Albuquerque Vieira <joaopauloalbu@gmail.com>
 // Everyone is permitted to copy and distribute copies of this file under GPL2
 
 @import "base.rasi"
@@ -6,7 +6,7 @@
 inputbar {
 	border: 0 0 1px 0;
 	margin: 0 0 -2px 0;
-	children: [prompt, entry, icon-prev-page, icon-next-page];
+	children: [icon-prompt, entry, icon-prev-page, icon-next-page];
 }
 
 prompt {
@@ -33,10 +33,10 @@ textbox {
 listview {
 	layout: vertical;
 	fixed-columns: true;
-	// fixed-height: false;
-	columns: 10;
+	columns: 11;
 	lines: 7;
 	padding: 9px;
+	// spacing: 2px;
 }
 
 element {
@@ -48,10 +48,10 @@ element-icon {
 }
 
 element-text  {
-	font: "Noto Color Emoji 27";
+	font: "Noto Color Emoji 23";
 	horizontal-align: 0.5;
 	vertical-align: 0.5;
-	padding: 4px 0px;
+	padding: 5px 0px;
 }
 
 mode-switcher {
@@ -65,6 +65,7 @@ button {
 }
 
 icon-next-page {
+	size: 17;
 	expand: false;
 	padding: 12px;
 	vertical-align: 0.5;
@@ -73,9 +74,19 @@ icon-next-page {
 }
 
 icon-prev-page {
+	size: 17;
 	expand: false;
 	padding: 12px;
 	vertical-align: 0.5;
 	filename: "previous";
 	action: "kb-page-prev";
+}
+
+icon-prompt {
+	size: 23;
+	padding: 0 11px;
+	margin: 0 0 0 2px;
+	expand: false;
+	filename: "face-smile-symbolic";
+	action: "kb-cancel";
 }

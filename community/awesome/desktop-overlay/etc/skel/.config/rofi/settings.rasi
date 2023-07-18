@@ -17,7 +17,20 @@ window {
 	border-radius: 0;
 }
 
+inputbar {
+	children: [icon-prompt, entry, icon-prev-page, icon-next-page];
+}
+
 element-icon {
 	size: 17px;
 	margin: 0 4;
+}
+
+icon-prompt {
+	expand: false;
+	size: 25;
+	padding: 0 11px;
+	vertical-align: 0.5;
+	filename: "fcitx-mozc-properties";
+	action: "kb-cancel";
 }
