@@ -1,5 +1,5 @@
 notify = true
-use_nerdfont = true
+use_nerdfont = false
 
 [keybindings]
 # Views
@@ -19,11 +19,11 @@ use_nerdfont = true
 "Left" = "move left 1"
 "Right" = "move right 1"
 "PageUp" = "move up 5"
-"PageDown" = "move down 5"
+"PageDown" = "move down 10"
 
 # Fast forward / rewind
-"[" = "seek -2s"
-"]" = "seek +2s"
+"[" = "seek -3s"
+"]" = "seek +5s"
 "{" = "seek -10s"
 "}" = "seek +10s"
 
@@ -43,9 +43,9 @@ use_nerdfont = true
 
 # Open context menu
 "w" = "open selected"
-"W" = "open current"
+"Shift+w" = "open current"
 "a" = "goto artist"
-"A" = "goto album"
+"Shift+a" = "goto album"
 "p" = "similar current"
 "Ctrl+p" = "similar selected"
 
@@ -64,16 +64,16 @@ use_nerdfont = true
 
 # Sorting
 "t" = "sort added d"
-"T" = "sort title a"
+"Shift+t" = "sort title a"
 
 # Sharing
-"Y" = "share selected"
+"Shift+y" = "share selected"
 "y" = "share current"
 
 # Other
-"Q" = "quit"
+"Shift+q" = "quit"
 "?" = "help"
-"U" = "update"
+"Shift+u" = "update"
 
 [notification_format]
 title = "%title"
@@ -81,7 +81,7 @@ body = "%album - %artists"
 
 [theme] 
 # Spotify
-background = "black"
+# background = "black"
 primary = "white"
 secondary = "light white"
 title = "green"
