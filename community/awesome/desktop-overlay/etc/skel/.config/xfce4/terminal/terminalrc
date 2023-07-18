@@ -27,7 +27,7 @@ MiscNewTabAdjacent=TRUE
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=FALSE
 ScrollingLines=10000
-FontName=NotoMono Nerd Font Mono 11
+FontName=Monospace 11
 ColorForeground=#e8e8e8e8e8e8
 ColorBackground=#242429293232
 ColorCursor=#dcdcdc
@@ -47,5 +47,5 @@ DropdownToggleFocus=FALSE
 DropdownPositionVertical=1
 BackgroundDarkness=0,800000
 RunCustomCommand=TRUE
-CellHeightScale=1,200000
+CellHeightScale=1,050000
 
