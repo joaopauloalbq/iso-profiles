@@ -1,8 +1,4 @@
-set -g fish_greeting ''
-
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
+set -U fish_greeting
 
 function fish_prompt
     set -l prompt_symbol '$ '
@@ -21,8 +17,8 @@ alias ls='exa'
 alias la='exa -la'
 alias ll='exa -lh'
 alias lt='exa --tree'
-alias cat='bat'
 alias grep='rg'
+alias cat='bat'
 alias cal='cal -3'
 alias diff='diff --color=always'
 alias nano='micro'
@@ -40,3 +36,6 @@ abbr -a ps pamac search
 abbr -a pu pamac update
 abbr -a pc pamac checkupdates
 abbr -a pd pamac info
+
+# bind \cu 'history | head -n 1 | bat -Pp | grep -Eo "(((http|https|ftp|gopher)|mailto)[.:][^ >\"\]*|www\.[-a-z0-9.]+)[^ .,;\>\">\):]" | fzf | xargs xdg-open'
+bind \cu 'history | head -n 1 | xargs -0 fish -c | bat -Pp | grep -Eo "(((http|https|ftp|gopher)|mailto)[.:][^ >\"\]*|www\.[-a-z0-9.]+)[^ .,;\>\">\):]" | fzf | xargs xdg-open > /dev/null  2>&1'
