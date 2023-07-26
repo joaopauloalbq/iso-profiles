@@ -21,6 +21,19 @@ window {
 	border-radius: 0;
 }
 
+inputbar {
+	children: [icon-prompt, entry];
+}
+
+icon-prompt {
+	expand: false;
+	size: 17;
+	padding: 0 11px;
+	vertical-align: 0.5;
+	filename: "activities";
+	action: "kb-cancel";
+}
+
 prompt {
 	padding: 0px 15px;
 	margin: 0;
