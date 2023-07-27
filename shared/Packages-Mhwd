@@ -29,7 +29,6 @@ mesa-vdpau
 >nonfree_default nvidia-utils
 >nonfree_x86_64 nvidia-utils
 >nonfree_multilib lib32-nvidia-utils
-opencl-mesa
 open-vm-tools
 primus
 bumblebee
