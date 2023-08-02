@@ -114,11 +114,11 @@ myexitmenu = {
 
 mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
 
-suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi "settings:suit-settings" -show settings -theme settings' })
+suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi suit-settings -show suit-settings -theme settings' })
 
 mydesktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
-                                       { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi "wallpaper:suit-wallpaper" -show wallpaper -theme wallpaper') end},
-                                       { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn.with_shell('rofi -modi "settings:suit-settings" -show settings -theme settings') end},
+                                       { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi suit-wallpaper -show suit-wallpaper -theme wallpaper') end},
+                                       { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn.with_shell('rofi -modi suit-settings -show suit-settings -theme settings') end},
                                        { "Exit", myexitmenu }
                                     }})
 
@@ -184,35 +184,16 @@ local tasklist_buttons = gears.table.join(
                                               awful.client.swap.byidx(-1)
                                           end))
 
--- local function set_wallpaper(s)
-    -- -- Wallpaper
-    -- if beautiful.wallpaper then
-        -- local wallpaper = beautiful.wallpaper
-        -- -- If wallpaper is a function, call it with the screen
-        -- if type(wallpaper) == "function" then
-            -- wallpaper = wallpaper(s)
-        -- end
-        -- gears.wallpaper.maximized(wallpaper, s, true)
-    -- end
--- end
-
 local function set_wallpaper(s)
     awful.spawn("nitrogen --restore", false)
 end
 
 local function run_once(exeBefore, exeCmd, exeArgs)
-    awful.spawn.easy_async('pidof ' .. exeCmd, function(stdout, stderr, exitreason, exitcode)
-        if exitcode ~= 0 then
+    awful.spawn.easy_async('pidof ' .. exeCmd, function(_, _, _, exitcode)
+        if exitcode == 1 then
             awful.spawn.with_shell(exeBefore .. exeCmd .. exeArgs)
         end
     end)
-end
-
-local function rallpaper() 
-    awful.spawn.with_line_callback('xdg-user-dir PICTURES', {
-        stdout = function(PICTURES_DIR)
-            awful.spawn.with_shell(terminal.." -T 'Set wallpaper' --role='set-wallpaper' -x ranger --confdir=$HOME/.config/rallpaper " .. PICTURES_DIR .. "/Wallpapers")
-        end,}) 
 end
 
 -- Toggle titlebar on or off depending on s. Creates titlebar if it doesn't exist
@@ -368,6 +349,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mylayoutbox = awful.widget.layoutbox(s)
     s.mylayoutbox:buttons(gears.table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 2, function () awful.layout.set(awful.layout.layouts[1]) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(-1) end)))
@@ -493,7 +475,7 @@ globalkeys = gears.table.join(
 	end),
               
 	-- Move client to prev/next tag and switch to it
-	awful.key({ modkey, "Control" , "Shift" }, "Left",
+	awful.key({ modkey, "Control", "Shift" }, "Left",
 	    function ()
 	        -- get current tag
 	        local t = client.focus and client.focus.first_tag or nil
@@ -503,12 +485,10 @@ globalkeys = gears.table.join(
 	        -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
 	        local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
             client.focus:move_to_tag(tag)
-            -- awful.client.movetotag(tag) -- deprecated
 	        tag:view_only()
-	        -- awful.tag.viewprev() -- deprecated
 	    end,
 	        {description = "move client to previous tag and switch to it", group = "layout"}),
-	awful.key({ modkey, "Control" , "Shift" }, "Right",
+	awful.key({ modkey, "Control", "Shift" }, "Right",
 	    function ()
 	        -- get curreìnt tag
 	        local t = client.focus and client.focus.first_tag or nil
@@ -518,11 +498,37 @@ globalkeys = gears.table.join(
 	        -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
 	        local tag = client.focus.screen.tags[(t.name % 9) + 1]
 	        client.focus:move_to_tag(tag)
-	        -- awful.client.movetotag(tag) -- deprecated
 	        tag:view_only()
-	        -- awful.tag.viewnext() -- deprecated
 	    end,
 	        {description = "move client to next tag and switch to it", group = "layout"}),
+	
+	-- Toggle client to prev/next tag
+		awful.key({ modkey, altkey, "Shift" }, "Left",
+		    function ()
+		    	-- get curreìnt tag
+   		        local t = client.focus and client.focus.first_tag or nil
+   		        if t == nil then
+   		            return
+   		        end
+		        -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
+		        local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
+				client.focus:toggle_tag(tag)
+		        -- tag:view_only()
+		    end,
+		        {description = "toggle focused client to previous tag", group = "layout"}),
+		awful.key({ modkey, altkey, "Shift" }, "Right",
+		    function ()
+		        -- get curreìnt tag
+		        local t = client.focus and client.focus.first_tag or nil
+		        if t == nil then
+		            return
+		        end
+		        -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
+		        local tag = client.focus.screen.tags[(t.name % 9) + 1]
+		        client.focus:toggle_tag(tag)
+		        -- tag:view_only()
+		    end,
+		        {description = "toggle focused client to next tag", group = "layout"}),
 	
 	-- Window navigation (by id)
     awful.key({ modkey,           }, "Right",
@@ -569,7 +575,7 @@ globalkeys = gears.table.join(
 	awful.key({ altkey, "Control" }, "Left",  function () awful.screen.focus_relative(-1) end,
               {description = "change screen focus", group = "screen"}),
               
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
+    awful.key({ modkey, "Control" }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
     awful.key({ altkey,           }, "Tab",
         function ()
@@ -617,7 +623,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Launchers
-	awful.key({ modkey },            "o",     function () awful.spawn('rofi -modi "settings:suit-settings" -show settings -theme settings', false) end,
+	awful.key({ modkey },            "o",     function () awful.spawn('rofi -modi suit-settings -show suit-settings -theme settings', false) end,
 		    {description = "show windows (all desktops)", group = "launcher"}),
 		    
 	awful.key({ modkey },            "a",     function () awful.spawn("rofi -modi 'window,windowcd' -show window", false) end,
@@ -633,7 +639,7 @@ globalkeys = gears.table.join(
 			{description = "clipboard", group = "launcher"}),
 			
     -- awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("clipmenu -theme clipdel -p  && clipdel -d $(xsel -o)", false) end,
-    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi 'delclip:suit-delclip' -show delclip -theme clipdel -p ", false) end,
+    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi suit-delclip -show suit-delclip -theme clipdel -p ", false) end,
     		{description = "Delete clipboard entries", group = "launcher"}),
 			
 	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
@@ -656,13 +662,13 @@ globalkeys = gears.table.join(
     awful.key({ modkey },  "p",     function () awful.spawn.with_shell("suit-monitor", false) end,
             {description = "Display Mode", group = "launcher"}),        
 			
-	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi 'powermenu:suit-powermenu' -show powermenu -theme power", false) end,
+	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi suit-powermenu -show suit-powermenu -theme power", false) end,
 		 	{description = "Power menu", group = "launcher"}),
 	              		              	              	              		              	             
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell("rofi -modi 'search:suit-search' -show search -kb-accept-alt '' -kb-custom-1 'Shift+Return'") end,
+	awful.key({ modkey },            "s",     function () awful.spawn.with_shell("rofi -modi suit-search -show suit-search -theme-str 'element-icon {enabled: false;}' -kb-accept-alt '' -kb-custom-1 'Shift+Return' -kb-custom-2 'Alt+Return' -disable-history -no-sort -keep-right") end,
 	        {description = "File searcher", group = "launcher"}),
 		 	
 	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
@@ -676,7 +682,7 @@ globalkeys = gears.table.join(
 				 {description = "btop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "c",     function () awful.spawn(terminal .. " -e micro") end,
 				 {description = "micro text editor", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi "wallpaper:suit-wallpaper" -show wallpaper -theme wallpaper') end,
+	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi suit-wallpaper -show suit-wallpaper -theme wallpaper') end,
 				 {description = "wallpaper", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
 				 {description = "ranger file manager", group = "launcher"}),
@@ -688,9 +694,10 @@ globalkeys = gears.table.join(
 	             {description = "ncspot", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
 				 {description = "vs code", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("brave") end,
+	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn("firefox") end,
 				 {description = "web browser", group = "launcher"}),
-	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end),
+	-- awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("brave --incognito") end),
+	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn("firefox --private-window") end),
 
 	-- Lockscreen
     awful.key({ modkey },            "l",     function () awful.spawn("suit-lockscreen") end,
@@ -729,8 +736,8 @@ globalkeys = gears.table.join(
 	   
 	-- Screenshot
     awful.key({}, "Print", function ()
-        local name = os.date("Imagens/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
-        awful.spawn.easy_async_with_shell("maim " .. name, function()
+        local name = beautiful.picture_dir .. os.date("/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
+        awful.spawn.easy_async("maim " .. name, function()
             naughty.notify({ title = "Screenshot captured",
 				             text  = name,
         			     	 icon  = "preferences-desktop-wallpaper",
@@ -739,7 +746,7 @@ globalkeys = gears.table.join(
     end, {description = "Print desktop", group = "Screenshot"}),
     
     awful.key({ modkey }, "Print", function ()
-        local name = os.date("Imagens/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
+        local name = beautiful.picture_dir .. os.date("/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
         awful.spawn.easy_async_with_shell("maim -i $(xdotool getactivewindow) " .. name, function()
             naughty.notify({ title = "Screenshot captured",
 			    	         text  = name,
@@ -749,8 +756,8 @@ globalkeys = gears.table.join(
     end, {description = "Print window", group = "Screenshot"}),
     
     awful.key({ "Shift" }, "Print", nil, function ()
-        local name = os.date("Imagens/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
-        awful.spawn.easy_async_with_shell("maim -s " .. name, function(stdout, stderr, exitreason, exitcode)            
+		local name = beautiful.picture_dir .. os.date("/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
+        awful.spawn.easy_async_with_shell("maim -s " .. name, function(_, _, _, exitcode)            
             if exitcode == 0 then        
                 naughty.notify({ title = "Screenshot captured",
     				             text  = name,
@@ -762,7 +769,7 @@ globalkeys = gears.table.join(
     
     awful.key({ "Control" }, "Print", nil, function ()
         awful.spawn.with_shell("maim -s -k | xclip -selection c -t image/png && notify-send 'Screenshot captured' 'to clipboard' -i 'preferences-desktop-wallpaper'")
-    end, {description = "Print area to clipboard", group = "Screenshot"}),
+    end, {description = "copied to the clipboard", group = "Screenshot"}),
     
     awful.key({ modkey }, "z", nil, function ()
         awful.spawn.easy_async("xcolor -s", function()
@@ -771,7 +778,7 @@ globalkeys = gears.table.join(
                     awful.spawn.easy_async_with_shell('convert $HOME/.local/share/color.png -fill "'.. color .. '" -colorize 100 $HOME/.local/share/color.png', function() 
                         naughty.notify({
                             title = color,
-                            text  = "copied to clipboard",
+                            text  = "copied to the clipboard",
                             icon  = ".local/share/color.png",
                             border_color = color,
                             ignore_suspend = true
@@ -792,6 +799,8 @@ globalkeys = gears.table.join(
 )
 
 clientkeys = gears.table.join(
+    -- awful.key({ modkey, "Shift" }, "u",  function () awful.spawn.with_shell('history | head -n 1 | xargs -0 fish -c | bat -Pp | grep -Eo "(((http|https|ftp|gopher)|mailto)[.:][^ >\"\]*|www\.[-a-z0-9.]+)[^ .,;\>\">\):]" | rofi -dmenu -i -monitor -2 -theme hud | xargs xdg-open > /dev/null  2>&1') end,
+        -- {description = "decreases width", group = "floating window"}),
     awful.key({ altkey }, "/",  function () awful.spawn("suit-hud",false) end,
         {description = "decreases width", group = "floating window"}),
     awful.key({ modkey, "Shift" }, "Home",  function (c) c:relative_move( 75,   0, -150,   0) end,
@@ -1099,7 +1108,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.centered+awful.placement.no_offscreen,
+                     placement = awful.placement.centered,
                      size_hints_honor = false
                    }
     },
@@ -1159,19 +1168,12 @@ awful.rules.rules = {
         rule_any = { class = {"^steam_app$"} },
         properties = { fullscreen = true }, --, size_hints_honor = true, floating = true, ontop = true, tag = " 6 " 
     },
-    -- Steam Client
-    {
-        -- Most Steam windows (friends list, "Activate a new product", "An update
-        -- is available", etc.) should be floating…
-        rule_any = { class = {"Steam"} },
-        -- …but not the main window
-        exclude_any = { name = {"Steam"} }, -- TODO: Identify the main window
-        properties = { floating = true, focus = false, size_hints_honor = true, tag = " 6 " },
-    },
 
     -- Rules
     -- { rule = { class= "Rofi" },
 	    -- properties = { floating = true, skip_taskbar = true, type = "dock" } },
+    { rule = { class = "polkit-gnome-authentication-agent-1" },
+      	    properties = { ontop = true, focus = true } },
     { rule = { class = "Xsnow" },
       	    properties = { fullscreen = true, requests_no_titlebar = true, skip_taskbar = true, below = true } },
   	{ rule = { class = "wps" },
@@ -1194,22 +1196,13 @@ awful.rules.rules = {
 	    properties = { floating = true, ontop = true, sticky = true, focus = false, placement = awful.placement.bottom_right } },
 	{ rule = { class="Dragon-drop" },
 		properties = { ontop = true, sticky = true } },
-	{ rule = { name="Torrential" },
+	{ rule = { name="Torrential", instance="transmission" },
 		properties = { floating = true } },	
 	{ rule = { class="Heimer" },
 		properties = { floating = false, fullscreen = false } },	
-	{ rule = { class= "mpv" },
-		callback = function() 
-		    if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then
-		        awful.layout.set(awful.layout.suit.max)
-            end
-        end },
-	{ rule = { class= "Viewnior" },
-		callback = function() 
-            if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then
-                awful.layout.set(awful.layout.suit.max)
-            end
-        end },
+	{ rule = { class="mpv" },
+		callback = function() if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then awful.layout.set(awful.layout.suit.max) end end },
+	{ rule = { class="Viewnior" }, callback = function() if awful.layout.get(awful.screen.focused()) ~= awful.layout.suit.floating then awful.layout.set(awful.layout.suit.max) end end },
 	-- { rule = { class="okular" },
 		-- properties = { switchtotag = true, tag = " 4 " },
 		-- callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[4]) end },
@@ -1221,7 +1214,7 @@ awful.rules.rules = {
             properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Flowblade" },
             properties = { maximized = false, tag = " 5 " } },
-    { rule = { class="heroic" },
+    { rule = { class="heroic", name="Steam" },
             properties = { tag = " 6 " } },
     { rule = { class="Skype" },
     	properties = { tag = " 7 " } },
@@ -1231,7 +1224,7 @@ awful.rules.rules = {
     { rule = { class="discord" },
     	properties = { switchtotag = false, urgent = false, focus = false, tag = " 7 " } },
     { rule = { instance="web.whatsapp.com" },
-    	properties = { width = 845, height = 860, floating = true, placement = awful.placement.right, tag = " 8 " } },
+    	properties = { width = 845, height = 860, floating = true, fullscreen = false, placement = awful.placement.right, tag = " 8 " } },
     { rule = { class="TelegramDesktop" },
     	properties = { placement = awful.placement.restore, floating = true, urgent = false, tag = " 8 " } }
 }

@@ -1,5 +1,6 @@
-export XDG_CONFIG_DIRS=/etc/xdg
-export XDG_CURRENT_DESKTOP=X-Generic
+# export XDG_CONFIG_DIRS=/etc/xdg
+# export XDG_CURRENT_DESKTOP=X-Generic
+export XDG_CONFIG_HOME="$HOME/.config"
 export FONTCONFIG_PATH=/etc/fonts
 export FONTCONFIG_FILE=fonts.conf
 export QT_QPA_PLATFORMTHEME="qt5ct"

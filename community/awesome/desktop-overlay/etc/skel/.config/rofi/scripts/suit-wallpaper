@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+echo -en "\x00prompt\x1f\n"
+echo -en "\x00use-hot-keys\x1ftrue\n"
+
+WALLPAPER_FOLDER="$(xdg-user-dir PICTURES)/Wallpapers/"
+IFS=$'\n' # change Internal Field Separator to newline char
+WALLPAPERS=($(ls -1 $WALLPAPER_FOLDER))
+
+for w in "${WALLPAPERS[@]}" 
+do
+    if [ ! -e $HOME/.cache/thumbnails/large/$w ]; then
+        convert -thumbnail 400 $WALLPAPER_FOLDER$w $HOME/.cache/thumbnails/large/$w 
+    fi
+    
+    echo -en "$w\0icon\x1f$HOME/.cache/thumbnails/large/$w\n"
+done
+
+case $ROFI_RETV in
+    1 )
+        nitrogen --save --set-zoom-fill $WALLPAPER_FOLDER$1
+    ;;
+esac
