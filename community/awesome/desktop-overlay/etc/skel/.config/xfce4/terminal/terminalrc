@@ -46,6 +46,5 @@ DropdownHeight=80
 DropdownToggleFocus=FALSE
 DropdownPositionVertical=1
 BackgroundDarkness=0,800000
-CellHeightScale=1,050000
 RunCustomCommand=TRUE
-
+CellHeightScale=1,050000
