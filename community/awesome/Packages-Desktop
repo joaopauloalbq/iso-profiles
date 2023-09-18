@@ -183,6 +183,7 @@ xcolor
 libcanberra
 >extra gnome-keyring
 gsimplecal
+imagemagick
 
 ## Gestures
 touchegg
