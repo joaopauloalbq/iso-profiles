@@ -505,8 +505,8 @@ globalkeys = gears.table.join(
 	-- Toggle client to prev/next tag
 		awful.key({ modkey, altkey, "Shift" }, "Left",
 		    function ()
-		    	-- get curreìnt tag
-   		        local t = client.focus and client.focus.first_tag or nil
+		    	-- get current tag
+   		        local t = awful.screen.focused().selected_tag or nil
    		        if t == nil then
    		            return
    		        end
@@ -518,8 +518,8 @@ globalkeys = gears.table.join(
 		        {description = "toggle focused client to previous tag", group = "layout"}),
 		awful.key({ modkey, altkey, "Shift" }, "Right",
 		    function ()
-		        -- get curreìnt tag
-		        local t = client.focus and client.focus.first_tag or nil
+		        -- get current tag
+		        local t = awful.screen.focused().selected_tag or nil
 		        if t == nil then
 		            return
 		        end
@@ -835,7 +835,7 @@ clientkeys = gears.table.join(
     	{description = "move right", group = "client"}),
    	
    	awful.key({}, "XF86Cut", function()
-			awful.spawn("xdotool key F11", false)
+			awful.key.execute({}, "F11")
    	   	end),
     awful.key({ modkey,           }, "f",
         function (c)
@@ -1214,6 +1214,8 @@ awful.rules.rules = {
             properties = { maximized = false, tag = " 5 " } },
     { rule = { class="Flowblade" },
             properties = { maximized = false, tag = " 5 " } },
+    { rule = { class="steam" },
+            properties = { tag = " 6 " } },
     { rule = { class="heroic", name="Steam" },
             properties = { tag = " 6 " } },
     { rule = { class="Skype" },
