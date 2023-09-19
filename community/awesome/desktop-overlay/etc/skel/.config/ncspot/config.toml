@@ -1,5 +1,7 @@
 notify = true
-use_nerdfont = false
+use_nerdfont = true
+
+library_tabs = ["tracks", "playlists", "browse", "artists", "albums", "podcasts"]
 
 [keybindings]
 # Views

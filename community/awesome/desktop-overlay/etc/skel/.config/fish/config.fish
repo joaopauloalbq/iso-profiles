@@ -36,6 +36,5 @@ abbr -a ps pamac search
 abbr -a pu pamac update
 abbr -a pc pamac checkupdates
 abbr -a pd pamac info
-
-# bind \cu 'history | head -n 1 | bat -Pp | grep -Eo "(((http|https|ftp|gopher)|mailto)[.:][^ >\"\]*|www\.[-a-z0-9.]+)[^ .,;\>\">\):]" | fzf | xargs xdg-open'
-bind \cu 'history | head -n 1 | xargs -0 fish -c | bat -Pp | grep -Eo "(((http|https|ftp|gopher)|mailto)[.:][^ >\"\]*|www\.[-a-z0-9.]+)[^ .,;\>\">\):]" | fzf | xargs xdg-open > /dev/null  2>&1'
+abbr -a ran ranger
+abbr -a laz lazygit
