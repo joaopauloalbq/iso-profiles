@@ -13,10 +13,10 @@ function fish_prompt
     (set_color normal)
 end
 
-alias ls='exa'
-alias la='exa -la'
-alias ll='exa -lh'
-alias lt='exa --tree'
+alias ls='eza'
+alias la='eza -la'
+alias ll='eza -lh'
+alias lt='eza --tree'
 alias grep='rg'
 alias cat='bat'
 alias cal='cal -3'
