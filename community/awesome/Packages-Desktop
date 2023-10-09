@@ -124,7 +124,7 @@ xorg-xrdb
 light
 
 ## Applications
-awesome
+awesome-luajit
 picom
 xfce4-terminal
 firefox
@@ -187,6 +187,12 @@ imagemagick
 
 ## Gestures
 touchegg
+
+## VAAPI
+intel-media-driver #Broadwell+
+# libva-intel-driver
+libva-mesa-driver
+# mesa-vdpau
 
 ## Theme
 papirus-icon-theme
