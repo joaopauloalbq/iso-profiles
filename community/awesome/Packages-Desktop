@@ -126,7 +126,7 @@ light
 ## Applications
 awesome-luajit
 picom
-xfce4-terminal
+xterm
 firefox
 mpv
 maim
@@ -142,6 +142,9 @@ bluez-utils # (contains bluetoothctl)
 ranger
 micro
 mintstick
+cbatticon-git
+i3lock-color
+
 >extra libreoffice-fresh
 >extra manjaro-settings-manager
 
@@ -184,6 +187,8 @@ libcanberra
 >extra gnome-keyring
 gsimplecal
 imagemagick
+dragon-drop
+udiskie-dmenu-git
 
 ## Gestures
 touchegg
@@ -195,6 +200,7 @@ libva-mesa-driver
 # mesa-vdpau
 
 ## Theme
+colloid-gtk-theme-git
 papirus-icon-theme
 papirus-folders
 >extra gnome-themes-extra
@@ -220,12 +226,3 @@ pkg-config
 git
 patchutils
 subversion
-
-## AUR packages
-# vimix-gtk-themes
-colloid-gtk-theme-git
-i3lock-color #light-locker
-dragon-drop
-udiskie-dmenu-git
-cbatticon-git
-# qt5-styleplugins
