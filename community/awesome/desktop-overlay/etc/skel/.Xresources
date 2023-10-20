@@ -1,3 +1,4 @@
+!! Screen settings
 Xft.dpi:       96
 Xft.antialias: true
 Xft.hinting:   true
@@ -5,4 +6,99 @@ Xft.autohint:  false
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.rgba:      rgb
+
+!! Cursor settings
 Xcursor.theme: Tie-cursors
+
+!! XTerm settings
+!! Enable color suport
+XTerm*termName: xterm-256color
+
+XTerm*loginShell: true
+XTerm*internalBorder: 3
+XTerm*scrollBar: false
+XTerm*saveLines: 4096
+XTerm*cursorBlink: true
+! XTerm*geometry: 110x28
+
+!! Fonts and Encoding
+XTerm*utf8: true
+XTerm*utf8Title: true
+XTerm*locale: true
+XTerm*renderFont: true
+XTerm*faceName: NotoMono Nerd Font
+XTerm*faceSize: 11
+XTerm*faceSize1: 9
+XTerm*faceSize2: 10
+XTerm*faceSize3: 12
+XTerm*faceSize4: 14
+XTerm*faceSize5: 18
+XTerm*faceSize6: 22
+
+XTerm*scaleHeight: 1,2
+XTerm*limitFontHeigth: 0
+XTerm*limitFontWidth: 0
+
+!! Backspace fix
+XTerm*backarrowKey: false
+
+!! Alt fix
+XTerm*metaSendsEscape: true
+
+!! Scroll multiple lines at a time for faster redrawing:
+XTerm*jumpScroll: true
+XTerm*multiScroll: true
+
+!! Trim whitespace from selection before copying
+XTerm*trimSelection: true
+
+!! Enable sixel
+!XTerm*decTerminalID: vt340
+!XTerm*numColorRegisters: 256
+!XTerm*sixelScrolling: 1
+!XTerm*sixelScrollsRight: 1
+
+! -- Hold Shift to use CLIPBOARD instead of PRIMARY to copy or paste
+! Change font size with ctrl-+/-/= (or mousewheel).
+! Add a few alt- shortcuts for quick access to special characters
+! Reminder: ~ means 'not pressed'
+XTerm*vt100.Translations: #override \n\
+    Ctrl <Key> =: larger-vt-font() \n\
+    Ctrl <Key> -: smaller-vt-font() \n\
+    Ctrl <Key> 0: set-vt-font(d) \n\
+    Ctrl <Btn4Down>: larger-vt-font() \n\
+    Ctrl <Btn5Down>: smaller-vt-font() \n\
+    Ctrl Shift <Key> c: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key> v: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
+    ~Shift ~Ctrl <Btn2Up>: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
+    ~Shift ~Ctrl <BtnUp>: select-end(CLIPBOARD, CUT_BUFFER1)
+
+! Matches URLs and emails and selects them on double-click
+xterm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
+
+! map the tab key to escape in xterm (becase we can!)
+! xterm.vt100.translations: #override\n\
+!        <Key>Tab: string("\033")\n\
+
+! Enable OSC 52 so xterm can set system clipboard contents.
+!xterm*disallowedWindowOps: 20,21,SetXprop
+
+!! Color Scheme
+XTerm*color0:       #242932
+XTerm*color1:       #d56060
+XTerm*color2:       #62b899
+XTerm*color3:       #e6cd83
+XTerm*color4:       #4d87b0
+XTerm*color5:       #aa7deb
+XTerm*color6:       #21a7a9
+XTerm*color7:       #dedede
+XTerm*color8:       #4b5055
+XTerm*color9:       #f06c6c
+XTerm*color10:      #77d4b2
+XTerm*color11:      #f0d68e
+XTerm*color12:      #63afe4
+XTerm*color13:      #bd93f9
+XTerm*color14:      #41c6c8
+XTerm*color15:      #e8e8e8
+XTerm*foreground:   #e8e8e8
+XTerm*background:   #242932
