@@ -41,7 +41,7 @@ udiskie
 >extra udisks2
 
 ## Fonts
-noto-fonts               # default font
+noto-fonts             # default font
 noto-fonts-emoji
 >extra noto-fonts-cjk  # removed to reduce iso size (-197,7 MB)
 ttf-noto-nerd
@@ -151,8 +151,6 @@ i3lock-color
 ## Misc
 fish
 manjaro-hotfixes
->extra xdg-desktop-portal
->extra xdg-desktop-portal-gtk
 exfatprogs
 >basic squashfs-tools
 >extra xiccd # enable color profile settings
