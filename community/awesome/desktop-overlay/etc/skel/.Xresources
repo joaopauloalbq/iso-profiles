@@ -17,6 +17,7 @@ XTerm*termName: xterm-256color
 XTerm*loginShell: true
 XTerm*internalBorder: 3
 XTerm*scrollBar: false
+XTerm*toolBar: false
 XTerm*saveLines: 4096
 XTerm*cursorBlink: true
 ! XTerm*geometry: 110x28
@@ -68,10 +69,11 @@ XTerm*vt100.Translations: #override \n\
     Ctrl <Key> 0: set-vt-font(d) \n\
     Ctrl <Btn4Down>: larger-vt-font() \n\
     Ctrl <Btn5Down>: smaller-vt-font() \n\
+    ~Shift ~Ctrl <Btn2Up>: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
+    ~Shift ~Ctrl <BtnUp>: select-end(CLIPBOARD, CUT_BUFFER1) \n\
     Ctrl Shift <Key> c: copy-selection(CLIPBOARD) \n\
     Ctrl Shift <Key> v: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
-    ~Shift ~Ctrl <Btn2Up>: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
-    ~Shift ~Ctrl <BtnUp>: select-end(CLIPBOARD, CUT_BUFFER1)
+    Ctrl Shift <Key> n: spawn-new-terminal(fish) 
 
 ! Matches URLs and emails and selects them on double-click
 xterm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
