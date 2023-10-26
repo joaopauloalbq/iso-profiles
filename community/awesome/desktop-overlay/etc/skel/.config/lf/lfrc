@@ -1,0 +1,79 @@
+# set shell fish
+set icons
+set drawbox
+set mouse true
+set ratios 1:4:3
+set cursorpreviewfmt "\033[7m"
+set info size
+set dircounts
+set anchorfind true
+set incsearch true
+set findlen 0
+
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
+
+cmd dnd %echo "$fx" | xargs -d '\n' dragon-drop -a -x
+cmd test %notify-send "$fx"
+
+set incfilter
+cmap <enter> &{{
+    # select and open file
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id :cmd-enter; set user_filter false; setfilter; open"
+    else
+        lf -remote "send $id cmd-enter"
+    fi
+}}
+cmap <esc> &{{
+    # exit filter mode
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id :cmd-escape; set user_filter false"
+    else
+        lf -remote "send $id cmd-escape"
+    fi
+}}
+cmap <a-n> &{{
+    # go to next file
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id down"
+    fi
+}}
+cmap <a-p> &{{
+    # go to previous file
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id up"
+    fi
+}}
+
+map f :find; set user_find true
+cmd on-select &{{
+	if [ "$lf_user_find" = true ]; then
+		lf -remote "send $id set user_find false"
+		lf -remote "send $id open"
+	fi
+}}
+ 
+cmd open &$OPENER "$f"
+map e $$EDITOR "$f"
+map i $$PAGER "$f"
+map w $/usr/bin/fish
+map s shell
+map <a-f> filter
+map <c-d> dnd
+map / :filter; set user_filter true
+
+map <backspace2> set hidden!
+map <enter> open
+map on :set sortby natural; set info
+map os :set sortby size; set info size
+map ot :set sortby time; set info time
+map oa :set sortby atime; set info atime
+map oc :set sortby ctime; set info ctime
+map oe :set sortby ext; set info
+
+map gm cd /run/media/jp
+map gM $lf -remote "send $id cd \"/run/media/${USER}\""
+map g/ cd /
