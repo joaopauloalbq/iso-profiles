@@ -7,12 +7,12 @@
 KERNEL-bbswitch
 KERNEL-broadcom-wl
 #KERNEL-r8168
-KERNEL-zfs
-zfs-utils
+#KERNEL-zfs
+#zfs-utils # only used for architect which we don't ship
 #KERNEL-rt3562sta
 #KERNEL-virtualbox-guest-modules
 KERNEL-headers
-zfs-dkms
+#zfs-dkms
 libva-intel-driver
 libva-mesa-driver
 libva-vdpau-driver
@@ -24,18 +24,24 @@ mesa-vdpau
 >multilib lib32-mesa-vdpau
 >multilib lib32-libxvmc
 >multilib lib32-primus
->nonfree_default KERNEL-nvidia
 >nonfree_x86_64 KERNEL-nvidia
->nonfree_default nvidia-utils
 >nonfree_x86_64 nvidia-utils
+>nonfree_x86_64 nvidia-settings
+>nonfree_x86_64 libxnvctrl
 >nonfree_multilib lib32-nvidia-utils
+opencl-clover-mesa
+opencl-rusticl-mesa
 open-vm-tools
 primus
+qemu-guest-agent
 bumblebee
 nvidia-prime
 gtkmm3
 spice-vdagent
 virtualbox-guest-utils
+vulkan-mesa-layers
+vulkan-swrast
+vulkan-virtio
 vulkan-radeon
 >multilib lib32-vulkan-radeon
 vulkan-intel
@@ -52,3 +58,4 @@ xf86-video-sisusb
 xf86-video-vesa
 xf86-video-vmware
 xf86-video-voodoo
+
