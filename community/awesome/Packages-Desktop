@@ -131,11 +131,11 @@ firefox
 mpv
 maim
 htop
-thunar
-thunar-archive-plugin
+>extra thunar
+>extra thunar-archive-plugin
+>extra engrampa
 viewnior
 galculator
-file-roller
 pavucontrol
 blueman
 bluez-utils # (contains bluetoothctl)
