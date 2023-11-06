@@ -55,9 +55,8 @@ beautiful.init("~/.config/awesome/themes/nord-pink/theme.lua")
 revelation.init({charorder = "asdfqwergtbvcxz"})
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xfce4-terminal"
-editor = "micro"
-editor_cmd = terminal .. " -x " .. editor
+terminal = os.getenv("TERMINAL")
+editor = os.getenv("EDITOR")
 
 naughty.config.defaults.border_width = beautiful.notification_border_width
 naughty.config.defaults.margin = beautiful.notification_margin
@@ -112,13 +111,13 @@ myexitmenu = {
     { "Logout", function() awesome.quit() end }, --, menubar.utils.lookup_icon("system-log-out") 
 }
 
-mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -yoffset 37 -xoffset 14" })
+mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -selected-row 0 -yoffset 37 -xoffset 13" })
 
 suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi suit-settings -show suit-settings -theme settings' })
 
 mydesktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
                                        { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi suit-wallpaper -show suit-wallpaper -theme wallpaper') end},
-                                       { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn.with_shell('rofi -modi suit-settings -show suit-settings -theme settings') end},
+                                       { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi suit-settings -show suit-settings -theme settings') end},
                                        { "Exit", myexitmenu }
                                     }})
 
@@ -470,7 +469,7 @@ globalkeys = gears.table.join(
 		-- end
 	-- end, {description = "Do not disturb", group = "Notification"}),
 	
-	awful.key({ modkey, 		}, "Delete", function()
+	awful.key({ modkey }, "Delete", function()
 		naughty.destroy_all_notifications()
 	end),
               
@@ -501,6 +500,31 @@ globalkeys = gears.table.join(
 	        tag:view_only()
 	    end,
 	        {description = "move client to next tag and switch to it", group = "layout"}),
+	        
+    awful.key({ altkey, "Control", "Shift" }, "Left",
+	    function ()
+	        -- get current tag
+	        local t = client.focus and client.focus.first_tag or nil
+	        if t == nil then
+	            return
+	        end
+	        -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
+	        local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
+            client.focus:move_to_tag(tag)
+	    end,
+	        {description = "move client to previous tag", group = "layout"}),
+	awful.key({ altkey, "Control", "Shift" }, "Right",
+	    function ()
+	        -- get curreìnt tag
+	        local t = client.focus and client.focus.first_tag or nil
+	        if t == nil then
+	            return
+	        end
+	        -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
+	        local tag = client.focus.screen.tags[(t.name % 9) + 1]
+	        client.focus:move_to_tag(tag)
+	    end,
+	        {description = "move client to next tag", group = "layout"}),
 	
 	-- Toggle client to prev/next tag
 		awful.key({ modkey, altkey, "Shift" }, "Left",
@@ -563,8 +587,8 @@ globalkeys = gears.table.join(
                 -- awful.client.focus.bydirection("right")
                 -- if client.focus then client.focus:raise() end
             -- end),
-    
-    awful.key({ altkey,           }, "Escape",      hotkeys_popup.show_help,
+                
+    awful.key({ altkey }, "Escape",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
@@ -577,7 +601,7 @@ globalkeys = gears.table.join(
               
     awful.key({ modkey, "Control" }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ altkey,           }, "Tab",
+    awful.key({ altkey }, "Tab",
         function ()
             awful.client.focus.history.previous()
             if client.focus then
@@ -585,9 +609,9 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
+    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal .. " fish") end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, altkey    }, "Return", function () awful.spawn(terminal .. " --drop-down") end,
+    awful.key({ modkey, altkey    }, "Return", function () awful.spawn(terminal .. " -T scratchpad") end,
               {description = "open a dropdown terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
@@ -623,74 +647,74 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Launchers
-	awful.key({ modkey },            "o",     function () awful.spawn('rofi -modi suit-settings -show suit-settings -theme settings', false) end,
+	awful.key({ modkey },            "o",     function () awful.spawn('rofi -modi suit-settings -show suit-settings -theme settings') end,
 		    {description = "show windows (all desktops)", group = "launcher"}),
 		    
-	awful.key({ modkey },            "a",     function () awful.spawn("rofi -modi 'window,windowcd' -show window", false) end,
+	awful.key({ modkey },            "a",     function () awful.spawn("rofi -modi 'window,windowcd' -show window -selected-row 0") end,
 			{description = "show windows (all desktops)", group = "launcher"}),
-	
-	awful.key({ modkey },            "b",     function () awful.spawn("rofi-bluetooth", false) end,
+		
+	awful.key({ modkey },            "b",     function () awful.spawn("rofi-bluetooth") end,
 				{description = "bluetooth", group = "launcher"}),
 	
-	awful.key({ modkey },            "k",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort", false) end,
+	awful.key({ modkey },            "k",     function () awful.spawn("rofi -modi calc -show calc -no-show-match -no-sort") end,
 			{description = "calculator", group = "launcher"}),
 			
-	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p  && xdotool key shift+Insert", false) end,
+	awful.key({ modkey },            "c",     function () awful.spawn.with_shell("clipmenu -p  && xdotool key shift+Insert") end,
 			{description = "clipboard", group = "launcher"}),
 			
-    -- awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("clipmenu -theme clipdel -p  && clipdel -d $(xsel -o)", false) end,
-    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi suit-delclip -show suit-delclip -theme clipdel -p ", false) end,
+    -- awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("clipmenu -theme clipdel -p  && clipdel -d $(xsel -o)") end,
+    awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell("rofi -modi suit-delclip -show suit-delclip -theme clipdel -p ") end,
     		{description = "Delete clipboard entries", group = "launcher"}),
 			
-	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid", false) end,
+	awful.key({ modkey },            "d",     function () awful.spawn("rofi -modi drun -show drun -theme grid -selected-row 0") end,
 	        {description = "open applications", group = "launcher"}),
 	
-	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c ; clipctl enable", false) end,
+	awful.key({ modkey },            "e",     function () awful.spawn.with_shell("clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c -selected-row 0 ; clipctl enable", false) end,
 			{description = "emoji picker", group = "launcher"}),              
 			
-	awful.key({ modkey },            "g",     function () awful.spawn("rofi -modi filebrowser -show filebrowser", false) end,
+	awful.key({ modkey },            "g",     function () awful.spawn("rofi -modi filebrowser -show filebrowser") end,
 			{description = "file browser", group = "launcher"}),
 	              		              
-	awful.key({ modkey },            "m",     function () awful.spawn.with_shell("udiskie-dmenu -matching regex -dmenu -i -no-custom -multi-select -p ") end,
+	awful.key({ modkey },            "m",     function () awful.spawn("udiskie-dmenu -matching regex -dmenu -i -no-custom -multi-select -p ") end,
 			{description = "Mount devices", group = "launcher"}),
 		 	
-	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu", false) end,
+	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu") end,
             {description = "network launcher", group = "launcher"}),
     
     awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),
             		 	
-    awful.key({ modkey },  "p",     function () awful.spawn.with_shell("suit-monitor", false) end,
+    awful.key({ modkey },  "p",     function () awful.spawn("suit-monitor") end,
             {description = "Display Mode", group = "launcher"}),        
 			
-	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi suit-powermenu -show suit-powermenu -theme power", false) end,
+	awful.key({ modkey , "Shift" },  "q",     function () awful.spawn("rofi -modi suit-powermenu -show suit-powermenu -theme power -selected-row 0") end,
 		 	{description = "Power menu", group = "launcher"}),
 	              		              	              	              		              	             
-	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
-	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -e -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" -e "$HOME/.config" -e "$HOME/.local" -e "$HOME/.cache" -e "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
+	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)"') end,
+	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(plocate -d "$HOME/.cache/plocate.db" -i --regex "$HOME/[^.]" | rofi -dmenu -i -keep-right -p  -auto-select)" || updatedb -l 0 -U "$HOME" "$HOME/.config" "$HOME/.local" "$HOME/.cache" "$HOME/Games" -o "$HOME/.cache/plocate.db"') end,
 	-- awful.key({ modkey },            "s",     function () awful.spawn.with_shell('xdg-open "$(fd . -c never | rofi -dmenu -i -keep-right -p )"') end, -- -theme-str "element-icon {enabled: false;}"
-	awful.key({ modkey },            "s",     function () awful.spawn.with_shell("rofi -modi suit-search -show suit-search -theme-str 'element-icon {enabled: false;}' -kb-accept-alt '' -kb-custom-1 'Shift+Return' -kb-custom-2 'Alt+Return' -disable-history -no-sort -keep-right") end,
+	awful.key({ modkey },            "s",     function () awful.spawn("rofi -modi suit-search -show suit-search -theme-str 'element-icon {enabled: false;}' -kb-accept-alt '' -kb-custom-1 'Shift+Return' -kb-custom-2 'Alt+Return' -disable-history -no-sort -keep-right -selected-row 0") end,
 	        {description = "File searcher", group = "launcher"}),
 		 	
-	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd", false) end,
+	awful.key({ modkey },            "w",     function () awful.spawn("rofi -modi 'windowcd,window' -show windowcd -selected-row 0") end,
 		    {description = "show windows (current desktop)", group = "launcher"}),
 		              
 	awful.key({ modkey },         "Escape",     function () awful.spawn.with_shell("seltr auto pt-BR") end,
 			{description = "Translate selected text", group = "launcher"}),
 			
 	-- Apps
-	awful.key({ modkey , "Shift" },  "b",     function () awful.spawn(terminal .. " -e btop -T btop") end,
+	awful.key({ modkey , "Shift" },  "b",     function () awful.spawn(terminal .. " -e btop") end,
 				 {description = "btop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "c",     function () awful.spawn(terminal .. " -e micro") end,
 				 {description = "micro text editor", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "d", function () awful.spawn('rofi -modi suit-wallpaper -show suit-wallpaper -theme wallpaper') end,
 				 {description = "wallpaper", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger -T ranger") end,
+	awful.key({ modkey , "Shift" },  "f",     function () awful.spawn(terminal .. " -e ranger") end,
 				 {description = "ranger file manager", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "h",     function () awful.spawn(terminal .. " -e htop -T htop") end,
+	awful.key({ modkey , "Shift" },  "h",     function () awful.spawn(terminal .. " -e htop") end,
 				 {description = "htop", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "n",     function () awful.spawn(terminal .. " -e nmtui", {floating = true}) end,
 				 {description = "network manager", group = "launcher"}),
-	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e ncspot -I spotify", {tag = " 9 ", focus = false }) end, 
+	awful.key({ modkey , "Shift" },  "s",     function () awful.spawn(terminal .. " -e ncspot") end, 
 	             {description = "ncspot", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "v",     function () awful.spawn("code") end,
 				 {description = "vs code", group = "launcher"}),
@@ -714,24 +738,24 @@ globalkeys = gears.table.join(
     
 	-- Media Keys	
     awful.key({}, "XF86AudioPlay", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause")
     end),    
     awful.key({modkey}, "/", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any play-pause")
     end),
     
     awful.key({}, "XF86AudioNext", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any next", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any next")
     end),
     awful.key({modkey}, ".", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any next", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any next")
     end),
     
     awful.key({}, "XF86AudioPrev", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any previous", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any previous")
     end),
     awful.key({modkey}, ",", function()
-        awful.spawn("playerctl --player=spotify,ncspot,%any previous", false)
+        awful.spawn("playerctl --player=spotify,ncspot,%any previous")
     end),
 	   
 	-- Screenshot
@@ -741,7 +765,7 @@ globalkeys = gears.table.join(
             naughty.notify({ title = "Screenshot captured",
 				             text  = name,
         			     	 icon  = "preferences-desktop-wallpaper",
-        			     	 run   = function() awful.spawn.with_shell('xdg-open ' .. name) end })
+        			     	 run   = function() awful.spawn('xdg-open ' .. name) end })
         end) 
     end, {description = "Print desktop", group = "Screenshot"}),
     
@@ -751,18 +775,18 @@ globalkeys = gears.table.join(
             naughty.notify({ title = "Screenshot captured",
 			    	         text  = name,
         		    	 	 icon  = "preferences-desktop-wallpaper",
-        		    	 	 run   = function() awful.spawn.with_shell('xdg-open ' .. name)  end })
+        		    	 	 run   = function() awful.spawn('xdg-open ' .. name)  end })
         end)
     end, {description = "Print window", group = "Screenshot"}),
     
     awful.key({ "Shift" }, "Print", nil, function ()
 		local name = beautiful.picture_dir .. os.date("/Screenshots/Screenshot_%Y%m%d_%H%M%S.png")
-        awful.spawn.easy_async_with_shell("maim -s " .. name, function(_, _, _, exitcode)            
+        awful.spawn.easy_async("maim -s " .. name, function(_, _, _, exitcode)            
             if exitcode == 0 then        
                 naughty.notify({ title = "Screenshot captured",
     				             text  = name,
             			 	     icon  = "preferences-desktop-wallpaper",
-            			 	     run   = function() awful.spawn.with_shell('xdg-open ' .. name)  end })
+            			 	     run   = function() awful.spawn('xdg-open ' .. name)  end })
             end
         end)
     end, {description = "Print area", group = "Screenshot"}),
@@ -770,6 +794,16 @@ globalkeys = gears.table.join(
     awful.key({ "Control" }, "Print", nil, function ()
         awful.spawn.with_shell("maim -s -k | xclip -selection c -t image/png && notify-send 'Screenshot captured' 'to clipboard' -i 'preferences-desktop-wallpaper'")
     end, {description = "copied to the clipboard", group = "Screenshot"}),
+    
+    -- ######### TEST ###########
+    awful.key({ modkey }, "x", function ()
+        awful.spawn.easy_async('xsel -o', function(sel)
+        	naughty.notify({
+                text = sel,
+            })                
+        end)
+    end),
+    -- ##########################
     
     awful.key({ modkey }, "z", nil, function ()
         awful.spawn.easy_async("xcolor -s", function()
@@ -971,7 +1005,6 @@ clientbuttons = gears.table.join(
     awful.button({ modkey }, 3, function (c)
         c:emit_signal("request::activate", "mouse_click", {raise = true})
         awful.mouse.client.resize(c)
-        
     end)
 )
 
@@ -1186,11 +1219,11 @@ awful.rules.rules = {
 	    properties = { floating = true, border_width = 0, skip_taskbar = true, requests_no_titlebar = true, placement = awful.placement.top_right } },
     { rule = { class= "MEGAsync" },
 	    properties = { floating = true, border_width = 0, skip_taskbar = true, titlebars_enabled = false, placement = awful.placement.top_right } },
+	{ rule = { name= "scratchpad" },
+		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.centered } },
 	{ rule = { name= "Picture-in-picture" },
 		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.restore } },
 	{ rule = { class= "Nitrogen" },
-		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.bottom_right } },
-    { rule = { class= "Xfce4-terminal", role="set-wallpaper" },
 		properties = { floating = true, ontop = true, sticky = true, placement = awful.placement.bottom_right } },
     { rule = { class= "qvidcap" },
 	    properties = { floating = true, ontop = true, sticky = true, focus = false, placement = awful.placement.bottom_right } },
@@ -1223,12 +1256,14 @@ awful.rules.rules = {
 	{ rule = { class="VirtualBox Manager" },
         properties = { switchtotag = true, tag = " 7 " },
         callback = function() awful.layout.set(awful.layout.suit.max, awful.screen.focused().tags[7]) end },
-    { rule = { class="discord" },
+    { rule = { class="discord", instance="discord" },
     	properties = { switchtotag = false, urgent = false, focus = false, tag = " 7 " } },
     { rule = { instance="web.whatsapp.com" },
     	properties = { width = 845, height = 860, floating = true, fullscreen = false, placement = awful.placement.right, tag = " 8 " } },
     { rule = { class="TelegramDesktop" },
-    	properties = { placement = awful.placement.restore, floating = true, urgent = false, tag = " 8 " } }
+    	properties = { placement = awful.placement.restore, floating = true, urgent = false, tag = " 8 " } },
+    { rule = { name="ncspot" },
+    	properties = { urgent = false, focus = false, tag = " 9 " } }
 }
 -- }}}
 
@@ -1242,4 +1277,4 @@ run_once('sleep 1.1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SE
 run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1',' & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)')
 run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
-awful.spawn.with_shell('touchegg')
+awful.spawn.with_shell('killall touchegg && touchegg')
