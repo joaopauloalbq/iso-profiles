@@ -10,21 +10,19 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- More widgets, layouts and utilities 
 local lain = require("lain")
-local markup = lain.util.markup
 -- Overview
 local revelation = require("revelation")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
--- Menu
 -- local freedesktop = require("freedesktop")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 -- require("awful.hotkeys_popup.keys")
 local dpi = require('beautiful').xresources.apply_dpi
+-- local icon_theme = require ("lgi").require("Gtk", "3.0").IconTheme.get_default()
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -62,8 +60,9 @@ naughty.config.defaults.border_width = beautiful.notification_border_width
 naughty.config.defaults.margin = beautiful.notification_margin
 naughty.config.padding = dpi(14)
 naughty.config.spacing = dpi(6)
-naughty.config.icon_dirs = {"/usr/share/icons/Papirus-Dark/48x48/status/", "/usr/share/icons/Papirus-Dark/48x48/categories/"}
 naughty.config.icon_formats = {"svg"}
+naughty.config.icon_dirs = {"/usr/share/icons/Papirus-Dark/48x48/status/", "/usr/share/icons/Papirus-Dark/48x48/categories/"}
+icon_path = "/usr/share/icons/Papirus-Dark/24x24/panel/"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -104,26 +103,23 @@ awful.layout.layouts = {
 -- {{{ Menu
 -- To add the menu to a widget:
 myexitmenu = {
-    { "Shutdown", "systemctl poweroff" }, --, menubar.utils.lookup_icon("system-shutdown")
-    { "Suspend", "systemctl suspend" }, --, menubar.utils.lookup_icon("system-suspend") 
-    { "Hibernate", "systemctl hibernate" }, --, menubar.utils.lookup_icon("system-hibernate")
-    { "Restart", "systemctl reboot" }, --, menubar.utils.lookup_icon("system-reboot")
-    { "Logout", function() awesome.quit() end }, --, menubar.utils.lookup_icon("system-log-out") 
+    { "Shutdown", "systemctl poweroff" }, 
+    { "Suspend", "systemctl suspend" },
+    { "Hibernate", "systemctl hibernate" },
+    { "Restart", "systemctl reboot" },
+    { "Logout", function() awesome.quit() end },
 }
-
-mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -selected-row 0 -yoffset 37 -xoffset 13" })
-
-suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi suit-settings -show suit-settings -theme settings' })
 
 mydesktopmenu = awful.menu({ items = { { "Hotkeys", function() return false, hotkeys_popup.show_help end },
                                        { "Wallpaper", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi suit-wallpaper -show suit-wallpaper -theme wallpaper') end},
                                        { "Settings", function() mouse.coords({x=awful.screen.focused().geometry.width - 200, y=mouse.coords().y}) awful.spawn('rofi -modi suit-settings -show suit-settings -theme settings') end},
                                        { "Exit", myexitmenu }
                                     }})
+                                    
+mylauncher = awful.widget.launcher({ image = ".config/awesome/themes/nord-pink/suit-logo.png", command = "rofi -modi drun -show drun -theme grid -location 1 -selected-row 0 -yoffset 37 -xoffset 13" })
 
-
--- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+-- suitSettingsLauncher = awful.widget.launcher({ image = icon_theme:lookup_icon("fcitx-mozc-properties", dpi(24), 0):get_filename(), command = 'rofi -modi suit-settings -show suit-settings -theme settings' })
+suitSettingsLauncher = awful.widget.launcher({ image = "/usr/share/icons/Papirus-Dark/24x24/panel/fcitx-mozc-properties.svg", command = 'rofi -modi suit-settings -show suit-settings -theme settings' })
 -- }}}
 
 -- {{{ Wibar
@@ -196,11 +192,8 @@ local function run_once(exeBefore, exeCmd, exeArgs)
 end
 
 -- Toggle titlebar on or off depending on s. Creates titlebar if it doesn't exist
-local function setTitlebar(client, s)
-    if s then
-        -- if client.titlebar == nil then
-            -- client:emit_signal("request::titlebars", "rules", {})
-        -- end
+local function setTitlebar(client, condition)
+    if condition then
         awful.titlebar.show(client)
     else 
         awful.titlebar.hide(client)
@@ -248,22 +241,26 @@ end
 
 local function getAudioIcon(vol)
     if vol > 65 then
-        return "notification-audio-volume-high"
+        return "audio-volume-high"
     elseif vol >= 35 then
-        return "notification-audio-volume-medium"
+        return "audio-volume-medium"
     else
-        return "notification-audio-volume-low"
+        return "audio-volume-low"
     end
 end
 
 local function audio(mode)
 	awful.spawn.easy_async('pamixer --' .. mode .. ' 5', function()
         awful.spawn.easy_async('pamixer --get-volume', function(vol)
+            local audioIcon = getAudioIcon(tonumber(vol))
+            suitVOLUME:set_image(icon_path .. audioIcon .. ".svg")
+            suitVOLUMETIP:set_markup(vol:sub(1,-2) .. "%")
+            
         	if notification_audio ~= nil then
         		notification_audio = naughty.notify ({
         			replaces_id	= notification_audio.id,
         			text        = string.rep("■", math.ceil(vol * 0.3)),
-        			icon        = getAudioIcon(tonumber(vol)),
+        			icon        = "notification-" .. audioIcon,
         			timeout  	= t_out,
         			preset   	= preset,
            			ignore_suspend = true
@@ -271,7 +268,7 @@ local function audio(mode)
         	else
         		notification_audio = naughty.notify ({
         			text        = string.rep("■", math.ceil(vol * 0.3)),
-        			icon        = getAudioIcon(tonumber(vol)),
+            		icon        = "notification-" .. audioIcon,
         			timeout     = t_out,
         			preset      = preset,
         			ignore_suspend = true
@@ -285,8 +282,11 @@ local function audioMute()
     awful.spawn.easy_async('pamixer --toggle-mute', function() 
         awful.spawn.easy_async('pamixer --get-volume', function(vol) 
             awful.spawn.easy_async('pamixer --get-mute', function(isMuted)
+                local audioIcon = getAudioIcon(tonumber(vol))
+                
                 if notification_audio ~= nil then
                     if isMuted == "true\n" then
+                        suitVOLUME:set_image(icon_path .. "audio-volume-muted.svg")
                         notification_audio = naughty.notify ({
                             replaces_id	= notification_audio.id,
                             fg          = "#676767",
@@ -297,10 +297,11 @@ local function audioMute()
                             ignore_suspend = true
                          })
                     else
+                        suitVOLUME:set_image(icon_path .. audioIcon .. ".svg")
                         notification_audio = naughty.notify ({
                             replaces_id = notification_audio.id,
                             text        = string.rep("■", math.ceil(vol * 0.3)),
-                            icon        = getAudioIcon(tonumber(vol)),
+                			icon        = "notification-" .. audioIcon,
                             timeout  	= t_out,
                             preset   	= preset,
                             ignore_suspend = true
@@ -308,6 +309,7 @@ local function audioMute()
                     end
                 else
                     if isMuted == "true\n" then
+                        suitVOLUME:set_image(icon_path .. "audio-volume-muted.svg")
                         notification_audio = naughty.notify ({
                             fg          = "#676767",
                             text        = string.rep("■", math.ceil(vol * 0.3)),
@@ -317,9 +319,10 @@ local function audioMute()
                             ignore_suspend = true
                         })
                     else
+                        suitVOLUME:set_image(icon_path .. audioIcon .. ".svg")
                         notification_audio = naughty.notify ({
                             text        = string.rep("■", math.ceil(vol * 0.3)),
-                            icon        = getAudioIcon(tonumber(vol)),
+                			icon        = "notification-" .. audioIcon,
                             timeout     = t_out,
                             preset      = preset,
                             ignore_suspend = true
@@ -330,6 +333,57 @@ local function audioMute()
         end)
     end)
 end
+
+suitVOLUME = wibox.widget.imagebox()
+suitVOLUMETIP = awful.tooltip{objects = {suitVOLUME}}
+suitVOLUME:buttons( gears.table.join(
+                        awful.button({ }, 1, function () awful.spawn("pavucontrol") end),
+                        awful.button({ }, 2, function () audioMute() end),
+                        awful.button({ }, 3, function () mydesktopmenu:toggle() end),
+                        awful.button({ }, 4, function () audio("increase") end),
+                        awful.button({ }, 5, function () audio("decrease") end)))
+
+local suitBATTERY = wibox.widget.imagebox()
+local suitBATTERYTIP = awful.tooltip{objects = {suitBATTERY}}
+awful.widget.watch("acpi -b", 5,
+    function(_, stdout)
+        local icon_name = "battery"
+        local status, level, estimated_time = string.match(stdout, '.+: ([%a%s]+), (%d?%d?%d)%%(.*)')
+        local level = tonumber(level)
+        
+        if level <= 5 then
+            icon_name = icon_name .. "-000"
+        elseif level <= 10 then
+            icon_name = icon_name .. "-010"
+        elseif level <= 20 then
+            icon_name = icon_name .. "-020"
+        elseif level <= 30 then
+            icon_name = icon_name .. "-030"
+        elseif level <= 40 then
+            icon_name = icon_name .. "-040"
+        elseif level <= 50 then
+            icon_name = icon_name .. "-050"
+        elseif level <= 60 then
+            icon_name = icon_name .. "-060"
+        elseif level <= 70 then
+            icon_name = icon_name .. "-070"
+        elseif level <= 80 then
+            icon_name = icon_name .. "-080"
+        elseif level <= 90 then
+            icon_name = icon_name .. "-090"
+        elseif level <= 100 then
+            icon_name = icon_name .. "-100"
+        end
+
+        -- if status == "Charging" or status == "Full" then
+        if status ~= "Discharging" then
+            icon_name = icon_name .. "-charging"
+        end
+
+        suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
+        suitBATTERYTIP:set_markup(level .. "%" .. estimated_time:sub(1,-2))
+    end
+)
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
@@ -411,6 +465,9 @@ awful.screen.connect_for_each_screen(function(s)
             
             wibox.widget.systray(),
             -- awful.widget.keyboardlayout(),
+            suitVOLUME,
+            suitBATTERY,
+            -- baticon,
             suitSettingsLauncher,
             -- wibox.widget.textclock(" %a %d, %H:%M "),
             mytextclock,
@@ -449,9 +506,9 @@ globalkeys = gears.table.join(
               {description = "view previous", group = "tag"}),
     awful.key({ modkey, "Control" }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
- 	awful.key({ modkey, "Control", altkey  }, "Left", function () lain.util.tag_view_nonempty(-1) end,
+ 	awful.key({ modkey, altkey, "Control"  }, "Left", function () lain.util.tag_view_nonempty(-1) end,
               {description = "view  previous nonempty", group = "tag"}),
-   	awful.key({ modkey, "Control", altkey  }, "Right", function () lain.util.tag_view_nonempty(1) end,
+   	awful.key({ modkey, altkey, "Control"  }, "Right", function () lain.util.tag_view_nonempty(1) end,
    			  {description = "view  previous nonempty", group = "tag"}),
               
 	-- awful.key({ modkey, 		}, "BackSpace", function()
@@ -611,7 +668,7 @@ globalkeys = gears.table.join(
         {description = "go back", group = "client"}),
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal .. " fish") end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, altkey    }, "Return", function () awful.spawn(terminal .. " -T scratchpad") end,
+    awful.key({ modkey, altkey    }, "Return", function () awful.spawn.raise_or_spawn("xterm -xrm 'XTerm*allowTitleOps: false' -T scratchpad fish") end,
               {description = "open a dropdown terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
@@ -681,7 +738,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu") end,
             {description = "network launcher", group = "launcher"}),
     
-    awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),
+    -- awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),
             		 	
     awful.key({ modkey },  "p",     function () awful.spawn("suit-monitor") end,
             {description = "Display Mode", group = "launcher"}),        
@@ -731,8 +788,8 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86MonBrightnessUp", function() backlight("A") end), 
     awful.key({}, "XF86MonBrightnessDown", function() backlight("U") end),
               
-	-- Volume Keys
     awful.key({}, "XF86AudioRaiseVolume", function() audio("increase") end), 
+	-- Volume Keys
     awful.key({}, "XF86AudioLowerVolume", function() audio("decrease") end), 
     awful.key({}, "XF86AudioMute", function() audioMute() end),
     
@@ -797,11 +854,12 @@ globalkeys = gears.table.join(
     
     -- ######### TEST ###########
     awful.key({ modkey }, "x", function ()
-        awful.spawn.easy_async('xsel -o', function(sel)
-        	naughty.notify({
-                text = sel,
-            })                
-        end)
+        -- awful.spawn.easy_async('xsel -o', function(sel)
+        -- 	naughty.notify({
+        --         text = sel,
+        --     })                
+        -- end)
+        naughty.notify({text = io.popen("pamixer --get-volume"):read("*a")})
     end),
     -- ##########################
     
@@ -1014,12 +1072,14 @@ root.keys(globalkeys)
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c)
-    setTitlebar(c, c.first_tag.layout == awful.layout.suit.floating) -- or c.floating
-
+client.connect_signal("manage", function (c)    
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
     if not awesome.startup then awful.client.setslave(c) end
+    
+    if c.maximized then c.border_width = 0 else c.border_width = beautiful.border_width end
+    
+    setTitlebar(c, c.first_tag.layout == awful.layout.suit.floating) -- or c.floating
 
     -- if awesome.startup
       -- and not c.size_hints.user_position
@@ -1027,6 +1087,20 @@ client.connect_signal("manage", function (c)
         -- -- Prevent clients from being unreachable after screen count changes.
         -- awful.placement.no_offscreen(c)
     -- end
+end)
+
+-- Show titlebars on clients with floating property
+client.connect_signal("property::floating", function(c)
+    setTitlebar(c, c.floating)
+end)
+
+-- Show titlebars on tags with the floating layout
+tag.connect_signal("property::layout", function(t)
+    if t.layout == awful.layout.suit.floating then
+        for _, c in pairs(t:clients()) do
+            setTitlebar(c, true)
+        end
+    end
 end)
 
 -- Focus urgent clients automatically
@@ -1045,13 +1119,6 @@ client.connect_signal("property::fullscreen", function(c)
     end
 end)
 
--- Show titlebars on tags with the floating layout
-tag.connect_signal("property::layout", function(t)
-    for _, c in pairs(t:clients()) do
-        setTitlebar(c, t.layout == awful.layout.suit.floating)
-    end
-end)
-
 -- Double click titlebar timer, how long it takes for a 2 clicks to be considered a double click
 function double_click_event_handler(double_click_event)
     if double_click_timer then
@@ -1059,7 +1126,6 @@ function double_click_event_handler(double_click_event)
         double_click_timer = nil
         return true
     end
-
     double_click_timer = gears.timer.start_new(0.20, function() double_click_timer = nil return false end)
 end
 
@@ -1112,12 +1178,6 @@ client.connect_signal("request::titlebars", function(c)
     	left = 8,
     	widget = wibox.container.margin
 	}
-end)
-
--- Hook called when a client spawns
-client.connect_signal("manage", function(c)
-    -- setTitlebar(c, c.first_tag.layout == awful.layout.suit.floating) -- or c.floating
-    if c.maximized then c.border_width = 0 else c.border_width = beautiful.border_width end
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
@@ -1269,12 +1329,30 @@ awful.rules.rules = {
 
 run_once('','picom','')
 run_once('','nm-applet','')
-run_once('sleep 0.9 && ','pa-applet',' --disable-key-grabbing')
-run_once("sleep 1.0 && ","cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
-run_once('sleep 1.1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+-- run_once('sleep 0.9 && ','pa-applet',' --disable-key-grabbing')
+-- run_once('sleep 1.0 && ',"cbatticon"," -i 'level' -l 5 -c 'systemctl hibernate' -n")
+-- run_once('sleep 1.1 && DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1 ','megasync',' --style Fusion')
+-- run_once('sleep 1.1 && ','megasync',' --style Fusion')
 -- run_once('','udiskie',' -s -a')
 -- run_once('','blueman-tray','')
-run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1',' & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)')
+run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
 run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
-awful.spawn.with_shell('killall touchegg && touchegg')
+-- awful.spawn.with_shell('touchegg')
+
+gears.timer {
+    timeout   = 1,
+    call_now  = true,
+    autostart = true,
+    single_shot = true,
+    callback  = function()
+        awful.spawn.easy_async('pamixer --get-volume',
+            function(vol)
+                if vol then
+                    suitVOLUME:set_image(icon_path .. getAudioIcon(tonumber(vol)) .. ".svg")
+                    suitVOLUMETIP:set_markup(vol:sub(1,-2) .. "%")
+                end
+            end
+        )
+    end
+}
