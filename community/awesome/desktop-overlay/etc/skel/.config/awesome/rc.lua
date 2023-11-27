@@ -239,8 +239,10 @@ local function backlight(mode)
 	end)
 end
 
-local function getAudioIcon(vol)
-    if vol > 65 then
+local function getAudioIcon(vol, isMuted)
+    if isMuted == "true\n" then
+        return "audio-volume-muted"
+    elseif vol > 65 then
         return "audio-volume-high"
     elseif vol >= 35 then
         return "audio-volume-medium"
@@ -252,35 +254,37 @@ end
 local function audio(mode)
 	awful.spawn.easy_async('pamixer --' .. mode .. ' 5', function()
         awful.spawn.easy_async('pamixer --get-volume', function(vol)
-            local audioIcon = getAudioIcon(tonumber(vol))
-            suitVOLUME:set_image(icon_path .. audioIcon .. ".svg")
-            suitVOLUMETIP:set_markup(vol:sub(1,-2) .. "%")
-            
-        	if notification_audio ~= nil then
-        		notification_audio = naughty.notify ({
-        			replaces_id	= notification_audio.id,
-        			text        = string.rep("■", math.ceil(vol * 0.3)),
-        			icon        = "notification-" .. audioIcon,
-        			timeout  	= t_out,
-        			preset   	= preset,
-           			ignore_suspend = true
-        		})
-        	else
-        		notification_audio = naughty.notify ({
-        			text        = string.rep("■", math.ceil(vol * 0.3)),
-            		icon        = "notification-" .. audioIcon,
-        			timeout     = t_out,
-        			preset      = preset,
-        			ignore_suspend = true
-        		})
-        	end
+            awful.spawn.easy_async('pamixer --get-mute', function (isMuted)
+                local audioIcon = getAudioIcon(tonumber(vol), isMuted)
+                suitVOLUME:set_image(icon_path .. audioIcon .. ".svg")
+                suitVOLUMETIP:set_markup(vol:sub(1,-2) .. "%")
+                
+                if notification_audio ~= nil then
+                    notification_audio = naughty.notify ({
+                        replaces_id	= notification_audio.id,
+                        text        = string.rep("■", math.ceil(vol * 0.3)),
+                        icon        = "notification-" .. audioIcon,
+                        timeout  	= t_out,
+                        preset   	= preset,
+                        ignore_suspend = true
+                    })
+                else
+                    notification_audio = naughty.notify ({
+                        text        = string.rep("■", math.ceil(vol * 0.3)),
+                        icon        = "notification-" .. audioIcon,
+                        timeout     = t_out,
+                        preset      = preset,
+                        ignore_suspend = true
+                    })
+                end
+            end)
         end)
 	end)
 end
 
 local function audioMute()
-    awful.spawn.easy_async('pamixer --toggle-mute', function() 
-        awful.spawn.easy_async('pamixer --get-volume', function(vol) 
+    awful.spawn.easy_async('pamixer --toggle-mute', function()
+        awful.spawn.easy_async('pamixer --get-volume', function(vol)
             awful.spawn.easy_async('pamixer --get-mute', function(isMuted)
                 local audioIcon = getAudioIcon(tonumber(vol))
                 
@@ -343,8 +347,28 @@ suitVOLUME:buttons( gears.table.join(
                         awful.button({ }, 4, function () audio("increase") end),
                         awful.button({ }, 5, function () audio("decrease") end)))
 
-local suitBATTERY = wibox.widget.imagebox()
-local suitBATTERYTIP = awful.tooltip{objects = {suitBATTERY}}
+suitVOLUME.init = function ()
+    awful.spawn.easy_async('pamixer --get-volume', function(vol, _, _, exit_code)
+        if exit_code == 3 then
+            suitVOLUME.init()
+        else
+            awful.spawn.easy_async('pamixer --get-mute', function (isMuted)
+                vol = tonumber(vol)
+                suitVOLUME:set_image(icon_path .. getAudioIcon(vol, isMuted) .. ".svg")
+                suitVOLUMETIP:set_markup(vol .. "%")
+            end)
+        end
+    end)
+end
+suitVOLUME.init()
+
+
+suitBATTERY = wibox.widget.imagebox()
+suitBATTERYTIP = awful.tooltip{objects = {suitBATTERY}}
+suitBATTERY:buttons( gears.table.join(
+                        awful.button({ }, 4, function () backlight("A") end),
+                        awful.button({ }, 5, function () backlight("U") end)))
+
 awful.widget.watch("acpi -b", 5,
     function(_, stdout)
         local icon_name = "battery"
@@ -737,9 +761,7 @@ globalkeys = gears.table.join(
 		 	
 	awful.key({ modkey ,         },  "n",     function () awful.spawn("networkmanager_dmenu") end,
             {description = "network launcher", group = "launcher"}),
-    
-    -- awful.key({ modkey, altkey },  "p",     function () menubar.show() end ),
-            		 	
+                		 	
     awful.key({ modkey },  "p",     function () awful.spawn("suit-monitor") end,
             {description = "Display Mode", group = "launcher"}),        
 			
@@ -785,12 +807,12 @@ globalkeys = gears.table.join(
         {description = "Lock Screen", group = "launcher"}),
         
     -- Bright Keys
-    awful.key({}, "XF86MonBrightnessUp", function() backlight("A") end), 
+    awful.key({}, "XF86MonBrightnessUp", function() backlight("A") end),
     awful.key({}, "XF86MonBrightnessDown", function() backlight("U") end),
               
-    awful.key({}, "XF86AudioRaiseVolume", function() audio("increase") end), 
 	-- Volume Keys
-    awful.key({}, "XF86AudioLowerVolume", function() audio("decrease") end), 
+    awful.key({}, "XF86AudioRaiseVolume", function() audio("increase") end),
+    awful.key({}, "XF86AudioLowerVolume", function() audio("decrease") end),
     awful.key({}, "XF86AudioMute", function() audioMute() end),
     
 	-- Media Keys	
@@ -1340,19 +1362,38 @@ run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
 -- awful.spawn.with_shell('touchegg')
 
-gears.timer {
-    timeout   = 1,
-    call_now  = true,
-    autostart = true,
-    single_shot = true,
-    callback  = function()
-        awful.spawn.easy_async('pamixer --get-volume',
-            function(vol)
-                if vol then
-                    suitVOLUME:set_image(icon_path .. getAudioIcon(tonumber(vol)) .. ".svg")
-                    suitVOLUMETIP:set_markup(vol:sub(1,-2) .. "%")
-                end
-            end
-        )
-    end
-}
+-- gears.timer {
+--     timeout     = 1.0,
+--     autostart   = true,
+--     call_now    = true,
+--     single_shot = true,
+--     callback  = function()
+            -- awful.spawn.easy_async('pamixer --get-volume', function(vol)
+            --     awful.spawn.easy_async('pamixer --get-mute', function (isMuted)
+            --         -- naughty.notify({text=vol})
+            --         vol = tonumber(vol)
+            --         if vol then
+            --             suitVOLUME:set_image(icon_path .. getAudioIcon(vol, isMuted) .. ".svg")
+            --             suitVOLUMETIP:set_markup(vol .. "%")
+            --         end
+            --     end)
+            -- end)
+--     end
+-- }
+
+-- awful.spawn.with_line_callback('pamixer --get-volume', {
+--     stdout = function(vol)
+--         vol = tonumber(vol)
+--         naughty.notify({text=vol})
+--         suitVOLUME:set_image(icon_path .. getAudioIcon(vol, isMuted) .. ".svg")
+--     end,
+--     stderr = function(line)
+--         naughty.notify { text = "ERR:"..line, preset = naughty.config.presets.critical}
+--     end,
+--     output_done = function(line)
+--         naughty.notify { text = "OUTDONE:"..line, preset = naughty.config.presets.critical }
+--     end,
+--     exit = function(line)
+--         naughty.notify { text = "EXIT:"..line, preset = naughty.config.presets.critical}
+--     end,
+-- })
