@@ -1113,15 +1113,13 @@ end)
 
 -- Show titlebars on clients with floating property
 client.connect_signal("property::floating", function(c)
-    setTitlebar(c, c.floating)
+    setTitlebar(c, c.floating or awful.layout.get(awful.screen.focused()) == awful.layout.suit.floating)
 end)
 
 -- Show titlebars on tags with the floating layout
 tag.connect_signal("property::layout", function(t)
-    if t.layout == awful.layout.suit.floating then
-        for _, c in pairs(t:clients()) do
-            setTitlebar(c, true)
-        end
+    for _, c in pairs(t:clients()) do
+        setTitlebar(c, t.layout == awful.layout.suit.floating)
     end
 end)
 
@@ -1361,39 +1359,3 @@ run_once('','/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1','')
 run_once('','gnome-keyring-daemon',' --unlock')
 run_once('','clipmenud','')
 -- awful.spawn.with_shell('touchegg')
-
--- gears.timer {
---     timeout     = 1.0,
---     autostart   = true,
---     call_now    = true,
---     single_shot = true,
---     callback  = function()
-            -- awful.spawn.easy_async('pamixer --get-volume', function(vol)
-            --     awful.spawn.easy_async('pamixer --get-mute', function (isMuted)
-            --         -- naughty.notify({text=vol})
-            --         vol = tonumber(vol)
-            --         if vol then
-            --             suitVOLUME:set_image(icon_path .. getAudioIcon(vol, isMuted) .. ".svg")
-            --             suitVOLUMETIP:set_markup(vol .. "%")
-            --         end
-            --     end)
-            -- end)
---     end
--- }
-
--- awful.spawn.with_line_callback('pamixer --get-volume', {
---     stdout = function(vol)
---         vol = tonumber(vol)
---         naughty.notify({text=vol})
---         suitVOLUME:set_image(icon_path .. getAudioIcon(vol, isMuted) .. ".svg")
---     end,
---     stderr = function(line)
---         naughty.notify { text = "ERR:"..line, preset = naughty.config.presets.critical}
---     end,
---     output_done = function(line)
---         naughty.notify { text = "OUTDONE:"..line, preset = naughty.config.presets.critical }
---     end,
---     exit = function(line)
---         naughty.notify { text = "EXIT:"..line, preset = naughty.config.presets.critical}
---     end,
--- })
