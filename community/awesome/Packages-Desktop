@@ -142,7 +142,6 @@ bluez-utils # (contains bluetoothctl)
 ranger
 micro
 mintstick
-cbatticon-git
 i3lock-color
 
 >extra libreoffice-fresh
@@ -156,7 +155,6 @@ exfatprogs
 >extra xiccd # enable color profile settings
 ufw  # firewall needs to be in every iso
 pamixer
-pa-applet
 network-manager-applet
 rofi
 rofi-calc
