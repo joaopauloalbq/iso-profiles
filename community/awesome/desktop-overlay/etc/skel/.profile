@@ -20,5 +20,6 @@ export CM_SELECTIONS=clipboard
 export CM_HISTLENGTH="9"
 # udiskie rofi support
 export UDISKIE_DMENU_LAUNCHER="rofi"
-
+export DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1 
+export DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1
 xdg-user-dirs-update
