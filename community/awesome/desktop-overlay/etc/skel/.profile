@@ -12,6 +12,7 @@ export VISUAL="micro"
 export EDITOR="micro"
 export MICRO_TRUECOLOR=1
 export FZF_DEFAULT_OPTS="--color=fg:-1,bg:-1,hl:green --color=fg+:bright-white,bg+:bright-black,gutter:black,hl+:bright-green --color=info:yellow,prompt:blue,pointer:bright-green --color=marker:cyan,spinner:bright-magenta,header:blue --prompt ' ∷ ' --pointer '󰐊'  --marker '●'"
+export BAT_THEME="base16"
 # clipmenu rofi support
 export CM_LAUNCHER=rofi
 export CM_DIR=~/.local/share/
