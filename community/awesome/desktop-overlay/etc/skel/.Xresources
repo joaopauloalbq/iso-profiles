@@ -15,19 +15,19 @@ Xcursor.theme: Tie-cursors
 XTerm*termName: xterm-256color
 
 XTerm*loginShell: true
-XTerm*internalBorder: 3
+XTerm*internalBorder: 2
 XTerm*scrollBar: false
 XTerm*toolBar: false
 XTerm*saveLines: 4096
 XTerm*cursorBlink: true
-! XTerm*geometry: 110x28
+XTerm*geometry: 110x28
 
 !! Fonts and Encoding
 XTerm*utf8: true
 XTerm*utf8Title: true
 XTerm*locale: true
 XTerm*renderFont: true
-XTerm*faceName: NotoMono Nerd Font
+XTerm*faceName: NotoMono NF
 XTerm*faceSize: 11
 XTerm*faceSize1: 9
 XTerm*faceSize2: 10
@@ -36,7 +36,7 @@ XTerm*faceSize4: 14
 XTerm*faceSize5: 18
 XTerm*faceSize6: 22
 
-XTerm*scaleHeight: 1,2
+XTerm*scaleHeight: 1,3
 XTerm*limitFontHeigth: 0
 XTerm*limitFontWidth: 0
 
