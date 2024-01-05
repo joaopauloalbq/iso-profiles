@@ -13,12 +13,13 @@ function fish_prompt
     (set_color normal)
 end
 
-alias ls='eza'
-alias la='eza -la'
-alias ll='eza -lh'
-alias lt='eza --tree'
+alias ls='eza --icons'
+alias la='eza -la --icons'
+alias ll='eza -lh --icons'
+alias lt='eza --tree --icons'
 alias grep='rg'
 alias cat='bat'
+alias find='fd'
 alias cal='cal -3'
 alias diff='diff --color=always'
 alias nano='micro'
@@ -36,6 +37,7 @@ abbr -a ps pamac search
 abbr -a pu pamac update
 abbr -a pc pamac checkupdates
 abbr -a pd pamac info
+
 abbr -a gad git add
 abbr -a gbr git branch
 abbr -a gco git commit
@@ -56,5 +58,6 @@ abbr -a gpu git pull
 abbr -a gpx git push
 abbr -a gt git tag
 
+abbr -a mi micro
 abbr -a ra ranger
 abbr -a laz lazygit
