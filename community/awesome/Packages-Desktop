@@ -153,7 +153,6 @@ i3lock-color
 
 ## Misc
 fish
-manjaro-hotfixes
 exfatprogs
 >basic squashfs-tools
 >extra xiccd # enable color profile settings
@@ -189,6 +188,7 @@ gsimplecal
 imagemagick
 dragon-drop
 udiskie-dmenu-git
+upower
 
 ## Gestures
 touchegg
