@@ -24,8 +24,12 @@ ntp
 >extra gst-plugins-good
 >extra gst-plugins-ugly
 >extra libdvdcss
-# >extra >multilib manjaro-alsa
-manjaro-pipewire
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-audio
+wireplumber
+>extra >multilib lib32-pipewire
 
 ## Connect Packages
 >extra android-tools
