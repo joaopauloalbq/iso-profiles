@@ -25,28 +25,9 @@ local dpi = require('beautiful').xresources.apply_dpi
 -- local icon_theme = require ("lgi").require("Gtk", "3.0").IconTheme.get_default()
 -- handy = require("handy")
 
--- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
-if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical, title = "Oops, there were errors during startup!", text = awesome.startup_errors })
-end
+require("error")
 
--- Handle runtime errors after startup
-do
-    local in_error = false
-    awesome.connect_signal("debug::error", function (err)
-        -- Make sure we don't go into an endless error loop
-        if in_error then return end
-        in_error = true
-        
-        naughty.notify({ preset = naughty.config.presets.critical,
-        title = "Oops, an error happened!",
-        text = tostring(err) })
-        in_error = false
-    end)
-end
--- }}}
+awful.layout.layouts = require("layout")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -72,33 +53,6 @@ icon_path = "/usr/share/icons/Papirus-Dark/24x24/panel/"
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 altkey = "Mod1"
-
--- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
-    -- awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    -- lain.layout.termfair,
-    -- lain.layout.termfair.center,
-    -- lain.layout.cascade,
-    -- lain.layout.cascade.tile,
-    -- lain.layout.centerwork,
-    -- lain.layout.centerwork.horizontal,
-    -- awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.sw,
-    -- awful.layout.suit.corner.se,
-    -- awful.layout.suit.magnifier,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.floating,
-    -- awful.layout.suit.spiral,
-    -- awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-}
 -- }}}
 
 -- {{{ Menu
@@ -128,32 +82,21 @@ mytextclock = wibox.widget.textclock(" %a %d, %H:%M ")
 mytextclock:buttons( gears.table.join(
                         awful.button({ }, 1, function () awful.spawn([[gsimplecal]], false) end),
                         awful.button({ }, 4, function () awful.spawn([[gsimplecal next_month]], false) end),
-                        awful.button({ }, 5, function () awful.spawn([[gsimplecal prev_month]], false) end)))
+                        awful.button({ }, 5, function () awful.spawn([[gsimplecal prev_month]], false) end))
+                    )
 
 suitTRAY = wibox.widget.systray()
 suitTRAY:set_reverse(true)
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
-                    awful.button({ }, 1, function(t) t:view_only() end),
-                    awful.button({ }, 2, function(t)
-                                            if client.focus then
-                                                client.focus:move_to_tag(t)
-                                            end
-                                         end),
-                    awful.button({ modkey }, 1, function(t)
-                                                    if client.focus then
-                                                        client.focus:move_to_tag(t)
-                                                    end
-                                                end),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, function(t)
-                                                    if client.focus then
-                                                        client.focus:toggle_tag(t)
-                                                    end
-                                                end),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
-                )
+                            awful.button({ }, 1, function(t) t:view_only() end),
+                            awful.button({ }, 2, function(t) if client.focus then client.focus:move_to_tag(t) end end),
+                            awful.button({ }, 3, awful.tag.viewtoggle),
+                            awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+                            awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end),
+                            awful.button({ modkey }, 1, function(t) if client.focus then client.focus:move_to_tag(t) end end),
+                            awful.button({ modkey }, 3, function(t) if client.focus then client.focus:toggle_tag(t) end end)
+                        )
 
 local tasklist_buttons = gears.table.join(
                      awful.button({ }, 1, function (c)
@@ -290,7 +233,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
     
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 24 }) -- opacity = 0.90
+    s.mywibox = awful.wibar({ screen = s, position = "'top", height = 24 }) -- opacity = 0.90
  	-- os.setlocale(os.getenv("LANG"))
      	 	 	
     -- Add widgets to the wibox
@@ -308,18 +251,17 @@ awful.screen.connect_for_each_screen(function(s)
             spacing = beautiful.systray_icon_spacing,
             
             suitTRAY,
-            -- awful.widget.keyboardlayout(),
             suitNETWORK,
             suitAUDIO,
             suitBATTERY,
             suitSettingsLauncher,
+            -- awful.widget.keyboardlayout(),
             -- wibox.widget.textclock(" %a %d, %H:%M "),
             mytextclock,
             s.mylayoutbox,
         },
     }
 end)
-
 -- }}}
 
 -- {{{ Mouse bindings
