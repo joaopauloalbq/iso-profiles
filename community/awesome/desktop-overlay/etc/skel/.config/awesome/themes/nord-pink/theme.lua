@@ -13,7 +13,7 @@ theme.font          = "Noto Sans Medium 11"
 
 theme.bg_normal     = "#2d323a"
 theme.bg_focus      = "#4c5158"
-theme.bg_minimize   = "#1e222a"
+theme.bg_minimize   = "#1b1f26"
 theme.bg_urgent     = "#F06C6C"
 theme.bg_systray    = theme.bg_normal
 
@@ -67,8 +67,8 @@ theme.tasklist_sticky = '󰗐 ' -- 
 theme.tasklist_ontop = ' ' 
 theme.tasklist_above = ' '
 theme.tasklist_below = ' '
-theme.tasklist_floating = '󰅣 ' -- 󱀋 
-theme.tasklist_maximized = '󰨤 ' --  󰹵
+theme.tasklist_floating = '󱀋 ' -- 󱀋 
+theme.tasklist_maximized = ' ' --  󰹵 󰨤
 theme.tasklist_maximized_vertical = '󰡏 ' -- 󰹹
 theme.tasklist_maximized_horizontal = '󰡎 '
 

@@ -1,0 +1,55 @@
+suitNETWORK = wibox.widget.imagebox()
+
+-- awful.widget.watch([[nmcli --fields IN-USE,SSID,SIGNAL device wifi list]], 5,
+awful.widget.watch([[nmcli -g IN-USE,SSID,SIGNAL device wifi]], 5,
+    function(_, stdout)
+        local icon_name = "network-wireless-connected"
+        -- local ssid, signal = string.match(stdout, "/*%s+([^%s]+)%s+(%d+)")
+        local ssid, signal = string.match(stdout, "/*:(.+):(.+)")
+        local signal = tonumber(signal)
+        
+        if signal <= 5 then
+            icon_name = icon_name .. "-00"
+        elseif signal <= 25 then
+            icon_name = icon_name .. "-25"
+        elseif signal <= 50 then
+            icon_name = icon_name .. "-50"
+        elseif signal <= 75 then
+            icon_name = icon_name .. "-075"
+        elseif signal <= 100 then
+            icon_name = icon_name .. "-100"
+        end
+
+        suitNETWORK:set_image(icon_path .. icon_name .. ".svg")
+    end
+)
+
+gears.timer {
+    timeout = 5,
+    call_now = true,
+    autostart = true,
+    callback = function()
+        awful.spawn.easy_async(
+            {"sh", "-c", "nmcli -g IN-USE,SSID,SIGNAL device wifi"},
+            function(stdout)
+                local icon_name = "network-wireless-connected"
+                local ssid, signal = string.match(stdout, "/*:(.+):(.+)")
+                local signal = tonumber(signal)
+                
+                if signal <= 5 then
+                    icon_name = icon_name .. "-00"
+                elseif signal <= 25 then
+                    icon_name = icon_name .. "-25"
+                elseif signal <= 50 then
+                    icon_name = icon_name .. "-50"
+                elseif signal <= 75 then
+                    icon_name = icon_name .. "-075"
+                elseif signal <= 100 then
+                    icon_name = icon_name .. "-100"
+                end
+        
+                suitNETWORK:set_image(icon_path .. icon_name .. ".svg")
+            end
+        )
+    end
+}

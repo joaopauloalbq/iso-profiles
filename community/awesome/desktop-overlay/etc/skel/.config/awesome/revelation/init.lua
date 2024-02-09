@@ -186,7 +186,7 @@ function revelation.expose(args)
             scr, awful.layout.suit.fair.horizontal)[1]
         
         if curr_tag_only then
-            match_clients(rule, awful.client.visible(scr), t[scr], is_excluded)
+            match_clients(rule, awful.screen.focused().selected_tag:clients(), t[scr], is_excluded)
         else
             match_clients(rule, capi.client.get(scr), t[scr], is_excluded)
         end

@@ -23,7 +23,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- require("awful.hotkeys_popup.keys")
 local dpi = require('beautiful').xresources.apply_dpi
 -- local icon_theme = require ("lgi").require("Gtk", "3.0").IconTheme.get_default()
--- handy = require("handy")
+local lgi = require('lgi')
+local NM = lgi.NM
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -202,32 +203,163 @@ local function setTitlebar(client, condition)
     end
 end
 
--- local function getBrightnessIcon(brightness)
---     if brightness == 100 then
---         return "notification-display-brightness-full"
---     elseif brightness >= 80 then
---         return "notification-display-brightness-high"
---     elseif brightness >= 40 then
---         return "notification-display-brightness-medium"
---     else
---         return "notification-display-brightness-low"
---     end
--- end    
--- 
--- function backlight(mode)
---     awful.spawn.easy_async({ "sh", "-c", "light -" .. mode .. " 10 && light -G" }, function(brightness)
---         naughty.notify ({
--- 			replaces_id	= 2,
--- 			text        = string.rep("■", math.ceil(brightness * 0.3)),
--- 			icon        = getBrightnessIcon(tonumber(brightness)),
--- 			ignore_suspend = true
--- 		})
--- 	end)
--- end
-
 suitAUDIO = require("suitAUDIO")
-suitNETWORK = require("suitNETWORK")
-suitBATTERY = require("suitBATTERY")
+
+local function getBrightnessIcon(brightness)
+    if brightness == 100 then
+        return "notification-display-brightness-full"
+    elseif brightness >= 80 then
+        return "notification-display-brightness-high"
+    elseif brightness >= 40 then
+        return "notification-display-brightness-medium"
+    else
+        return "notification-display-brightness-low"
+    end
+end    
+
+local function backlight(mode)
+    awful.spawn.easy_async({ "sh", "-c", "light -" .. mode .. " 10 && light -G" }, function(brightness)
+        naughty.notify ({
+			replaces_id	= 2,
+			text        = string.rep("■", math.ceil(brightness * 0.3)),
+			icon        = getBrightnessIcon(tonumber(brightness)),
+			ignore_suspend = true
+		})
+	end)
+end
+
+suitBATTERY = wibox.widget.imagebox()
+suitBATTERY.tooltip = awful.tooltip{objects = {suitBATTERY}}
+suitBATTERY:buttons( gears.table.join(
+                        awful.button({ }, 4, function () backlight("A") end),
+                        awful.button({ }, 5, function () backlight("U") end)))
+
+gears.timer {
+    timeout = 5,
+    call_now = true,
+    autostart = true,
+    callback = function()
+        awful.spawn.easy_async(
+            {"sh", "-c", "acpi -b"},
+            function(stdout)
+                local icon_name = "battery"
+                local status, level, estimated_time = string.match(stdout, '.+: ([%a%s]+), (%d?%d?%d)%%(.*)')
+                local level = tonumber(level)
+                
+                if level <= 5 then
+                    icon_name = icon_name .. "-000"
+                elseif level <= 10 then
+                    icon_name = icon_name .. "-010"
+                elseif level <= 20 then
+                    icon_name = icon_name .. "-020"
+                elseif level <= 30 then
+                    icon_name = icon_name .. "-030"
+                elseif level <= 40 then
+                    icon_name = icon_name .. "-040"
+                elseif level <= 50 then
+                    icon_name = icon_name .. "-050"
+                elseif level <= 60 then
+                    icon_name = icon_name .. "-060"
+                elseif level <= 70 then
+                    icon_name = icon_name .. "-070"
+                elseif level <= 80 then
+                    icon_name = icon_name .. "-080"
+                elseif level <= 90 then
+                    icon_name = icon_name .. "-090"
+                elseif level <= 100 then
+                    icon_name = icon_name .. "-100"
+                end
+        
+                if status ~= "Discharging" then
+                    icon_name = icon_name .. "-charging"
+                end
+        
+                suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
+                suitBATTERY.tooltip:set_markup(level .. "%" .. estimated_time:sub(1,-2))
+            end
+        )
+    end
+}
+
+-- awful.widget.watch([[acpi -b]], 5,  
+--     function(_, stdout)
+--         local icon_name = "battery"
+--         local status, level, estimated_time = string.match(stdout, '.+: ([%a%s]+), (%d?%d?%d)%%(.*)')
+--         local level = tonumber(level)
+--         
+--         if level <= 5 then
+--             icon_name = icon_name .. "-000"
+--         elseif level <= 10 then
+--             icon_name = icon_name .. "-010"
+--         elseif level <= 20 then
+--             icon_name = icon_name .. "-020"
+--         elseif level <= 30 then
+--             icon_name = icon_name .. "-030"
+--         elseif level <= 40 then
+--             icon_name = icon_name .. "-040"
+--         elseif level <= 50 then
+--             icon_name = icon_name .. "-050"
+--         elseif level <= 60 then
+--             icon_name = icon_name .. "-060"
+--         elseif level <= 70 then
+--             icon_name = icon_name .. "-070"
+--         elseif level <= 80 then
+--             icon_name = icon_name .. "-080"
+--         elseif level <= 90 then
+--             icon_name = icon_name .. "-090"
+--         elseif level <= 100 then
+--             icon_name = icon_name .. "-100"
+--         end
+-- 
+--         if status ~= "Discharging" then
+--             icon_name = icon_name .. "-charging"
+--         end
+-- 
+--         suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
+--         suitBATTERY.tooltip:set_markup(level .. "%" .. estimated_time:sub(1,-2))
+--     end
+-- )
+
+suitNETWORK = wibox.widget.imagebox() --icon_path .. "network-wireless-acquiring.svg"
+suitNETWORK.tooltip = awful.tooltip{objects = {suitNETWORK}}
+suitNETWORK:buttons( gears.table.join(
+                        awful.button({ }, 1, function () awful.spawn([[networkmanager_dmenu]]) end),
+                        awful.button({ }, 3, function () awful.spawn(terminal .. " -e nmtui") end)))
+
+gears.timer {
+    timeout = 6,
+    call_now = true,
+    autostart = true,
+    callback = function()
+        awful.spawn.easy_async(
+            {"sh", "-c", "nmcli -g IN-USE,SSID,SIGNAL device wifi"},
+            function(stdout)
+                local icon_name = "network-wireless-connected"
+                local ssid, signal = string.match(stdout, "%*:(.-):(%d+).*")
+                local signal = tonumber(signal)
+                
+                if signal == nil then
+                    icon_name = "network-wireless-acquiring"
+                    signal = ""
+                    ssid = ""
+                elseif signal <= 5 then
+                    icon_name = icon_name .. "-00"
+                elseif signal <= 25 then
+                    icon_name = icon_name .. "-25"
+                elseif signal <= 50 then
+                    icon_name = icon_name .. "-50"
+                elseif signal <= 75 then
+                    icon_name = icon_name .. "-75"
+                elseif signal <= 100 then
+                    icon_name = icon_name .. "-100"
+                end
+                
+                suitNETWORK:set_image(icon_path .. icon_name .. ".svg")
+                suitNETWORK.tooltip:set_markup(ssid .. " " .. signal .. "%")
+            end
+        )
+    end
+}
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
@@ -511,9 +643,6 @@ globalkeys = gears.table.join(
         {description = "go back", group = "client"}),
     awful.key({ modkey,           }, "Return" , function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    -- awful.key({ modkey, altkey    }, "Return", function () handy([[xfce4-terminal]], awful.placement.centered, 0.6, 0.7) end,
-              -- {description = "open a scrathpad terminal", group = "launcher"}),
-              
     -- WIP 
     -- awful.key({ modkey, altkey    }, "Return", function () 
     --         awful.spawn.raise_or_spawn([[xterm -xrm 'XTerm*allowTitleOps: false' -T scratchpad]], {role="scratchpad", skip_taskbar=true, floating=true, ontop=true, sticky=true}, function(c) 
@@ -556,17 +685,13 @@ globalkeys = gears.table.join(
               {description = "select previous", group = "layout"}),
 
     awful.key({ modkey, }, "Up",
-            function ()
-                local clients = awful.screen.focused().selected_tag:clients()
-                
-                for i = #clients, 1, -1 do
-                    if clients[i].minimized then
-                        clients[i]:emit_signal("request::activate", "key.unminimize", {raise = true})
-                        break
-                    end
-                end
-            end,
-            {description = "restore minimized", group = "client"}),
+              function ()
+                  local c = awful.client.restore()
+                  if c then
+                    c:emit_signal("request::activate", "key.unminimize", {raise = true})
+                  end
+              end,
+              {description = "restore minimized", group = "client"}),
 
     -- Launchers
 	awful.key({ modkey },            "o",     function () awful.spawn([[rofi -modi suit-settings -show suit-settings -theme settings]]) end,
@@ -657,8 +782,8 @@ globalkeys = gears.table.join(
     awful.key({}, "XF86MonBrightnessDown", function() backlight("U") end),
               
 	-- Volume Keys
-    awful.key({}, "XF86AudioRaiseVolume", function() suitAUDIO:volume("+") end),
-    awful.key({}, "XF86AudioLowerVolume", function() suitAUDIO:volume("-") end),
+    awful.key({}, "XF86AudioRaiseVolume", function() suitAUDIO:volume("increase") end),
+    awful.key({}, "XF86AudioLowerVolume", function() suitAUDIO:volume("decrease") end),
     awful.key({}, "XF86AudioMute", function() suitAUDIO:mute() end),
     
 	-- Media Keys	
@@ -722,7 +847,7 @@ globalkeys = gears.table.join(
     
     -- ######### TEST ###########
     awful.key({ modkey }, "x", function ()
-    	naughty.notify({text = tostring(beautiful.theme_path)})
+    	naughty.notify({text = tostring(awful.util.shell)})
     end),
     -- ##########################
     
@@ -1190,12 +1315,11 @@ awful.rules.rules = {
 
 run_once('picom')
 -- run_once('nm-applet')
--- run_once('megasync','--style Fusion', 'sleep 1.1')
+run_once('megasync','--style Fusion', 'sleep 1.1')
 -- run_once('udiskie','-s -a')
 -- run_once('blueman-tray')
 run_once('/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1')
 run_once('gnome-keyring-daemon','--unlock')
-run_once('clipmenud')
 -- awful.spawn.with_shell('touchegg')
 
 naughty.get_next_notification_id() -- reserve id to brightness notification
