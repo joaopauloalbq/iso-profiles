@@ -233,7 +233,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
     
     -- Create the wibox
-    s.mywibox = awful.wibar({ screen = s, position = "'top", height = 24 }) -- opacity = 0.90
+    s.mywibox = awful.wibar({ screen = s, position = "top", height = 24 }) -- opacity = 0.90
  	-- os.setlocale(os.getenv("LANG"))
      	 	 	
     -- Add widgets to the wibox
