@@ -10149,7 +10149,7 @@ oss${c2}yNMMMNyMMh${c1}sssssssssssssshmmmh${c1}ssssssso
 EOF
         ;;
 
-        "SuitLinux"*)
+        "Suit Linux"*)
             set_colors 8 5
             read -rd '' ascii_data <<'EOF'
 ${c1}        
