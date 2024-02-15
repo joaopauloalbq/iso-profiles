@@ -1,10 +1,3 @@
--- https://upower.freedesktop.org/docs/UpClient.html
-
--- STATE
--- 1 -> charging
--- 2 -> discharging
--- 4 -> ac
-
 local UPowerGlib = require("lgi").UPowerGlib
 
 
@@ -25,6 +18,7 @@ function upower.estimated_time(self)
 	if self._device.state == 2 then -- discharging
 		return sec_to_hm(self._device.time_to_empty, "restantes")
 	end
+	
 	return sec_to_hm(self._device.time_to_full, "até ser carregado")
 end
 
@@ -40,6 +34,7 @@ function upower._get_device_from_path(self, path)
       return d
     end
   end
+  
   return nil
 end
 
@@ -51,6 +46,7 @@ function upower.get_status(self)
     -- state_number = self._device.state,
   }
 end
+
 
 upower._client = UPowerGlib.Client()
 upower._device = upower._client:get_display_device()

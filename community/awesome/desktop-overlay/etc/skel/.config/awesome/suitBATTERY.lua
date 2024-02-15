@@ -4,6 +4,8 @@ local awful = require("awful")
 local wibox = require("wibox")
 local upower = require("upower")
 
+local last_time = 0
+
 local function getBrightnessIcon(brightness)
     if brightness == 100 then
         return "notification-display-brightness-full"
@@ -38,13 +40,11 @@ suitBATTERY:buttons(
 	)
 )
 
-gears.timer {
-    timeout = 4,
-    call_now = true,
-    autostart = true,
-    callback = function()
-     	bat = upower:get_status()
-     	
+suitBATTERY.update = function()
+	-- For some reason on_notify is called multiple times, this is a workaround to avoid that.
+	if os.time() ~= last_time then		
+		local bat = upower:get_status()
+		     	
      	if bat.state ~= suitBATTERY.bat.state then
      		if suitBATTERY.bat.state == "discharging" then
      			naughty.notify({title = "Energia", text = "Carregador conectado", icon = "battery-ac-adapter"})
@@ -82,7 +82,14 @@ gears.timer {
 		suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
 		suitBATTERY.tooltip:set_markup(bat.percentage .. "%" .. bat.estimated_time)
 		suitBATTERY.bat = bat
-    end
-}
+	end
+	
+	last_time = os.time()
+end
+
+-- Signal
+upower:on_update(suitBATTERY.update)
+
+suitBATTERY.update()
 
 return suitBATTERY
