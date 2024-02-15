@@ -63,12 +63,15 @@ end
 
 function nm:flags_to_string(flags)
     local str = ""
+    
     for flag, _ in pairs(flags) do
         str = str .. " " .. flag
     end
+    
     if str == "" then
         str = "NONE"
     end
+    
     return (str:gsub("^%s", ""))
 end
 
