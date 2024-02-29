@@ -2,9 +2,10 @@ local naughty = require("naughty")
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
-local upower = require("upower")
+local upower = require(... .. ".upower")
 
-local last_time = 0
+
+local callback_enabled = true
 
 local function getBrightnessIcon(brightness)
     if brightness == 100 then
@@ -42,7 +43,8 @@ suitBATTERY:buttons(
 
 suitBATTERY.update = function()
 	-- For some reason on_notify is called multiple times, this is a workaround to avoid that.
-	if os.time() ~= last_time then		
+	if callback_enabled then
+		callback_enabled = false
 		local bat = upower:get_status()
 		     	
      	if bat.state ~= suitBATTERY.bat.state then
@@ -82,9 +84,11 @@ suitBATTERY.update = function()
 		suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
 		suitBATTERY.tooltip:set_markup(bat.percentage .. "%" .. bat.estimated_time)
 		suitBATTERY.bat = bat
+		
+        gears.timer.start_new (1, function() 
+            callback_enabled = true
+        end)
 	end
-	
-	last_time = os.time()
 end
 
 -- Signal

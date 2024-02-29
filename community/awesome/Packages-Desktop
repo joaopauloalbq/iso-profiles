@@ -189,6 +189,7 @@ imagemagick
 dragon-drop
 udiskie-dmenu-git
 upower
+smartmontools
 
 ## Gestures
 touchegg
@@ -226,3 +227,7 @@ pkg-config
 git
 patchutils
 subversion
+
+# TODO
+#rofi-bluetooth-git
+#networkmanager-dmenu-git

@@ -36,6 +36,7 @@ theme.border_marked = "#64A7A7"
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
 -- theme.notification_height = dpi(60)
+-- theme.notification_bg = "#333942"
 theme.notification_bg = "#333942"
 theme.notification_fg = theme.fg_focus
 theme.notification_border_width = theme.border_width
@@ -160,6 +161,7 @@ theme.layout_cornernw = "~/.config/awesome/themes/nord-pink/layouts/cornernww.pn
 theme.layout_cornerne = "~/.config/awesome/themes/nord-pink/layouts/cornernew.png"
 theme.layout_cornersw = "~/.config/awesome/themes/nord-pink/layouts/cornersww.png"
 theme.layout_cornerse = "~/.config/awesome/themes/nord-pink/layouts/cornersew.png"
+theme["layout_dovetail.layout.right"] = "~/.config/awesome/themes/nord-pink/layouts/dovetail.layout.right.png"
 theme.layout_centerwork = "~/.config/awesome/themes/nord-pink/layouts/centerwork.svg"
 
 -- Generate Awesome icon:

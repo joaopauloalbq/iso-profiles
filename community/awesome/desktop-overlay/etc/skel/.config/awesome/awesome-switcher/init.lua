@@ -28,8 +28,8 @@ local _M = {}
 
 _M.settings = {
 	preview_box = true,
-	preview_box_bg = "#2d323a",
-	preview_box_border = "#dc98b1",
+	preview_box_bg = "#ddddddaa",
+	preview_box_border = "#22222200",
 	preview_box_fps = 30,
 	preview_box_delay = 150,
 	preview_box_title_font = {"sans","italic","normal"},
@@ -38,10 +38,11 @@ _M.settings = {
 
 	client_opacity = false,
 	client_opacity_value_selected = 1,
-	client_opacity_value_in_focus = 1.0,
-	client_opacity_value = 1.0,
+	client_opacity_value_in_focus = 0.5,
+	client_opacity_value = 0.5,
 
-	cycle_raise_client = false,
+	cycle_raise_client = true,
+	cycle_all_clients  = false,
 }
 
 -- Create a wibox to contain all the client-widgets
@@ -104,7 +105,7 @@ function _M.getClients()
 			end
 		end
 
-		if isCurrentTag then
+		if isCurrentTag or _M.settings.cycle_all_clients then
 			-- check if client is already in the history
 			-- if not, add it
 			local addToTable = true
@@ -498,6 +499,7 @@ function _M.switch(dir, mod_key1, release_key, mod_key2, key_switch)
 						-- raise chosen client on top of all
 						c = _M.altTabTable[_M.altTabIndex].client
 						c:raise()
+						c:jump_to()
 						client.focus = c
 
 						-- restore minimized clients

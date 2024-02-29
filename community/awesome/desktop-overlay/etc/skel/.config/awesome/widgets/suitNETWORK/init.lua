@@ -1,10 +1,11 @@
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
-local nm = require("nm")
 local naughty = require("naughty") 
+local nm = require(... .. '.nm')
 
-local last_time = 0
+
+local callback_enabled = true
 
 local suitNETWORK = wibox.widget.imagebox()
 suitNETWORK.tooltip = awful.tooltip{objects = {suitNETWORK}}
@@ -14,7 +15,9 @@ suitNETWORK:buttons( gears.table.join(
 
 suitNETWORK.update = function()
     -- For some reason on_notify is called multiple times, this is a workaround to avoid that.
-	if os.time() ~= last_time then
+	-- if os.time() ~= last_time then
+	if callback_enabled then
+	    callback_enabled = false
         ap = nm.wifi_device:get_active_access_point()
 
         if ap then
@@ -37,9 +40,13 @@ suitNETWORK.update = function()
             suitNETWORK:set_image(icon_path .. "network-wireless-disconnected" .. ".svg")
             suitNETWORK.tooltip:set_markup("Wireless disconnected")
         end
+                            
+        gears.timer.start_new (1, function() 
+            callback_enabled = true
+        end)
     end
     
-    last_time = os.time()
+    -- last_time = os.time()
 end
 
 -- Signal
