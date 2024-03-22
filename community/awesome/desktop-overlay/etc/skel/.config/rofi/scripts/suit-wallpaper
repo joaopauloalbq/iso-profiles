@@ -9,11 +9,11 @@ WALLPAPERS=($(ls -1 $WALLPAPER_FOLDER))
 
 for w in "${WALLPAPERS[@]}" 
 do
-    if [ ! -e $HOME/.cache/thumbnails/large/$w ]; then
-        convert -thumbnail 400 $WALLPAPER_FOLDER$w $HOME/.cache/thumbnails/large/$w 
+    if [ ! -e $HOME/.cache/thumbnails/$w ]; then
+        convert -thumbnail 400 $WALLPAPER_FOLDER$w $HOME/.cache/thumbnails/$w 
     fi
     
-    echo -en "$w\0icon\x1f$HOME/.cache/thumbnails/large/$w\n"
+    echo -en "$w\0icon\x1f$HOME/.cache/thumbnails/$w\n"
 done
 
 case $ROFI_RETV in
