@@ -34,7 +34,6 @@ library_tabs = ["tracks", "playlists", "browse", "artists", "albums", "podcasts"
 "-" = "voldown 5"
 
 # Track manipulation
-" " = "playpause"
 "c" = "playpause"
 "z" = "previous"
 "x" = "next"
@@ -56,6 +55,8 @@ library_tabs = ["tracks", "playlists", "browse", "artists", "albums", "podcasts"
 "e" = "queue"
 "Ctrl+s" = "save queue"
 # Move selected song up/down in the queue
+"Shift+z" = "shift up 1"
+"Shift+x" = "shift down 1"
 "," = "shift up 1"
 "." = "shift down 1"
 "<" = "shift up 5"
@@ -79,7 +80,7 @@ library_tabs = ["tracks", "playlists", "browse", "artists", "albums", "podcasts"
 
 [notification_format]
 title = "%title"
-body = "%album - %artists"
+body = "%artists - %album"
 
 [theme] 
 # Spotify
