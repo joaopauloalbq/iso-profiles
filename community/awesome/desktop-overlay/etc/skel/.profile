@@ -7,6 +7,7 @@ export FONTCONFIG_FILE=fonts.conf
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export QT_SCALE_FACTOR=1
 export GTK_USE_PORTAL=0
+export GTK_THEME="Suit-Pink-Dark-Compact-Nord"
 export TERMINAL="xterm"
 export VISUAL="micro"
 export EDITOR="micro"
