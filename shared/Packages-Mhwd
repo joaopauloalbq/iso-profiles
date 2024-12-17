@@ -15,13 +15,9 @@ KERNEL-headers
 #zfs-dkms
 libva-intel-driver
 libva-mesa-driver
-libva-vdpau-driver
->multilib lib32-libva-vdpau-driver
 libxaw
 libxpm
 libxvmc
-mesa-vdpau
->multilib lib32-mesa-vdpau
 >multilib lib32-libxvmc
 >multilib lib32-primus
 >nonfree_x86_64 KERNEL-nvidia
@@ -29,8 +25,6 @@ mesa-vdpau
 >nonfree_x86_64 nvidia-settings
 >nonfree_x86_64 libxnvctrl
 >nonfree_multilib lib32-nvidia-utils
-opencl-clover-mesa
-opencl-rusticl-mesa
 open-vm-tools
 primus
 qemu-guest-agent
@@ -42,10 +36,13 @@ virtualbox-guest-utils
 vulkan-mesa-layers
 vulkan-swrast
 vulkan-virtio
+vulkan-icd-loader
 vulkan-radeon
 >multilib lib32-vulkan-radeon
 vulkan-intel
 >multilib lib32-vulkan-intel
+vulkan-nouveau
+>multilib lib32-vulkan-nouveau
 xf86-input-vmmouse
 xf86-video-amdgpu
 xf86-video-ati
