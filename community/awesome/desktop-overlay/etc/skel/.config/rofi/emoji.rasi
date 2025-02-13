@@ -17,8 +17,8 @@ prompt {
 }
 
 entry {
-	padding: 12px;
-	border: 0 0 0 1px;
+	padding: 12px 0;
+	//border: 0 0 0 1px;
 }
 
 message{
@@ -50,8 +50,7 @@ element-icon {
 element-text  {
 	font: "Noto Color Emoji 23";
 	horizontal-align: 0.5;
-	vertical-align: 0.5;
-	padding: 5px 0px;
+	padding: 0.59em 0em 1.90em 0em;
 }
 
 mode-switcher {
