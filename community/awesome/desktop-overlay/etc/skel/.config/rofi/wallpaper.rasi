@@ -21,15 +21,15 @@ inputbar {
 }
 
 prompt {
-	font: "Noto Sans 14";
+	font: "Noto Sans 11";
 	vertical-align: 0.5;
-	padding: 0 20px;
+	padding: 0 12px;
 	margin: 0 0 0 -6px;
 }
 
 entry {
-	border: 0 0 0 1px;
-	padding: 12px;
+	padding: 12px 0;
+	//border: 0 0 0 1px;
 }
 
 message{
