@@ -17,7 +17,7 @@ XTerm*termName: xterm-256color
 XTerm*loginShell: true
 XTerm*scrollBar: false
 XTerm*toolBar: false
-XTerm*saveLines: 4096
+XTerm*saveLines: 8192
 XTerm*cursorBlink: true
 XTerm.vt100.geometry: 110x28
 
@@ -33,10 +33,10 @@ XTerm*faceSize2: 10
 XTerm*faceSize3: 12
 XTerm*faceSize4: 14
 XTerm*faceSize5: 18
-XTerm*faceSize6: 22
+XTerm*faceSize6: 21
 
-XTerm*internalBorder: 3
 XTerm*scaleHeight: 1,1
+XTerm*internalBorder: 3
 XTerm*limitFontHeigth: 0
 XTerm*limitFontWidth: 0
 XTerm*forcePackedFont: true
@@ -58,9 +58,9 @@ XTerm*trimSelection: true
 Xterm*selectToClipboard: false
 
 !! Enable sixel
-!XTerm*decTerminalID: vt340
-!XTerm*numColorRegisters: 256
+!XTerm*decTerminalID: vt420
 !XTerm*sixelScrolling: 1
+!XTerm*numColorRegisters: 256
 !XTerm*sixelScrollsRight: 1
 
 ! -- Hold Shift to use CLIPBOARD instead of PRIMARY to copy or paste
@@ -78,7 +78,9 @@ XTerm*vt100.Translations: #override \n\
     Shift <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY) \n\
     Ctrl Shift <Key> c: copy-selection(CLIPBOARD) \n\
     Ctrl Shift <Key> v: insert-selection(CLIPBOARD, CUT_BUFFER1) \n\
-    Ctrl Shift <Key> n: spawn-new-terminal() 
+    Ctrl Shift <Key> n: spawn-new-terminal()  \n\
+    !Ctrl <Key> Return: string(0x1b) string("M")
+    Ctrl <Key> Return: string(x1bM)
 
 ! Matches URLs and emails and selects them on double-click
 xterm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
