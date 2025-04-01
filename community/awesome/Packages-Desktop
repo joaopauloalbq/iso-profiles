@@ -57,7 +57,7 @@ gsfonts
 
 ## Package management
 pamac
->extra pamac-gtk
+>extra pamac-gtk3
 # appimagelauncher
 
 ## Java
