@@ -58,7 +58,7 @@ gsfonts
 ## Package management
 pamac
 >extra pamac-gtk
-appimagelauncher
+# appimagelauncher
 
 ## Java
 >extra jre-openjdk
