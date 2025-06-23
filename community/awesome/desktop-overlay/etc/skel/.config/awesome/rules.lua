@@ -1,19 +1,17 @@
+-- Rules to apply to new clients (through the "manage" signal).
 local awful = require("awful")
-local beautiful = require("beautiful")
 
-beautiful.init("~/.config/awesome/themes/nord-pink/theme.lua")
-
-return {
-    -- All clients will match this rule.v
+awful.rules.rules = {
+    -- All clients will match this rule.
     { rule = { },
       properties = { border_color = beautiful.border_normal,
                      maximized = false,
                      focus = awful.client.focus.filter,
                      raise = true,
-                     keys = require("keybinds.clientkeys"),
-                     buttons = clientbuttons,
+                     keys = require("bindings.clientkeys"),
+                     buttons = require("bindings.clientbuttons"),
                      screen = awful.screen.preferred,
-                     placement = awful.placement.centered,
+                     placement = awful.placement.centered + awful.placement.no_offscreen,
                      size_hints_honor = false
                    }
     },
@@ -55,6 +53,7 @@ return {
 		-- Note that the name property shown in xprop might be set slightly after creation of the client
 		-- and the name shown there might not match defined rules here.
 		name = {
+		    "nmtui",
             "Event Tester",  -- xev.
             "galculator",
             "Settings",
@@ -81,9 +80,9 @@ return {
       	    properties = { fullscreen = true, requests_no_titlebar = true, skip_taskbar = true, below = true } },
   	{ rule = { class = "wps" },
   	    properties = { titlebars_enabled = false } },
-  	{ rule = { class = "conky" },
-  	    properties = { floating = true, requests_no_titlebar = true, border_width = 0 } },
-  	{ rule = { class = "Gcolor3" },
+  	{ rule = { class = "Tilda" },
+  	    properties = { floating = true, requests_no_titlebar = true} },
+  	{ rule = { class = "Nl.hjdskes.gcolor3" },
   	    properties = { floating = true, sticky = true} },
     { rule = { class= "Gsimplecal" },
 	    properties = { floating = true, border_width = 0, skip_taskbar = true, requests_no_titlebar = true, placement = awful.placement.top_right } },
@@ -135,3 +134,5 @@ return {
     { rule = { name="ncspot" },
     	properties = { urgent = false, focus = false, tag = " 9 " } }
 }
+
+return awful.rules.rules

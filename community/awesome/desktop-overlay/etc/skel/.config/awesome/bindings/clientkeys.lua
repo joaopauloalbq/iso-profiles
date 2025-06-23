@@ -59,7 +59,7 @@ return gears.table.join(
     awful.key({ altkey, "Control", "Shift" }, "Left",      function (c) c:move_to_screen(c.screen.index-1)   end,
               {description = "move to screen", group = "screen"}),
 	awful.key({ altkey, "Control", "Shift" }, "Right",      function (c) c:move_to_screen(c.screen.index+1)   end,
-	              {description = "move to screen", group = "screen"}),
+	          {description = "move to screen", group = "screen"}),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
 	awful.key({ modkey,           }, "y",      function (c) c.sticky = not c.sticky            end,
@@ -84,5 +84,4 @@ return gears.table.join(
             c:raise()
         end ,
         {description = "(un)maximize", group = "client"})
-
 )

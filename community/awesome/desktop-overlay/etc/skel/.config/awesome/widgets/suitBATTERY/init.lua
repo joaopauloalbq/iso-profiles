@@ -3,97 +3,142 @@ local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
 local upower = require(... .. ".upower")
+local dpi = require("beautiful.xresources").apply_dpi
+local icon_theme = require("lgi").require("Gtk", "3.0").IconTheme.get_default()
+
+
+-- TODO
+-- [] Adicionar modo economizar energia
 
 
 local callback_enabled = true
+local backlight_notification_id = naughty.get_next_notification_id() -- reserve id to brightness notification
 
-local function getBrightnessIcon(brightness)
-    if brightness == 100 then
+local function get_icon_dir()
+    local icon_info = icon_theme:lookup_icon("battery-090", dpi(24), 0)
+    if icon_info then
+        return string.match(icon_info:get_filename(), "(.*/)")
+    end
+    return ""
+end
+
+local icon_dir = get_icon_dir()
+
+local function get_brightness_icon(level)
+    if level == 100 then
         return "notification-display-brightness-full"
-    elseif brightness >= 80 then
+    elseif level >= 80 then
         return "notification-display-brightness-high"
-    elseif brightness >= 40 then
+    elseif level >= 40 then
         return "notification-display-brightness-medium"
     else
         return "notification-display-brightness-low"
     end
-end    
+end
 
 function backlight(mode)
-    awful.spawn.easy_async({ "sh", "-c", "light -" .. mode .. " 10 && light -G" }, function(brightness)
+    awful.spawn.easy_async({ "sh", "-c", "light -" .. mode .. " 10 ; light -G" }, function(brightness)
         naughty.notify ({
-			replaces_id	= 2,
+			replaces_id	= backlight_notification_id,
 			text        = string.rep("■", math.ceil(brightness * 0.3)),
-			icon        = getBrightnessIcon(tonumber(brightness)),
+			icon        = get_brightness_icon(tonumber(brightness)),
 			ignore_suspend = true
 		})
 	end)
 end
 
-suitBATTERY = wibox.widget.imagebox()
+local suit_battery = wibox.widget{
+	{
+		id = "icon",
+		widget = wibox.widget.imagebox
+	},
+	{
+		id = "text",
+		visible = false,
+		widget = wibox.widget.textbox
+	},
+	visible = upower.device.is_present,
+	layout = wibox.layout.fixed.horizontal,
+}
 
-suitBATTERY.tooltip = awful.tooltip{ objects = {suitBATTERY} }
-suitBATTERY.bat = {["state"] = ""}
-suitBATTERY:buttons( 
+suit_battery.tooltip = awful.tooltip{
+	objects = {suit_battery}
+}
+
+suit_battery.previous_state = "unknown"
+suit_battery.previous_warning_level = "none"
+
+suit_battery:buttons(
 	gears.table.join(
+		awful.button({ }, 1, function () suit_battery.text.visible = not suit_battery.text.visible end),
 		awful.button({ }, 4, function () backlight("A") end),
 		awful.button({ }, 5, function () backlight("U") end)
 	)
 )
 
-suitBATTERY.update = function()
+suit_battery.update = function()
 	-- For some reason on_notify is called multiple times, this is a workaround to avoid that.
 	if callback_enabled then
 		callback_enabled = false
-		local bat = upower:get_status()
+		local device = upower:get_status()
+
+		if suit_battery.previous_warning_level ~= device.warning_level then
+			if device.warning_level == "low" then
+				naughty.notify({title = "Energia", text = "Nível de bateria baixa", icon = "notification-battery-low"})
+			elseif device.warning_level == "critical" then
+				awful.spawn("systemctl suspend-then-hibernate")
+			end
+		end
 		     	
-     	if bat.state ~= suitBATTERY.bat.state then
-     		if suitBATTERY.bat.state == "discharging" then
-     			naughty.notify({title = "Energia", text = "Carregador conectado", icon = "battery-ac-adapter"})
-     		end
+     	if suit_battery.previous_state ~= device.state then
+			if device.state == "discharging" then
+				naughty.notify({title = "Energia", text = "Carregador desconectado", icon = "battery-ac-adapter"})
+			end
      	end
 		
-		if bat.percentage <= 5 then
+		local icon_name
+		if device.percentage <= 5 then
 		    icon_name = "battery-000"
-		elseif bat.percentage <= 10 then
+		elseif device.percentage <= 10 then
 		    icon_name = "battery-010"
-		elseif bat.percentage <= 20 then
+		elseif device.percentage <= 20 then
 		    icon_name = "battery-020"
-		elseif bat.percentage <= 30 then
+		elseif device.percentage <= 30 then
 		    icon_name = "battery-030"
-		elseif bat.percentage <= 40 then
+		elseif device.percentage <= 40 then
 		    icon_name = "battery-040"
-		elseif bat.percentage <= 50 then
+		elseif device.percentage <= 50 then
 		    icon_name = "battery-050"
-		elseif bat.percentage <= 60 then
+		elseif device.percentage <= 60 then
 		    icon_name = "battery-060"
-		elseif bat.percentage <= 70 then
+		elseif device.percentage <= 70 then
 		    icon_name = "battery-070"
-		elseif bat.percentage <= 80 then
+		elseif device.percentage <= 80 then
 		    icon_name = "battery-080"
-		elseif bat.percentage <= 90 then
+		elseif device.percentage <= 90 then
 		    icon_name = "battery-090"
-		elseif bat.percentage <= 100 then
+		elseif device.percentage <= 100 then
 		    icon_name = "battery-100"
 		end
 
-		if bat.state ~= "discharging" then
+		if device.state ~= "discharging" then
 		    icon_name = icon_name .. "-charging"
 		end
 		
-		suitBATTERY:set_image(icon_path .. icon_name .. ".svg")
-		suitBATTERY.tooltip:set_markup(bat.percentage .. "%" .. bat.estimated_time)
-		suitBATTERY.bat = bat
+		suit_battery.icon:set_image(icon_dir .. icon_name .. ".svg")
+		suit_battery.text:set_text(device.percentage .. "%")
+		suit_battery.tooltip:set_text(device.percentage .. "%" .. device.estimated_time)
+		suit_battery.previous_state = device.state
+		suit_battery.previous_warning_level = device.warning_level
 		
-        gears.timer.start_new (1, function() 
-            callback_enabled = true
-        end)
+        gears.timer.start_new (1, function() callback_enabled = true end)
 	end
 end
 
+
 -- Signal
-upower:on_update(suitBATTERY.update)
+upower:on_update(suit_battery.update)
 
-suitBATTERY.update()
+suit_battery.update()
 
-return suitBATTERY
+return suit_battery

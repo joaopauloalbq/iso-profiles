@@ -1,31 +1,26 @@
 local theme_assets = require("beautiful.theme_assets")
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
+local dpi = require("beautiful.xresources").apply_dpi
 
--- local awful = require("awful")
-local gears = require("gears")
-local gfs = require("gears.filesystem")
-local themes_path = gfs.get_themes_dir()
-local wibox = require("wibox")
+
 local theme = {}
 
 theme.font          = "Noto Sans Medium 11"
 
 theme.bg_normal     = "#2d323a"
 theme.bg_focus      = "#4c5158"
-theme.bg_minimize   = "#1b1f26"
+theme.bg_minimize   = "#1e222a"
 theme.bg_urgent     = "#F06C6C"
 theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#DEDEDE"
 theme.fg_focus      = "#FAFAFA"
 theme.fg_urgent     = "#EDEDED"
-theme.fg_minimize   = "#D4D4D4"
+theme.fg_minimize   = "#abb2bf"
 
-theme.useless_gap   = 3
+theme.useless_gap   = dpi(3)
 -- theme.gap_single_client = false
-theme.border_width  = 2
-theme.corner_radius = 11
+theme.border_width  = dpi(2)
+theme.corner_radius = dpi(11)
 theme.border_normal = "#565C63"
 theme.border_focus  = "#dc98b1"
 theme.border_marked = "#64A7A7"
@@ -161,12 +156,12 @@ theme.layout_cornernw = "~/.config/awesome/themes/nord-pink/layouts/cornernww.pn
 theme.layout_cornerne = "~/.config/awesome/themes/nord-pink/layouts/cornernew.png"
 theme.layout_cornersw = "~/.config/awesome/themes/nord-pink/layouts/cornersww.png"
 theme.layout_cornerse = "~/.config/awesome/themes/nord-pink/layouts/cornersew.png"
-theme["layout_dovetail.layout.right"] = "~/.config/awesome/themes/nord-pink/layouts/dovetail.layout.right.png"
 theme.layout_centerwork = "~/.config/awesome/themes/nord-pink/layouts/centerwork.svg"
+theme["layout_dovetail.layout.right"] = "~/.config/awesome/themes/nord-pink/layouts/dovetail.layout.right.png"
 
 -- Generate Awesome icon:
 theme.awesome_icon = theme_assets.awesome_icon(
-    theme.menu_height, theme.bg_normal, theme.fg_focus
+    theme.menu_height, theme.fg_focus, theme.bg_normal
 )
 
 -- Textclock
@@ -174,7 +169,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 -- local mytextclock = wibox.widget.textclock("  %a %d, %H:%M  ")
 
 -- System tray
-theme.systray_icon_spacing = 5
+theme.systray_icon_spacing = dpi(5)
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
@@ -198,7 +193,7 @@ content = content:gsub("darker%-highlight%-color: (%g+);", ("darker-highlight-co
 content = content:gsub("border: (%g+);", ("border: " .. (theme.border_width + 2) .. "px;"), 1)
 content = content:gsub("corner-radius: (%g+);", ("corner-radius: " .. (theme.corner_radius - theme.border_width) .. ";"), 1)
 
-file = io.open(".config/rofi/base.rasi", "w+")
+local file = io.open(".config/rofi/base.rasi", "w+")
 file:write(content)
 file:close()
 

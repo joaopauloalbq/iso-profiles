@@ -25,8 +25,8 @@ theme.fg_focus      = "#FAFAFA"
 theme.fg_urgent     = "#EDEDED"
 theme.fg_minimize   = "#D4D4D4"
 
-theme.useless_gap   = 3
 -- theme.gap_single_client = false
+theme.useless_gap   = 3
 theme.border_width  = 2
 theme.border_normal = "#666666"
 theme.border_focus  = "#41C6C8" -- #64A7A7 #41C6C8 #222222

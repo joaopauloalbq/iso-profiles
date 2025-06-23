@@ -67,16 +67,16 @@ function nm:flags_to_string(flags)
     for flag, _ in pairs(flags) do
         str = str .. " " .. flag
     end
-    
+
     if str == "" then
         str = "NONE"
     end
-    
+
     return (str:gsub("^%s", ""))
 end
 
-
 nm.client = NM.Client.new()
 nm.wifi_device = nm:get_device_of_type("WIFI")
+
 
 return nm

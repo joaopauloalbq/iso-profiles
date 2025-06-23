@@ -1,3 +1,4 @@
+-- Set keys
 -- joaopauloalbq
 -------------------------------------------------------------------------------------------------------------------
 local gears = require("gears")
@@ -67,7 +68,28 @@ local globalkeys = gears.table.join(
 	awful.key({ modkey }, "Delete", function()
 		naughty.destroy_all_notifications()
 	end),
-              
+    awful.key({ modkey, altkey }, "Return",
+    function ()
+        local tags = awful.screen.focused().tags
+        local selected_tag_index = awful.screen.focused().selected_tag.index
+        local i = selected_tag_index
+        repeat
+            i = i + 1
+            if i > #tags then
+                i = i - #tags
+            end
+            if i < 1 then
+                i = i + #tags
+            end
+            if #tags[i]:clients() == 0 then
+                if client.focus then
+                    client.focus:move_to_tag(tags[i]) 
+                end
+                return
+            end
+        until (i == selected_tag_index)                
+    end ,
+    {description = "move client to an empty tag", group = "layout"}),              
 	-- Move client to prev/next tag and switch to it
 	awful.key({ modkey, "Control", "Shift" }, "Left",
 	    function ()
@@ -96,7 +118,7 @@ local globalkeys = gears.table.join(
 	    end,
 	        {description = "move client to next tag and switch to it", group = "layout"}),
 	        
-    awful.key({ altkey, "Control", "Shift" }, "Left",
+    awful.key({ modkey, altkey, "Control", "Shift" }, "Left",
 	    function ()
 	        -- get current tag
 	        local t = client.focus and client.focus.first_tag or nil
@@ -108,7 +130,7 @@ local globalkeys = gears.table.join(
             client.focus:move_to_tag(tag)
 	    end,
 	        {description = "move client to previous tag", group = "layout"}),
-	awful.key({ altkey, "Control", "Shift" }, "Right",
+	awful.key({ modkey, altkey, "Control", "Shift" }, "Right",
 	    function ()
 	        -- get curreìnt tag
 	        local t = client.focus and client.focus.first_tag or nil
@@ -188,7 +210,7 @@ local globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Tab", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
    
-    -- Layout manipulation
+    
     awful.key({ altkey, "Control" }, "Right", function () awful.screen.focus_relative( 1) end,
               {description = "change screen focus", group = "screen"}),
 	awful.key({ altkey, "Control" }, "Left",  function () awful.screen.focus_relative(-1) end,
@@ -196,7 +218,7 @@ local globalkeys = gears.table.join(
               
     awful.key({ modkey, "Control" }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    
+        
     awful.key({ altkey }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -205,11 +227,9 @@ local globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-    
+
     awful.key({ modkey,           }, "Return" , function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    -- awful.key({ modkey, altkey    }, "Return", function () handy([[xfce4-terminal]], awful.placement.centered, 0.6, 0.7) end,
-              -- {description = "open a scrathpad terminal", group = "launcher"}),
               
     -- WIP 
     -- awful.key({ modkey, altkey    }, "Return", function () 
@@ -285,10 +305,11 @@ local globalkeys = gears.table.join(
     awful.key({ modkey, "Control" }, "c",     function () awful.spawn.with_shell([[rofi -modi suit-delclip -show suit-delclip -theme clipdel -p ]]) end,
     		{description = "Delete clipboard entries", group = "launcher"}),
 			
-	awful.key({ modkey },            "d",     function () awful.spawn([[rofi -modi drun -show drun -theme grid -selected-row 0]]) end,
+	-- awful.key({ modkey },            "d",     function () awful.spawn([[rofi -modi drun -show drun -theme grid -selected-row 0]]) end,
+	awful.key({ modkey },            "d",     function () suit_launcher() end,
 	        {description = "open applications", group = "launcher"}),
 	
-	awful.key({ modkey },            "e",     function () awful.spawn.with_shell([[clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji -kb-custom-1 Ctrl+c -selected-row 0 ; clipctl enable]], false) end,
+	awful.key({ modkey },            "e",     function () awful.spawn.with_shell([[clipctl disable; rofi -modi emoji -show emoji -emoji-format {emoji} -theme emoji; clipctl enable]], false) end,
 			{description = "emoji picker", group = "launcher"}),              
 			
 	awful.key({ modkey },            "g",     function () awful.spawn([[rofi -modi filebrowser -show filebrowser]]) end,
@@ -343,7 +364,7 @@ local globalkeys = gears.table.join(
 				 {description = "vs code", group = "launcher"}),
 	awful.key({ modkey , "Shift" },  "w",     function () awful.spawn([[firefox]]) end,
 				 {description = "web browser", group = "launcher"}),
-	awful.key({ altkey , "Shift" },  "w",     function () awful.spawn([[firefox --private-window]]) end),
+	awful.key({ modkey , "Shift" },  "p",     function () awful.spawn([[firefox --private-window]]) end),
 
 	-- Lockscreen
     awful.key({ modkey },            "l",     function () awful.spawn([[suit-lockscreen]]) end,
@@ -354,9 +375,9 @@ local globalkeys = gears.table.join(
     awful.key({}, "XF86MonBrightnessDown", function() backlight("U") end),
               
 	-- Volume Keys
-    awful.key({}, "XF86AudioRaiseVolume", function() suitAUDIO:volume("+") end),
-    awful.key({}, "XF86AudioLowerVolume", function() suitAUDIO:volume("-") end),
-    awful.key({}, "XF86AudioMute", function() suitAUDIO:mute() end),
+    awful.key({}, "XF86AudioRaiseVolume", function() suit_audio:inc_volume() end),
+    awful.key({}, "XF86AudioLowerVolume", function() suit_audio:dec_volume() end),
+    awful.key({}, "XF86AudioMute", function() suit_audio:toggle_mute() end),
     
 	-- Media Keys	
     awful.key({}, "XF86AudioPlay", function()
@@ -387,7 +408,7 @@ local globalkeys = gears.table.join(
             naughty.notify({ title = "Screenshot captured",
 				             text  = name,
         			     	 icon  = "preferences-desktop-wallpaper",
-        			     	 run   = function() awful.spawn('xdg-open ' .. name) end })
+        			     	 run   = function() awful.spawn('gimp ' .. name) end })
         end) 
     end, {description = "Print desktop", group = "Screenshot"}),
     
@@ -397,7 +418,7 @@ local globalkeys = gears.table.join(
             naughty.notify({ title = "Screenshot captured",
 			    	         text  = name,
         		    	 	 icon  = "preferences-desktop-wallpaper",
-        		    	 	 run   = function() awful.spawn('xdg-open ' .. name)  end })
+        		    	 	 run   = function() awful.spawn('gimp ' .. name)  end })
         end)
     end, {description = "Print window", group = "Screenshot"}),
     
@@ -408,7 +429,7 @@ local globalkeys = gears.table.join(
                 naughty.notify({ title = "Screenshot captured",
     				             text  = name,
             			 	     icon  = "preferences-desktop-wallpaper",
-            			 	     run   = function() awful.spawn('xdg-open ' .. name)  end })
+            			 	     run   = function() awful.spawn('gimp ' .. name)  end })
             end
         end)
     end, {description = "Print area", group = "Screenshot"}),
@@ -419,29 +440,38 @@ local globalkeys = gears.table.join(
     
     -- ######### TEST ###########
     awful.key({ modkey }, "x", function ()
-        awful.spawn.easy_async_with_shell("pactl get-sink-volume @DEFAULT_SINK@; pactl get-sink-mute @DEFAULT_SINK@",
-                function(stdout)
-                    local volume_level = stdout:match("Volume: front.- (%d+)%%") or "0"
-                    local is_muted = stdout:match("Mute: (%a+)") == "yes"
-    	            
-    	            naughty.notify({title = tostring(is_muted), text = type(is_muted)})
-                end)
+        -- naughty.notify({title="Antes: ", text=tostring(collectgarbage("count"))})
+    	-- collectgarbage("collect")
+        -- naughty.notify({title="Depois: ", text=tostring(collectgarbage("count"))})
+        -- testepop.visible = not testepop.visible
+        
+        -- local tempo_inicial = os.clock()
+        suit_settings:toggle()
+        -- suit_calendar:toggle()
+        -- local tempo_final = os.clock()
+        -- naughty.notify({title="Time: ", text=tostring(tempo_final-tempo_inicial)})
+
     end),
-    -- ##########################
+
+    -- awful.key({altkey}, "x", function ()
+        -- suit_menu:toggle()
+    -- end),
+
+    awful.key({modkey}, "i", function ()
+        naughty.notify{title = "RAM used", text = string.format("%dMB", collectgarbage("count")/1000)}
+    end),
     
     awful.key({ modkey }, "z", nil, function ()
         awful.spawn.easy_async([[xcolor -s]], function()
             awful.spawn.with_line_callback([[xclip -selection clipboard -o]], {
                 stdout = function(color)
-                    awful.spawn.easy_async_with_shell('convert $HOME/.local/share/color.png -fill "'.. color .. '" -colorize 100 $HOME/.local/share/color.png', function() 
-                        naughty.notify({
-                            title = color,
-                            text  = "copied to the clipboard",
-                            icon  = ".local/share/color.png",
-                            border_color = color,
-                            ignore_suspend = true
-                        })                
-                    end)
+                    naughty.notify{
+                        title = color,
+                        text  = "copied to the clipboard",
+                        icon  = gears.color.recolor_image(".local/share/color.png", color),
+                        border_color = color,
+                        ignore_suspend = true
+                    }
                 end,
             })
         end)
@@ -450,10 +480,7 @@ local globalkeys = gears.table.join(
 	-- Kill app
     awful.key({ altkey, "Control" }, "Delete", nil, function ()
             awful.spawn([[xkill]]) 
-    end, {description = "Kill app", group = "client"}),
-
-	awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() 
-	end, {description = "run prompt", group = "launcher"})
+    end, {description = "Kill app", group = "client"})
 )
 
 -- Bind all key numbers to tags.
@@ -470,7 +497,7 @@ for i = 1, 9 do
                            tag:view_only()
                         end
                   end,
-                  {description = "view tag #"..i, group = "tag"}),
+                  {description = "view tag #", group = "tag"}),
         -- Toggle tag display.
         awful.key({ altkey }, "#" .. i + 9,
                   function ()
@@ -480,7 +507,7 @@ for i = 1, 9 do
                          awful.tag.viewtoggle(tag)
                       end
                   end,
-                  {description = "toggle tag #" .. i, group = "tag"}),
+                  {description = "toggle tag #", group = "tag"}),
         -- Move client to tag #.
         awful.key({ altkey, "Shift" }, "#" .. i + 9,
                   function ()
@@ -491,7 +518,7 @@ for i = 1, 9 do
                           end
                      end
                   end,
-                  {description = "move focused client to tag #"..i, group = "tag"}),
+                  {description = "move focused client to tag #", group = "tag"}),
 		-- Move client to tag # and switch to it.
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                 function ()
@@ -503,7 +530,7 @@ for i = 1, 9 do
                         end
                    end
                 end,
-                {description = "move client and switch to tag #"..i, group = "tag"}),
+                {description = "move client and switch to tag #", group = "tag"}),
         -- Toggle tag on focused client.
         awful.key({ modkey, altkey, "Shift" }, "#" .. i + 9,
                   function ()
@@ -514,8 +541,10 @@ for i = 1, 9 do
                           end
                       end
                   end,
-                  {description = "toggle focused client on tag #" .. i, group = "tag"})
+                  {description = "toggle focused client on tag #", group = "tag"})
     )
 end
 
-return globalkeys
+
+-- set globalkeys
+root.keys(globalkeys)

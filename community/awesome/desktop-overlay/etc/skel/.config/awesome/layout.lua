@@ -5,8 +5,8 @@ local dovetail = require("awesome-dovetail")
 -------------------------------------------------------------------------------------------------------------------
 -- Table of layouts to cover with awful.layout.inc, order matters.
 return {
-    dovetail.layout.right,
     awful.layout.suit.tile,
+    dovetail.layout.right,
     awful.layout.suit.tile.bottom,
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.tile.top,
@@ -17,8 +17,8 @@ return {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
     -- awful.layout.suit.magnifier,
-    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.floating,
+    awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.tile.left,
     awful.layout.suit.max

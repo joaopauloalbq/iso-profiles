@@ -47,7 +47,7 @@ _M.settings = {
 
 -- Create a wibox to contain all the client-widgets
 _M.preview_wbox = wibox({ width = screen[mouse.screen].geometry.width })
-_M.preview_wbox.border_width = 3
+_M.preview_wbox.border_width = 2
 _M.preview_wbox.ontop = true
 _M.preview_wbox.visible = false
 

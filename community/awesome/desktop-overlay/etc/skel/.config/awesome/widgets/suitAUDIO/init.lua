@@ -1,131 +1,154 @@
 local wibox = require("wibox")
-local gears = require("gears")
 local awful = require("awful")
+local gears = require("gears")
 local naughty = require("naughty")
-local beautiful = require("beautiful")
+local dpi = require("beautiful.xresources").apply_dpi
+local icon_theme = require("lgi").require("Gtk", "3.0").IconTheme.get_default()
 
 
-local callback_enabled = true
+local icon_dir
 
-local function getAudioIcon(vol, muted)
-    if muted then
+local function get_text_fg(is_muted)
+    if is_muted then
+        return "#676767"
+    end
+    
+    return beautiful.notification_fg
+end
+
+local function get_icon_dir()
+    local icon_info = icon_theme:lookup_icon("audio-volume-muted", dpi(24), 0)
+    
+    if icon_info then
+        return string.match(icon_info:get_filename(), "(.*/)")
+    end
+    
+    return ""
+end
+
+local function get_audio_icon(volume, is_muted)
+    if is_muted then
         return "audio-volume-muted"
-    elseif vol > 65 then
+    elseif volume > 65 then
         return "audio-volume-high"
-    elseif vol >= 35 then
+    elseif volume >= 35 then
         return "audio-volume-medium"
     else
         return "audio-volume-low"
     end
 end
 
-local function getTextFG(muted)
-    if muted then
-        return "#676767"
-    end
-    return beautiful.notification_fg
-end
+local suit_audio = wibox.widget{
+    resize = false,
+    widget = wibox.widget.imagebox
+}
 
-local suitAUDIO = wibox.widget.imagebox()
-suitAUDIO.tooltip = awful.tooltip{objects = {suitAUDIO}}
-suitAUDIO:buttons( 
+suit_audio:buttons(
     gears.table.join(
-        awful.button({ }, 1, function () awful.spawn([[pavucontrol]]) end),
-        awful.button({ }, 2, function () suitAUDIO:mute() end),
-        awful.button({ }, 4, function () suitAUDIO:volume("+") end),
-        awful.button({ }, 5, function () suitAUDIO:volume("-") end)
+        awful.button({ }, 1, function() awful.spawn("pavucontrol") end),
+        awful.button({ }, 2, function() suit_audio:toggle_mute() end),
+        awful.button({ }, 4, function() suit_audio:inc_volume() end),
+        awful.button({ }, 5, function() suit_audio:dec_volume() end)
     )
 )
 
-function suitAUDIO:mute()
-    callback_enabled = false
+local suit_audio_tooltip = awful.tooltip{
+    objects = {suit_audio}
+}
 
-    awful.spawn.easy_async({ "sh", "-c", "pactl set-sink-mute @DEFAULT_SINK@ toggle; pactl get-sink-volume @DEFAULT_SINK@; pactl get-sink-mute @DEFAULT_SINK@" }, function(output)
-        local vol = tonumber(output:match("Volume: front.- (%d+)%%"))
-        local muted = output:match("Mute: (%a+)") == "yes"
+function suit_audio:inc_volume()
+	if self.volume < 100 then
+        self.volume = self.volume + 5
+    
+        naughty.notify{
+            replaces_id = self.notification_id,
+            fg = get_text_fg(self.is_muted),
+            text = string.rep("■", math.ceil(self.volume * 0.3)),
+            icon = "notification-" .. get_audio_icon(self.volume, self.is_muted),
+            ignore_suspend = true
+        }
+
+		awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%", false)
+    else
+		awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ 100%", false)
+        self.volume = 100
         
-        local audioIcon = getAudioIcon(vol, muted)
-        self:set_image(icon_path .. audioIcon .. ".svg")
-        
-        naughty.notify ({
-            replaces_id     = self.notification_id,
-            fg              = getTextFG(muted),
-            text            = string.rep("■", math.ceil(vol * 0.3)),
-            icon            = "notification-" .. audioIcon,
-            ignore_suspend  = true
-        })
-        
-        callback_enabled = true
+        naughty.notify{
+            replaces_id = self.notification_id,
+            fg = get_text_fg(self.is_muted),
+            text = string.rep("■", math.ceil(self.volume * 0.3)),
+            icon = "notification-" .. get_audio_icon(self.volume, self.is_muted),
+            ignore_suspend = true
+        }
+	end
+end
+
+function suit_audio:dec_volume()
+    self.volume = self.volume - 5
+    
+    naughty.notify{
+        replaces_id = self.notification_id,
+        fg = get_text_fg(self.is_muted),
+        text = string.rep("■", math.ceil(self.volume * 0.3)),
+        icon = "notification-" .. get_audio_icon(self.volume, self.is_muted),
+        ignore_suspend = true
+    }
+    
+    awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%", false)
+end
+
+function suit_audio:toggle_mute()
+    self.is_muted = not self.is_muted
+    
+    naughty.notify{
+        replaces_id = self.notification_id,
+        fg = get_text_fg(self.is_muted),
+        text = string.rep("■", math.ceil(self.volume * 0.3)),
+        icon = "notification-" .. get_audio_icon(self.volume, self.is_muted),
+        ignore_suspend = true
+    }
+
+    awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle", false)
+end
+
+function suit_audio:update()
+    awful.spawn.easy_async_with_shell("pactl get-sink-volume @DEFAULT_SINK@ && pactl get-sink-mute @DEFAULT_SINK@", function(output)
+        self.volume = tonumber(output:match("Volume.- (%d+)%%"))
+        self.is_muted = output:match("Mute: (%a+)") == "yes"
+
+        suit_audio:set_image(icon_dir .. get_audio_icon(self.volume, self.is_muted) .. ".svg")
+        suit_audio_tooltip:set_text(self.volume .. "%")
     end)
 end
 
-function suitAUDIO:volume(mode)
-    callback_enabled = false
-    awful.spawn.easy_async({ "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ " .. mode .. "5% ; pactl get-sink-volume @DEFAULT_SINK@ ; pactl get-sink-mute @DEFAULT_SINK@" }, function(output)
-        local vol = tonumber(output:match("Volume: front.- (%d+)%%"))
-        local muted = output:match("Mute: (%a+)") == "yes"
-        
-        local audioIcon = getAudioIcon(vol, muted)
-        self:set_image(icon_path .. audioIcon .. ".svg")
-        self.tooltip:set_markup(vol .. "%")
-        
-        naughty.notify ({
-            replaces_id	    = self.notification_id,
-            fg              = getTextFG(muted),
-            text            = string.rep("■", math.ceil(vol * 0.3)),
-            icon            = "notification-" .. audioIcon,
-            ignore_suspend  = true
-        })
-        
-        callback_enabled = true
-	end)
+function suit_audio:on_update()
+    awful.spawn.with_line_callback("pactl subscribe", {stdout = function(line_callback)
+        if line_callback:find("Event 'change' on sink #") then
+            self:update()
+        end  
+    end})
 end
 
+awesome.connect_signal("exit", function()
+    awful.spawn.with_shell("killall pactl")
+end)
 
-function suitAUDIO:update(mode)
-    awful.spawn.easy_async({ "sh", "-c", "pactl get-sink-volume @DEFAULT_SINK@; pactl get-sink-mute @DEFAULT_SINK@" }, function(output)
-        local vol = tonumber(output:match("Volume: front.- (%d+)%%"))
-        local muted = output:match("Mute: (%a+)") == "yes"
-        
-        local audioIcon = getAudioIcon(vol, muted)
-        self:set_image(icon_path .. audioIcon .. ".svg")
-        self.tooltip:set_markup(vol .. "%")
-	end)
-end
-    
-function suitAUDIO:init()
-    awful.spawn.easy_async({ "sh", "-c", "pactl get-sink-volume @DEFAULT_SINK@; pactl get-sink-mute @DEFAULT_SINK@" }, function(output, _, _, exit_code)
+function suit_audio:init()
+    awful.spawn.easy_async_with_shell("pactl info", function(_, _, _, exit_code)
         if exit_code == 1 then
             self:init()
         else
-            local vol = tonumber(output:match("Volume: front.- (%d+)%%"))
-            local muted = output:match("Mute: (%a+)") == "yes"
-            
-            local audioIcon = getAudioIcon(vol, muted)
-            self:set_image(icon_path .. getAudioIcon(vol, muted) .. ".svg")
-            self.tooltip:set_markup(vol .. "%")
-            self.notification_id = naughty.get_next_notification_id() -- reserve id 1 to volume notification
-            
-            --Callback            
-            awful.spawn.with_line_callback({"sh", "-c", "killall pactl; pactl subscribe"}, {
-                stdout = function()
-                    if callback_enabled then
-                        callback_enabled = false
-                        
-                        suitAUDIO:update()
-                        
-                        gears.timer.start_new (1, function() 
-                            callback_enabled = true
-                        end)
-                    end
-                end
-            })
+            self.notification_id = naughty.get_next_notification_id()
+            self:update()
+            self:on_update()
         end
     end)
-    
 end
 
 
-suitAUDIO:init()
+icon_dir = get_icon_dir()
 
-return suitAUDIO
+suit_audio:init()
+
+
+return suit_audio
