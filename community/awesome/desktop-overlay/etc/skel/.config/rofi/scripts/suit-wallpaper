@@ -19,6 +19,12 @@ done
 
 case $ROFI_RETV in
     1 )
-        nitrogen --save --set-zoom-fill $WALLPAPER_FOLDER$1
+        # Detecta número de monitores conectados
+        NUM_MONITORES=$(xrandr --query | grep " connected " | wc -l)
+        
+        # Aplica em CADA monitor (head=0,1,2...)
+        for i in $(seq 0 $((NUM_MONITORES - 1))); do
+            nitrogen --head="$i" --set-zoom-fill $WALLPAPER_FOLDER$1
+        done
     ;;
 esac
