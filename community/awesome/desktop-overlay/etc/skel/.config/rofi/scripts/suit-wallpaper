@@ -2,6 +2,7 @@
 
 echo -en "\x00prompt\x1f\n"
 echo -en "\x00use-hot-keys\x1ftrue\n"
+echo -en "\x00keep-selection\x1ftrue\n"
 
 WALLPAPER_FOLDER="$(xdg-user-dir PICTURES)/Wallpapers/"
 IFS=$'\n' # change Internal Field Separator to newline char
