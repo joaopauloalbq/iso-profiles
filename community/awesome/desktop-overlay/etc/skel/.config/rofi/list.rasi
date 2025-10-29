@@ -16,7 +16,7 @@ prompt {
 	font: "Noto Sans 12";
 	vertical-align: 0.5;
 	horizontal-align: 0.5;
-	padding: 0px 21px;
+	padding: 0px 18px;
 	margin: 0 0 0 -5px;
 }
 

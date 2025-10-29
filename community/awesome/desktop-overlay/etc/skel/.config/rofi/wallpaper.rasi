@@ -106,7 +106,7 @@ icon-prev-page {
 }
 
 icon-prompt {
-	size: 25;
+	size: 24;
 	padding: 0 9px;
 	margin: 0 0 0 2px;
 	expand: false;

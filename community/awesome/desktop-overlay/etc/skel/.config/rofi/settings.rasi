@@ -22,13 +22,13 @@ inputbar {
 }
 
 element-icon {
-	size: 17px;
+	size: 16px;
 	margin: 0 4;
 }
 
 icon-prompt {
 	expand: false;
-	size: 25;
+	size: 24;
 	padding: 0 11px;
 	vertical-align: 0.5;
 	filename: "fcitx-mozc-properties";
