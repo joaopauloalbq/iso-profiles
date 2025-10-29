@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo -en "\x00prompt\x1f\n"
+echo -en "\x00prompt\x1fsuit-wallpaper\n"
 echo -en "\x00use-hot-keys\x1ftrue\n"
 echo -en "\x00keep-selection\x1ftrue\n"
 
