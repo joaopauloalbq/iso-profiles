@@ -88,6 +88,8 @@ client.connect_signal("property::urgent", function(c)
 end)
 
 client.connect_signal("property::fullscreen", function(c)
+    c.screen = awful.screen.focused()
+    
     if c.fullscreen then
         gears.timer.delayed_call(function()
             if c.valid then
@@ -210,12 +212,3 @@ awesome.connect_signal("startup", function()
         end
     end
 end)
-
-
-
-
-
-
-
-
-
