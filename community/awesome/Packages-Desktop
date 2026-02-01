@@ -163,8 +163,6 @@ rofi
 rofi-calc
 rofi-emoji
 polkit-gnome
-lxappearance-gtk3
-nitrogen
 arandr
 qt5ct
 qt6ct
