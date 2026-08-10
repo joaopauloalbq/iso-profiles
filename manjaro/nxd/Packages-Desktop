@@ -3,13 +3,11 @@ avahi
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
-networkmanager-pptp
 networkmanager-vpnc
 nss-mdns # NSS support for mDNS (optdepend for avahi)
 ntp
 mobile-broadband-provider-info
 modemmanager
-openresolv
 openssh
 samba
 usb_modeswitch
@@ -58,8 +56,6 @@ udisks2
 >extra fakeroot
 >extra flex
 >extra gcc
->extra >multilib gcc-libs-multilib
->extra >multilib gcc-multilib
 >extra libtool
 >extra m4
 >extra make
@@ -74,7 +70,6 @@ udisks2
 
 ## Fonts
 ttf-dejavu
-# cantarell-fonts        # Installed as gnome-themes-standard dependency
 noto-fonts               # default font
 noto-fonts-cjk           # asian fonts - needed big package, ~76 mb compressed
 >extra noto-fonts-emoji
@@ -85,10 +80,8 @@ terminus-font
 >extra ttf-droid
 
 ## Games
->x86_64 >extra steam-manjaro
 
 ## Package management
-#appimagelauncher
 pamac-gtk
 pamac-tray-appindicator
 pamac-cli
@@ -96,17 +89,8 @@ pamac-cli
 >extra snapd
 >extra snapd-glib
 >extra pamac-snap-plugin
-#discover-snap
-#discover
-#packagekit-qt5
 >extra flatpak
->extra bauh
->extra fwupd 
-#octopi
-#octopi-cachecleaner
-#octopi-repoeditor
-#octopi-notifier-frameworks
-#pamac-qt
+>extra fwupd
 manjaro-application-utility
 
 ## Printing
@@ -138,7 +122,7 @@ sddm-kcm
 bluedevil
 kde-gtk-config
 kdeplasma-addons
-kgamma5
+kgamma
 kinfocenter
 kmenuedit
 kscreen
@@ -192,8 +176,6 @@ startup-notification # needed for waterfox
 ## Themes QT/GTK/SDDM
 #breeze
 #breeze-gtk
-gnome-icon-theme
-gnome-themes-standard
 gtk-theme-breath
 oxygen # needed to provide KDE system sounds
 oxygen-icons
@@ -204,9 +186,6 @@ illyria-wallpaper
 >extra wallpapers-juhraya
 >extra wallpapers-2018
 >extra manjaro-wallpapers-18.0
-
-## Better systray/notifications support
-#>extra sni-qt  # A Qt plugin that enables tray icons in qt4 applications
 
 ## KDE Applications
 ark
@@ -226,7 +205,6 @@ okular
 >extra >i686 kdenetwork-kget
 kdenetwork-filesharing
 #>extra kdenlive
-kde-servicemenus-rootactions
 khelpcenter
 kio-extras
 #>extra kleopatra
@@ -254,7 +232,7 @@ ffmpegthumbs              # video thumbnails
 ruby                      # installing new service menus with GHNS
 
 ## Optional dependencies for gwenview
-kimageformats     # support for dds, xcf, exr, psd, and more image formats
+kimageformats5     # support for dds, xcf, exr, psd, and more image formats
 qt5-imageformats  # support for tiff, webp, and more image formats
 
 ## Optional dependencies for k3b
@@ -296,7 +274,7 @@ inxi
 #>extra libreoffice-still
 #>extra calligra
 #manjaro-hello
-manjaro-settings-manager-kcm
+#manjaro-settings-manager-kcm
 manjaro-settings-manager-knotifier
 powertop
 #>extra qbittorrent
@@ -332,12 +310,10 @@ xf86-input-void
 ## Xorg Server and Graphics
 >multilib lib32-libva-intel-driver
 >multilib lib32-libva-mesa-driver
->multilib lib32-libva-vdpau-driver
 libva-intel-driver
 libva-mesa-driver
-libva-vdpau-driver
-mesa-demos
->multilib lib32-mesa-demos
+mesa-utils
+>multilib lib32-mesa-utils
 numlockx
 xdg-user-dirs
 xorg-server
@@ -350,11 +326,10 @@ perl-file-mimeinfo
 xdg-utils
 #xdg-su
 >extra timeshift
->extra kernel-alive
+#>extra kernel-alive
 
 ## Misc
-manjaro-hotfixes
->basic squashfs-tools
+
 
 ## Flatpak support
 >extra flatpak

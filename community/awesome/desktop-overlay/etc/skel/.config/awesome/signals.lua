@@ -1,6 +1,7 @@
 local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
+local naughty = require("naughty")
 local dpi = require("beautiful.xresources").apply_dpi
 -------------------------------------------------------------------------------------------------------------------
 awesome.register_xproperty("ANIMATED", "boolean");
@@ -21,6 +22,14 @@ local function set_titlebar(client, condition)
         awful.titlebar.hide(client)
     end
 end
+-------------------------------------------------------------------------------------------------------------------
+-- 
+-- local function get_screen_name(s)
+    -- naughty.notify{title = type(s), text = tostring(s), }
+    -- for key, _ in pairs(s) do
+    --     return key
+    -- end
+-- end
 -------------------------------------------------------------------------------------------------------------------
 tag.connect_signal("property::layout", function()
     if client.focus then
@@ -183,6 +192,21 @@ end)
 screen.connect_signal("property::geometry", function ()
     awful.spawn([[nitrogen --restore]], false)
 end)
+
+-- screen.connect_signal("added", function(s)
+--     naughty.notify{text="added screen"}
+--     local screen_name = get_screen_name(s)
+--     if screen_name == "HDMI-1" then
+--         awful.spawn("xrandr --output eDP-1 --primary --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --left-of eDP-1")
+--     end
+-- end)
+-- 
+-- screen.connect_signal("removed", function()
+--     naughty.notify{text="removed screen" }
+--     if screen:count() == 1 then
+--         awful.spawn("xrandr --output eDP-1 --primary --mode 1920x1080 --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off")
+--     end
+-- end)
 -------------------------------------------------------------------------------------------------------------------
 awesome.connect_signal("exit", function(reason_restart)
     if reason_restart then

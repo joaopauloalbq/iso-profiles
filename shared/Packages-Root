@@ -1,3 +1,6 @@
+# Dbus
+#dbus-daemon-units
+
 # Base
 base
 
@@ -28,34 +31,38 @@ intel-ucode
 jfsutils
 KERNEL
 less
+wireless-regdb
 linux-firmware
 logrotate
 lvm2
 man-db
+man-pages
 manjaro-release
 manjaro-system
 manjaro-zsh-config
-man-pages
 mdadm
 memtest86+
 memtest86+-efi
 mhwd
 mhwd-db
+micro
 mkinitcpio-openswap
 nano
 nano-syntax-highlighting
+networkmanager
 nfs-utils
 ntfs-3g
 os-prober
 perl
 rsync
 s-nail
+sbctl
 sof-firmware
 sudo
 sysfsutils
-systemd
 texinfo
 update-grub
+udev-usb-sync
 usbutils
 vi
 wget

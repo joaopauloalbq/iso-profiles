@@ -3,16 +3,18 @@ avahi
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
-networkmanager-pptp
 networkmanager-vpnc
 nss-mdns # NSS support for mDNS (optdepend for avahi)
 ntp
 mobile-broadband-provider-info
 modemmanager
-openresolv
 openssh
 samba
 usb_modeswitch
+
+## Btrfs
+grub-btrfs
+>extra timeshift-autosnap-manjaro
 
 ## Libraries for Sound/Audio/Video
 alsa-firmware
@@ -24,11 +26,10 @@ gst-plugins-base
 gst-plugins-good
 gst-plugins-ugly
 libdvdcss
->multilib manjaro-alsa
-manjaro-pulse
-pulseaudio-bluetooth
-pulseaudio-ctl
-pulseaudio-zeroconf
+manjaro-alsa
+manjaro-gstreamer
+>extra manjaro-modem
+manjaro-pipewire
 
 ## Connect Packages
 android-tools
@@ -45,36 +46,31 @@ udisks2
 
 ## Fonts
 ttf-dejavu
-# cantarell-fonts        # Installed as gnome-themes-standard dependency
 noto-fonts               # default font
-#noto-fonts-cjk           # asian fonts - needed big package, ~76 mb compressed
+noto-fonts-cjk           # asian fonts - needed big package, ~76 mb compressed
+>extra noto-fonts-emoji  # optional for noto-fonts
+>extra noto-fonts-extra  # additional languages, optional for noto-fonts
 adobe-source-sans-pro-fonts
-adobe-source-han-sans-jp-fonts
-adobe-source-han-sans-kr-fonts
-adobe-source-han-sans-cn-fonts
+# adobe-source-han-sans-jp-fonts
+# adobe-source-han-sans-kr-fonts
+# adobe-source-han-sans-cn-fonts
 # >extra noto-fonts-emoji
 terminus-font
+ttf-hack-nerd                      # default monospace font
+ttf-meslo-nerd-font-powerlevel10k  # default font for manjaro-zsh-config
 >extra ttf-inconsolata
 >extra ttf-indic-otf
 >extra ttf-liberation
 >extra ttf-droid
 
-## Games
->x86_64 >extra steam-manjaro
-
 ## Package management
 >extra apparmor
 #>extra gnome-software-snap
-pamac-gtk
+pamac-gtk3
 >extra snapd
 >extra snapd-glib
 >extra pamac-snap-plugin
 >extra pamac-flatpak-plugin
-
-## Java
->extra jdk8-openjdk
->extra jre8-openjdk-headless
->extra jre8-openjdk
 
 ## Printing
 >extra manjaro-printer
@@ -105,22 +101,20 @@ xfwm4
 blueman
 ffmpegthumbnailer  # tumbler - for video thumbnails
 freetype2          # tumbler - for font thumbnails
-gksu
 gnome-keyring      # fix wlan segfault
 libgsf             # tumbler - for ODF thumbnails
 libopenraw         # tumbler - for RAW thumbnails
-light-locker
+# light-locker     # remove it for now as it might double-lock in certain cases
+xfce4-screensaver
 network-manager-applet
 menulibre
 poppler-glib       # tumbler - for PDF thumbnails
 thunar-archive-plugin
 thunar-media-tags-plugin
-# >extra xfce4-artwork
 xfce4-battery-plugin
 xfce4-clipman-plugin
 >extra xfce4-cpufreq-plugin
 >extra xfce4-cpugraph-plugin
-# xfce4-datetime-plugin
 >extra xfce4-dict
 >extra xfce4-diskperf-plugin
 >extra xfce4-fsguard-plugin
@@ -150,53 +144,51 @@ pavucontrol
 >extra manjaro-wallpapers-18.0
 >extra wallpapers-2018
 >extra wallpapers-juhraya
-gnome-icon-theme
-gnome-themes-standard
 grub-theme-manjaro
 matcha-gtk-theme
 xcursor-simpleandsoft
 xcursor-vanilla-dmz-aa
+#plymouth # seems there are issues with plymouth and XFCE
+#plymouth-theme-manjaro
+illyria-wallpaper
 
 ## Applications
+bash-completion
 >extra catfish
 dmidecode # optional dependency inxi
 engrampa
->extra firefox
+firefox
 # >extra flashplugin
->extra galculator-gtk2
-gcolor2
+>extra galculator
+gcolor3
 >extra gimp
 gparted
 gufw
 >extra audacious
->extra hexchat
 htop
-qpdfview
 inxi
 #>extra libreoffice-still
 #>extra microsoft-office-online-jak
 #>extra freeoffice
+#>extra onlyoffice-desktopeditors
 manjaro-hello
 manjaro-application-utility
 manjaro-settings-manager
 manjaro-settings-manager-notifier
->basic midori
 >extra mlocate
 mousepad
 mugshot
 >basic parole # media player
->extra pidgin
 powertop
 screenfetch
+evince
 >extra poppler-data  # CKJ support for pdf
 #>basic sylpheed # mail client
 >extra thunderbird
->extra vlc
+#>extra vlc
 >extra viewnior
 >extra xfburn
 >extra yelp
->extra libreoffice-fresh-br
->basic onlyoffice-desktopeditors
 
 # Optional dependencies engrampa
 p7zip  # 7Z and ARJ archive support
@@ -204,11 +196,11 @@ unace  # ACE archive support
 unrar  # RAR archive support
 
 ## Documentation
-manjaro-documentation-en
+#manjaro-documentation-en
 
 ## Settings packages
->extra manjaro-xfce-gtk3-settings
->basic manjaro-xfce-gtk3-minimal-settings
+>extra manjaro-xfce-settings
+>basic manjaro-xfce-minimal-settings
 manjaro-browser-settings
 
 ## Xorg Input Drivers
@@ -220,12 +212,10 @@ xf86-input-void
 ## Xorg Server and Graphics
 >multilib lib32-libva-intel-driver
 >multilib lib32-libva-mesa-driver
->multilib lib32-libva-vdpau-driver
 libva-intel-driver
 libva-mesa-driver
-libva-vdpau-driver
-mesa-demos
->multilib lib32-mesa-demos
+mesa-utils
+>multilib lib32-mesa-utils
 numlockx
 xdg-user-dirs
 xorg-server
@@ -236,20 +226,12 @@ xorg-mkfontscale
 
 ## Desktop Utils
 perl-file-mimeinfo
+xdg-desktop-portal-gtk
 xdg-utils
 #xdg-su
 >extra timeshift
->extra kernel-alive
+#>extra kernel-alive
 
 ## Misc
-gtkhash-thunar
-manjaro-hotfixes
->basic squashfs-tools
 xiccd # enable color profile settings
-
-## Handshake tools
-#faucet-tool
-#hnsd-git
-#hsd-git
-#veracrypt
-#cryptoseed
+#tlp

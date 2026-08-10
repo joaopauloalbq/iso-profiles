@@ -3,13 +3,11 @@ avahi
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
-networkmanager-pptp
 networkmanager-vpnc
 nss-mdns # NSS support for mDNS (optdepend for avahi)
 ntp
 mobile-broadband-provider-info
 modemmanager
-openresolv
 openssh
 samba
 usb_modeswitch
@@ -58,8 +56,6 @@ bison
 fakeroot
 flex
 gcc
->multilib gcc-libs-multilib
->multilib gcc-multilib
 libtool
 m4
 make
@@ -74,7 +70,6 @@ pkg-config
 
 ## Fonts
 ttf-dejavu
-# cantarell-fonts        # Installed as gnome-themes-standard dependency
 noto-fonts               # default font
 # noto-fonts-cjk         # big package, ~76 mb compressed
 >extra noto-fonts-emoji
@@ -85,17 +80,10 @@ terminus-font
 >extra ttf-droid
 
 ## Games
->extra steam-manjaro
 
-## Package management
-#packagekit-qt5
-#discover
+## Package managemen
 flatpak
-#fwupd 
-octopi
-octopi-cachecleaner
-octopi-repoeditor
-octopi-notifier-frameworks
+#fwupd
 #pamac
 #pamac-tray-appindicator
 
@@ -124,7 +112,7 @@ sddm-kcm
 bluedevil
 kde-gtk-config
 kdeplasma-addons
-kgamma5
+kgamma
 kinfocenter
 kmenuedit
 kscreen
@@ -149,8 +137,6 @@ user-manager
 ## Themes QT/GTK/SDDM
 #breeze
 #breeze-gtk
-gnome-icon-theme
-gnome-themes-standard
 gtk-theme-breath
 #>extra oxygen
 #>extra oxygen-icons
@@ -160,9 +146,6 @@ grub-theme-manjaro
 illyria-wallpaper
 >extra wallpapers-2018
 >extra manjaro-wallpapers-18.0
-
-## Better systray/notifications support
->extra sni-qt  # A Qt plugin that enables tray icons in qt4 applications
 
 ## KDE Applications
 ark
@@ -182,7 +165,6 @@ okular
 >extra >i686 kdenetwork-kget
 kdenetwork-filesharing
 #>extra kdenlive
-kde-servicemenus-rootactions
 khelpcenter
 kio-extras
 #>extra kleopatra
@@ -210,7 +192,7 @@ ffmpegthumbs              # video thumbnails
 ruby                      # installing new service menus with GHNS
 
 ## Optional dependencies for gwenview
-kimageformats     # support for dds, xcf, exr, psd, and more image formats
+kimageformats5     # support for dds, xcf, exr, psd, and more image formats
 qt5-imageformats  # support for tiff, webp, and more image formats
 
 ## Optional dependencies for k3b
@@ -243,7 +225,6 @@ poppler-data  # encoding data to display PDF documents containing CJK characters
 >extra python-pysmbc          # SMB browser support
 
 ## Applications
-appimagelauncher
 #>extra cantata
 dmidecode # for inxi -m output
 htop
@@ -254,7 +235,7 @@ inxi
 >basic falkon
 ms-office-online
 >extra libreoffice-fresh
-manjaro-settings-manager-kcm
+#manjaro-settings-manager-kcm
 manjaro-settings-manager-knotifier
 powertop
 #>extra qbittorrent
@@ -289,8 +270,8 @@ xf86-input-void
 ## Xorg Server and Graphics
 >multilib lib32-libva-intel-driver
 libva-intel-driver
-mesa-demos
->multilib lib32-mesa-demos
+mesa-utils
+>multilib lib32-mesa-utils
 numlockx
 xdg-user-dirs
 xorg-server
@@ -304,7 +285,6 @@ xdg-utils
 xdg-su
 
 ## Misc
-manjaro-hotfixes
 
 ## Flatpak support
 #>extra flatpak

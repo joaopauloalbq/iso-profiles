@@ -1,6 +1,5 @@
 #sonar sonar-release
 >i686 archlinux32-keyring
->multilib gcc-libs-multilib
 acpi
 acpid
 amd-ucode
@@ -10,7 +9,6 @@ btrfs-progs
 bzip2
 coreutils
 cpupower
-crda
 cronie
 cryptsetup
 device-mapper
@@ -41,6 +39,7 @@ iproute2
 iputils
 jfsutils
 KERNEL
+linux-firmware
 less
 licenses
 logrotate
@@ -64,12 +63,10 @@ pciutils
 perl
 procps-ng
 psmisc
-reiserfsprogs
 rsync
 s-nail
 sed
 shadow
-spectre-meltdown-checker
 sudo
 sysfsutils
 systemd
@@ -83,6 +80,7 @@ util-linux
 vi
 wget
 which
+wireless-regdb
 wpa_supplicant
 xfsprogs
 xz

@@ -1,11 +1,10 @@
 calamares-dev
 feh
-fluxbox-theme-vertex-maia
 KERNEL-broadcom-wl
 KERNEL-r8168
 #KERNEL-rt3562sta
 KERNEL-virtualbox-guest-modules
-manjaro-hotfixes
+breeze-cursors
 manjaro-live-skel
 mkinitcpio-nfs-utils
 nbd
@@ -23,7 +22,6 @@ sddm-andromeda-qt-theme
 networkmanager
 >systemd sddm
 virtualbox-guest-utils
-xcursor-breeze
 xf86-input-elographics
 xf86-input-evdev
 #xf86-input-keyboard # deprecated
@@ -40,7 +38,6 @@ xf86-video-intel
 xf86-video-nouveau
 xf86-video-sisusb
 xf86-video-vesa
-xf86-video-vmware
 xf86-video-voodoo
 xorg-server
 xorg-xinit
