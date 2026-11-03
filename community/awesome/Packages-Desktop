@@ -219,7 +219,6 @@ m4
 make
 patch
 pkg-config
->multilib lib32-flex
 # Extra packages for AUR support
 git
 patchutils
